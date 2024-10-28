@@ -1,0 +1,51 @@
+﻿@using PMSWeb.ViewModels.Consumable
+@model ConsumableDetailsViewModel
+
+@{
+    ViewData["Title"] = "Consumable Details";
+}
+
+<h1>Consumable Details</h1>
+
+<div>
+    <h4>Consumable</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">ID</dt>
+        <dd class="col-sm-10">@Model.ConsumableId</dd>
+
+        <dt class="col-sm-2">Name</dt>
+        <dd class="col-sm-10">@Model.Name</dd>
+
+        <dt class="col-sm-2">Units</dt>
+        <dd class="col-sm-10">@Model.Units</dd>
+
+        <dt class="col-sm-2">Description</dt>
+        <dd class="col-sm-10">@Model.Description</dd>
+
+        <dt class="col-sm-2">Creator ID</dt>
+        <dd class="col-sm-10">@Model.CreatorId</dd>
+
+        <dt class="col-sm-2">Creator</dt>
+        <dd class="col-sm-10">@Model.CreatorName</dd>
+
+        <dt class="col-sm-2">Created On</dt>
+        <dd class="col-sm-10">@Model.CreatedOn</dd>
+
+        <dt class="col-sm-2">Edited On</dt>
+        <dd class="col-sm-10">@Model.EditedOn</dd>
+
+        <dt class="col-sm-2">Price</dt>
+        <dd class="col-sm-10">@Model.Price</dd>
+
+        <dt class="col-sm-2">Remaining on Stock (ROB)</dt>
+        <dd class="col-sm-10">@Model.ROB</dd>
+
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ConsumableId" class="btn btn-warning">Edit</a>
+    <a asp-action="Delete" asp-route-id="@Model.ConsumableId" class="btn btn-danger">Delete</a>
+    <a asp-action="Select" class="btn btn-secondary">Back</a>
+</div>

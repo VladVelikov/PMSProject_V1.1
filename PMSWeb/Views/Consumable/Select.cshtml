@@ -1,0 +1,41 @@
+﻿@using PMSWeb.ViewModels.Consumable
+@model IEnumerable<ConsumableDisplayViewModel>
+@{
+    ViewBag.Title = "Select Consumables";
+}
+
+<a asp-action="Create" class="btn btn-primary mb-3">Create New Consumable</a>
+
+<div style="display:flex; flex-direction:column; height: 40em; max-width: 50em; flex-wrap:wrap; overflow:auto;">
+        <table>
+        <thead>
+            <tr style="border: 0.5em  solid white;">
+                <th>Name</th>
+                <th>Units</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Remaining Stock (ROB)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var consumable in Model)
+            {
+                <tr style="border: 0.5em solid white;">
+                    <td>@consumable.Name</td>
+                    <td>@consumable.Units</td>
+                    <td style="word-wrap:anywhere;">
+                          @consumable.Description
+                    </td>
+                    <td>@consumable.Price.ToString("C")</td>
+                    <td>@consumable.ROB</td>
+                    <td style="display:flex; flex-direction:column; gap:0.2em;">
+                        <a asp-action="Edit" asp-route-id="@consumable.ConsumableId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Details" asp-route-id="@consumable.ConsumableId" class="btn btn-sm btn-info">View</a>
+                        <a asp-action="Delete" asp-route-id="@consumable.ConsumableId" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
