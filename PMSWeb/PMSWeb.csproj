@@ -33,6 +33,8 @@
     <ProjectReference Include="..\PMS.Common\PMS.Common.csproj" />
     <ProjectReference Include="..\PMS.Data.Models\PMS.Data.Models.csproj" />
     <ProjectReference Include="..\PMS.Data\PMS.Data.csproj" />
+    <ProjectReference Include="..\PMS.Services.Data\PMS.Services.Data.csproj" />
+    <ProjectReference Include="..\PMS.Services.Mapping\PMS.Services.Mapping.csproj" />
     <ProjectReference Include="..\PMSWeb.Infrastructure\PMSWeb.Infrastructure.csproj" />
     <ProjectReference Include="..\PMSWeb.ViewModels\PMSWeb.ViewModels.csproj" />
   </ItemGroup>

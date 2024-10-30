@@ -6,6 +6,8 @@ using PMS.Data.Models.Identity;
 using PMS.Data.Repository;
 using PMS.Data.Repository.Interfaces;
 using PMS.Data.Seeders;
+using PMS.Services.Data;
+using PMS.Services.Data.Interfaces;
 
 namespace PMSWeb
 {
@@ -26,6 +28,8 @@ namespace PMSWeb
 
             /// Adding scoped services
             builder.Services.AddScoped<IRepository<Consumable, Guid>, GenericRepository<Consumable,Guid>>();
+            builder.Services.AddScoped<IConsumableService, ConsumableService>();
+
 
             var app = builder.Build();
 

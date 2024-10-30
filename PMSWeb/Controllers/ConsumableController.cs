@@ -5,13 +5,14 @@ using Microsoft.Extensions.Configuration.UserSecrets;
 using PMS.Data;
 using PMS.Data.Models;
 using PMS.Data.Repository.Interfaces;
+using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.Consumable;
 using System.Security.Claims;
 
 namespace PMSWeb.Controllers
 {
 
-    public class ConsumableController(IRepository<Consumable, Guid> consumables) : Controller
+    public class ConsumableController(IRepository<Consumable, Guid> consumables, IConsumableService consumableService) : Controller
     {
 
         public async Task<IActionResult> Index()
@@ -21,21 +22,22 @@ namespace PMSWeb.Controllers
 
         public async Task<IActionResult> Select()
         {
-            var models = await consumables.GetAllAsQueryable()
-                .Where(x => x.IsDeleted == false)
-                .AsNoTracking()
-                .Select(x => new ConsumableDisplayViewModel() {
-                    ConsumableId = x.ConsumableId.ToString(),
-                    Name = x.Name,
-                    Units = x.Units,
-                    Description = x.Description,
-                    Price = x.Price,
-                    ROB = x.ROB,
-                    EditedOn = x.EditedOn
-                })
-                .OrderByDescending(x => x.EditedOn)
-                .ThenBy(x => x.Name)
-                .ToListAsync();
+            //var models = await consumables.GetAllAsQueryable()
+            //    .Where(x => x.IsDeleted == false)
+            //    .AsNoTracking()
+            //    .Select(x => new ConsumableDisplayViewModel() {
+            //        ConsumableId = x.ConsumableId.ToString(),
+            //        Name = x.Name,
+            //        Units = x.Units,
+            //        Description = x.Description,
+            //        Price = x.Price,
+            //        ROB = x.ROB,
+            //        EditedOn = x.EditedOn
+            //    })
+            //    .OrderByDescending(x => x.EditedOn)
+            //    .ThenBy(x => x.Name)
+            //    .ToListAsync();
+            var models = await consumableService.GetListOfViewModelsAsync();
             return View(models);
         }
 
