@@ -4,13 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using PMS.Data;
 using PMS.Data.Models;
+using PMS.Data.Repository.Interfaces;
 using PMSWeb.ViewModels.Consumable;
 using System.Security.Claims;
 
 namespace PMSWeb.Controllers
 {
 
-    public class ConsumableController(PMSDbContext context) : Controller
+    public class ConsumableController(IRepository<Consumable, Guid> consumables) : Controller
     {
 
         public async Task<IActionResult> Index()
@@ -20,8 +21,7 @@ namespace PMSWeb.Controllers
 
         public async Task<IActionResult> Select()
         {
-            var models = await context
-                .Consumables
+            var models = await consumables.GetAllAsQueryable()
                 .Where(x => x.IsDeleted == false)
                 .AsNoTracking()
                 .Select(x => new ConsumableDisplayViewModel() {
@@ -58,7 +58,7 @@ namespace PMSWeb.Controllers
                 return View(model);
             }
 
-            Consumable consumable = new()
+            Consumable consumable = new Consumable()
             {
                 Name = model.Name,
                 Units = model.Units,
@@ -70,17 +70,14 @@ namespace PMSWeb.Controllers
                 EditedOn = DateTime.Now,
                 IsDeleted = false
             };
-            await context.Consumables.AddAsync(consumable);
-            await context.SaveChangesAsync();
-
+            await consumables.AddAsync(consumable);
             return RedirectToAction(nameof(Select));
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            var model = await context
-                .Consumables
+            var model = await consumables.GetAllAsQueryable() 
                 .AsNoTracking()
                 .Where(x => x.IsDeleted == false)
                 .Where(x => x.ConsumableId.ToString() == id)
@@ -108,8 +105,7 @@ namespace PMSWeb.Controllers
             {
                 return View(model);
             }
-            var consToEdit = await context
-               .Consumables
+            Consumable? consToEdit = await consumables.GetAllAsQueryable()
                .Where(x => x.IsDeleted == false)
                .Where(x => x.ConsumableId.ToString() == model.ConsumableId)
                .FirstOrDefaultAsync();
@@ -128,7 +124,7 @@ namespace PMSWeb.Controllers
             consToEdit.IsDeleted = false;
             consToEdit.EditedOn = DateTime.Now;
 
-            await context.SaveChangesAsync();
+            await consumables.UpdateAsync(consToEdit);
 
             return RedirectToAction(nameof(Select));
         }
@@ -136,8 +132,7 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
-            var model = await context
-                .Consumables
+            var model = await consumables.GetAllAsQueryable()
                 .Where(x => x.IsDeleted == false)
                 .Where(x => x.ConsumableId.ToString() == id)
                 .AsNoTracking()
@@ -161,8 +156,7 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
-            var model = await context
-                .Consumables
+            var model = await consumables.GetAllAsQueryable()
                 .Where(x => x.IsDeleted == false)
                 .Where(x => x.ConsumableId.ToString() == id)
                 .AsNoTracking()
@@ -182,15 +176,14 @@ namespace PMSWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(ConsumableDeleteViewModel model)
         {
-            var consToDelete = await context
-                .Consumables
+            Consumable? consToDelete = await consumables.GetAllAsQueryable()
                 .Where(x => x.IsDeleted == false)
                 .Where(x => x.ConsumableId.ToString() == model.ConsumableId)
                 .FirstOrDefaultAsync();
             if (consToDelete != null)
             {
                 consToDelete.IsDeleted = true;
-                context.SaveChanges();  
+                await consumables.UpdateAsync(consToDelete);  
             }
             return RedirectToAction(nameof(Select));
         }

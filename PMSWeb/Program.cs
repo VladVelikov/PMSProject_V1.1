@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PMS.Data;
+using PMS.Data.Models;
 using PMS.Data.Models.Identity;
+using PMS.Data.Repository;
+using PMS.Data.Repository.Interfaces;
 using PMS.Data.Seeders;
 
 namespace PMSWeb
@@ -17,10 +20,12 @@ namespace PMSWeb
             builder.Services.AddDbContext<PMSDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
             builder.Services.AddDefaultIdentity<PMSUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<PMSDbContext>();
             builder.Services.AddControllersWithViews();
+
+            /// Adding scoped services
+            builder.Services.AddScoped<IRepository<Consumable, Guid>, GenericRepository<Consumable,Guid>>();
 
             var app = builder.Build();
 

@@ -179,7 +179,7 @@ namespace PMSWeb.Data.Migrations
 
                     b.HasKey("CityId");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
                 });
 
             modelBuilder.Entity("PMS.Data.Models.Consumable", b =>
@@ -235,7 +235,7 @@ namespace PMSWeb.Data.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Consumables");
+                    b.ToTable("Consumables", (string)null);
                 });
 
             modelBuilder.Entity("PMS.Data.Models.ConsumableEquipment", b =>
@@ -250,7 +250,7 @@ namespace PMSWeb.Data.Migrations
 
                     b.HasIndex("EquipmentId");
 
-                    b.ToTable("ConsumablesEquipments");
+                    b.ToTable("ConsumablesEquipments", (string)null);
                 });
 
             modelBuilder.Entity("PMS.Data.Models.ConsumableSupplier", b =>
@@ -265,7 +265,7 @@ namespace PMSWeb.Data.Migrations
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("ConsumablesSuppliers");
+                    b.ToTable("ConsumablesSuppliers", (string)null);
                 });
 
             modelBuilder.Entity("PMS.Data.Models.Country", b =>
@@ -288,7 +288,7 @@ namespace PMSWeb.Data.Migrations
 
                     b.HasKey("CountryId");
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", (string)null);
                 });
 
             modelBuilder.Entity("PMS.Data.Models.Equipment", b =>
@@ -336,7 +336,7 @@ namespace PMSWeb.Data.Migrations
 
                     b.HasIndex("MakerId");
 
-                    b.ToTable("Equipments");
+                    b.ToTable("Equipments", (string)null);
                 });
 
             modelBuilder.Entity("PMS.Data.Models.Identity.PMSUser", b =>
@@ -460,7 +460,7 @@ namespace PMSWeb.Data.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Makers");
+                    b.ToTable("Makers", (string)null);
                 });
 
             modelBuilder.Entity("PMS.Data.Models.Manual", b =>
@@ -520,7 +520,7 @@ namespace PMSWeb.Data.Migrations
 
                     b.HasIndex("SparepartId");
 
-                    b.ToTable("Manuals");
+                    b.ToTable("Manuals", (string)null);
                 });
 
             modelBuilder.Entity("PMS.Data.Models.RoutineMaintenance", b =>
@@ -575,7 +575,7 @@ namespace PMSWeb.Data.Migrations
 
                     b.HasIndex("CReatorId");
 
-                    b.ToTable("RoutineMaintenances");
+                    b.ToTable("RoutineMaintenances", (string)null);
                 });
 
             modelBuilder.Entity("PMS.Data.Models.RoutineMaintenanceEquipment", b =>
@@ -590,7 +590,7 @@ namespace PMSWeb.Data.Migrations
 
                     b.HasIndex("EquipmentId");
 
-                    b.ToTable("RoutineMaintenancesEquipments");
+                    b.ToTable("RoutineMaintenancesEquipments", (string)null);
                 });
 
             modelBuilder.Entity("PMS.Data.Models.Sparepart", b =>
@@ -654,7 +654,7 @@ namespace PMSWeb.Data.Migrations
 
                     b.HasIndex("EquipmentId");
 
-                    b.ToTable("Spareparts");
+                    b.ToTable("Spareparts", (string)null);
                 });
 
             modelBuilder.Entity("PMS.Data.Models.SparepartSupplier", b =>
@@ -669,7 +669,7 @@ namespace PMSWeb.Data.Migrations
 
                     b.HasIndex("SparepartId");
 
-                    b.ToTable("SparepartsSuppliers");
+                    b.ToTable("SparepartsSuppliers", (string)null);
                 });
 
             modelBuilder.Entity("PMS.Data.Models.SpecificMaintenance", b =>
@@ -734,7 +734,7 @@ namespace PMSWeb.Data.Migrations
 
                     b.HasIndex("EquipmentId");
 
-                    b.ToTable("SpecificMaintenances");
+                    b.ToTable("SpecificMaintenances", (string)null);
                 });
 
             modelBuilder.Entity("PMS.Data.Models.Supplier", b =>
@@ -800,7 +800,7 @@ namespace PMSWeb.Data.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Suppliers");
+                    b.ToTable("Suppliers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
