@@ -7,19 +7,19 @@ namespace PMS.Services.Data.Interfaces
         Task<IEnumerable<ConsumableDisplayViewModel>> GetListOfViewModelsAsync();
 
 
-        Task<bool> CreateConsumableAsync(ConsumableCreateViewModel model);
+        Task<bool> CreateConsumableAsync(ConsumableCreateViewModel model, string userId);
 
 
-        Task<bool> GetDetailsAsync(string Id);
+        Task<ConsumableDetailsViewModel> GetDetailsAsync(string id);
 
 
-        Task<bool> GetItemForEditAsync(string Id);
+        Task<ConsumableEditViewModel> GetItemForEditAsync(string id);
 
 
-        Task<bool> SaveItemToEditAsync(ConsumableEditViewModel model);
+        Task<bool> SaveItemToEditAsync(ConsumableEditViewModel model, string userId);
 
 
-        Task<bool> GetItemToDeleteAsync(string Id);
+        Task<ConsumableDeleteViewModel> GetItemToDeleteAsync(string id);
 
 
         Task<bool> ConfirmDeleteAsync(ConsumableDeleteViewModel model);

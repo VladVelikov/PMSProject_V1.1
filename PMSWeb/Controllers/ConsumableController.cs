@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace PMSWeb.Controllers
 {
-
+    [Authorize]
     public class ConsumableController(IRepository<Consumable, Guid> consumables, IConsumableService consumableService) : Controller
     {
 
@@ -19,24 +19,9 @@ namespace PMSWeb.Controllers
         {
             return View();
         }
-
+        
         public async Task<IActionResult> Select()
         {
-            //var models = await consumables.GetAllAsQueryable()
-            //    .Where(x => x.IsDeleted == false)
-            //    .AsNoTracking()
-            //    .Select(x => new ConsumableDisplayViewModel() {
-            //        ConsumableId = x.ConsumableId.ToString(),
-            //        Name = x.Name,
-            //        Units = x.Units,
-            //        Description = x.Description,
-            //        Price = x.Price,
-            //        ROB = x.ROB,
-            //        EditedOn = x.EditedOn
-            //    })
-            //    .OrderByDescending(x => x.EditedOn)
-            //    .ThenBy(x => x.Name)
-            //    .ToListAsync();
             var models = await consumableService.GetListOfViewModelsAsync();
             return View(models);
         }
@@ -59,40 +44,19 @@ namespace PMSWeb.Controllers
             {
                 return View(model);
             }
-
-            Consumable consumable = new Consumable()
+           
+            bool result = await consumableService.CreateConsumableAsync(model, GetUserId()!);
+            if (!result)
             {
-                Name = model.Name,
-                Units = model.Units,
-                Description = model.Description,
-                Price = model.Price,
-                ROB = model.ROB,
-                CreatorId = GetUserId() ?? string.Empty,
-                CreatedOn = DateTime.Now,
-                EditedOn = DateTime.Now,
-                IsDeleted = false
-            };
-            await consumables.AddAsync(consumable);
+                return View(model);
+            }
             return RedirectToAction(nameof(Select));
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            var model = await consumables.GetAllAsQueryable() 
-                .AsNoTracking()
-                .Where(x => x.IsDeleted == false)
-                .Where(x => x.ConsumableId.ToString() == id)
-                .Select(x => new ConsumableEditViewModel() {
-                    ConsumableId = x.ConsumableId.ToString(),
-                    Name = x.Name,
-                    Units = x.Units,
-                    Description = x.Description,
-                    Price = x.Price,
-                    ROB = x.ROB
-                })
-                .FirstOrDefaultAsync();
-
+            ConsumableEditViewModel model = await consumableService.GetItemForEditAsync(id); 
             return View(model);
         }
 
@@ -107,85 +71,36 @@ namespace PMSWeb.Controllers
             {
                 return View(model);
             }
-            Consumable? consToEdit = await consumables.GetAllAsQueryable()
-               .Where(x => x.IsDeleted == false)
-               .Where(x => x.ConsumableId.ToString() == model.ConsumableId)
-               .FirstOrDefaultAsync();
-
-            if (consToEdit == null)
+           
+            bool isEdited = await consumableService.SaveItemToEditAsync(model, GetUserId()!);
+            if (!isEdited)
             {
-                return RedirectToAction(nameof(Index));
+                return View(model);
             }
-
-            consToEdit.Name = model.Name;
-            consToEdit.Units = model.Units;
-            consToEdit.Description = model.Description;
-            consToEdit.Price = model.Price;
-            consToEdit.ROB = model.ROB;
-            consToEdit.CreatorId = GetUserId() ?? string.Empty;
-            consToEdit.IsDeleted = false;
-            consToEdit.EditedOn = DateTime.Now;
-
-            await consumables.UpdateAsync(consToEdit);
-
             return RedirectToAction(nameof(Select));
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
-            var model = await consumables.GetAllAsQueryable()
-                .Where(x => x.IsDeleted == false)
-                .Where(x => x.ConsumableId.ToString() == id)
-                .AsNoTracking()
-                .Select(x => new ConsumableDetailsViewModel() {
-                    ConsumableId = x.ConsumableId.ToString(),
-                    Name = x.Name,
-                    Units = x.Units,
-                    Description = x.Description,
-                    Price = x.Price.ToString("C"),
-                    ROB = x.ROB,
-                    CreatedOn = x.CreatedOn,
-                    EditedOn = x.EditedOn,
-                    CreatorId = x.CreatorId,
-                    CreatorName = x.Creator.UserName ?? string.Empty,
-                })
-                .FirstOrDefaultAsync();
-
+            var model = await consumableService.GetDetailsAsync(id);
             return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
-            var model = await consumables.GetAllAsQueryable()
-                .Where(x => x.IsDeleted == false)
-                .Where(x => x.ConsumableId.ToString() == id)
-                .AsNoTracking()
-                .Select(x => new ConsumableDeleteViewModel() {
-                    ConsumableId = x.ConsumableId.ToString(),
-                    Name = x.Name,
-                    CreatedOn = x.CreatedOn,
-                    EditedOn = x.EditedOn,
-                    CreatorId = x.CreatorId,
-                    CreatorName = x.Creator.UserName ?? string.Empty
-                })
-                .FirstOrDefaultAsync();
-
+            ConsumableDeleteViewModel model = await consumableService.GetItemToDeleteAsync(id);
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(ConsumableDeleteViewModel model)
         {
-            Consumable? consToDelete = await consumables.GetAllAsQueryable()
-                .Where(x => x.IsDeleted == false)
-                .Where(x => x.ConsumableId.ToString() == model.ConsumableId)
-                .FirstOrDefaultAsync();
-            if (consToDelete != null)
+            bool result = await consumableService.ConfirmDeleteAsync(model);
+            if (!result)
             {
-                consToDelete.IsDeleted = true;
-                await consumables.UpdateAsync(consToDelete);  
+                return View(model);
             }
             return RedirectToAction(nameof(Select));
         }
