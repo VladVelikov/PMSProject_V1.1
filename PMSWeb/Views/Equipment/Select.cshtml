@@ -1,0 +1,40 @@
+﻿@using PMSWeb.ViewModels.Equipment
+@model IEnumerable<EquipmentDisplayViewModel>
+
+@{
+    ViewData["Title"] = "Equipment List";
+}
+
+<h2>Equipment List</h2>
+<a asp-action="Create" class="btn btn-primary mb-3">Create New Equipment</a>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>CreatedOn</th>
+            <th>EditedOn</th>
+            <th>Creator</th>
+            <th>Maker</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.CreatedOn</td>
+                <td>@item.EditedOn</td>
+                <td>@item.Creator</td>
+                <td>@item.Maker</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.EquipmentId" class="btn btn-primary btn-sm">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.EquipmentId" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.EquipmentId" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PMS.Data;
 using PMS.Data.Seeders;
@@ -6,6 +7,7 @@ using System.Security.Claims;
 
 namespace PMSWeb.Controllers
 {
+    [Authorize]
     public class SeedDataController(PMSDbContext context) : Controller
     {
         public IActionResult Index()
