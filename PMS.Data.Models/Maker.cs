@@ -45,7 +45,7 @@ namespace PMS.Data.Models
         public string CreatorId { get; set; } = null!;
 
         [ForeignKey(nameof(CreatorId))]
-        public PMSUser Creator { get; set; } = null!;
+        public virtual PMSUser Creator { get; set; } = null!;
 
         [Required]
         [Comment("Date when created on")]
@@ -56,9 +56,9 @@ namespace PMS.Data.Models
         public DateTime EditedOn { get; set; }
 
 
-        public ICollection<Equipment> Equipment { get; set; } = new List<Equipment>();
+        public virtual ICollection<Equipment> Equipment { get; set; } = new List<Equipment>();
 
-        public ICollection<Manual> Manuals { get; set; } = new List<Manual>();
+        public virtual ICollection<Manual> Manuals { get; set; } = new List<Manual>();
 
         [Comment("Soft delete implemented")]
         public bool IsDeleted { get; set; } 

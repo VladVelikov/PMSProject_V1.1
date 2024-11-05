@@ -36,29 +36,41 @@ namespace PMSWeb
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage();  // To be removed for production environment 
                 app.UseMigrationsEndPoint();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                // app.UseStatusCodePagesWithReExecute(); TO DO
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            /// change the sheme to HTTPS for any incoming, thus avoid redirection in the next middleware app.UseHttpsRedirection()
+            //app.Use(async (context, next) =>
+            //{
+            //    context.Request.Scheme = "https";    
+
+            //    await next();
+            //});
+
+
+
+            app.UseHttpsRedirection();  // if this on receives HTTP he will redirect to HTTPS !!!
+            app.UseStaticFiles();       // app can work with static files .json .img etc
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllerRoute(
+            app.MapControllerRoute(                // with map we can add branches to the pipeline and to send it to "other directions"
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
 
-            app.Run();
+            app.Run();           // delegate with run will close the pipeline
         }
     }
 }

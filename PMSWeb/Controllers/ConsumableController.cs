@@ -56,7 +56,7 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            ConsumableEditViewModel model = await consumableService.GetItemForEditAsync(id); 
+            ConsumableEditViewModel model = await consumableService.GetItemForEditAsync(id);
             return View(model);
         }
 

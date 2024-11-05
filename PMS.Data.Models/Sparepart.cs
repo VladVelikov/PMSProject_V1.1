@@ -52,7 +52,7 @@ namespace PMS.Data.Models
         public Guid EquipmentId { get; set; }
 
         [ForeignKey(nameof(EquipmentId))]
-        public Equipment Equipment { get; set; } = null!;
+        public virtual Equipment Equipment { get; set; } = null!;
 
         [Required]
         [Comment("Date when spare created on")]
@@ -67,12 +67,12 @@ namespace PMS.Data.Models
         public string CreatorId { get; set; } = null!;
 
         [ForeignKey(nameof(CreatorId))]
-        public PMSUser Creator { get; set; } = null!;
+        public virtual PMSUser Creator { get; set; } = null!;
 
 
-        public ICollection<SparepartSupplier> SparepartsSuppliers { get; set; } = new HashSet<SparepartSupplier>();
+        public virtual ICollection<SparepartSupplier> SparepartsSuppliers { get; set; } = new HashSet<SparepartSupplier>();
 
-        public ICollection<Manual> Manuals { get; set; } = new List<Manual>();
+        public virtual ICollection<Manual> Manuals { get; set; } = new List<Manual>();
 
         [Comment("Soft delete fpr spare part")]
         public bool IsDeleted { get; set; }     

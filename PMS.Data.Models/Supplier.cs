@@ -2,6 +2,7 @@
 using PMS.Data.Models.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Cryptography;
 using static PMS.Common.EntityValidationConstants.SupplierConstatnts;
 
 namespace PMS.Data.Models
@@ -46,7 +47,7 @@ namespace PMS.Data.Models
         public Guid CityId { get; set; } 
 
         [ForeignKey(nameof(CityId))]
-        public City City { get; set; } = null!;
+        public virtual City City { get; set; } = null!;
 
 
         [Required]
@@ -54,7 +55,7 @@ namespace PMS.Data.Models
         public Guid CountryId { get; set; } 
 
         [ForeignKey(nameof(CountryId))]
-        public Country Country { get; set; } = null!;
+        public virtual Country Country { get; set; } = null!;
 
         [Required]
         [Comment("UniqueIdentifierOf The Creator")]
@@ -62,7 +63,7 @@ namespace PMS.Data.Models
 
 
         [ForeignKey(nameof(CreatorId))]
-        public PMSUser Creator { get; set; } = null!;
+        public virtual PMSUser Creator { get; set; } = null!;
 
         [Required]
         [Comment("Date when created on")]
@@ -73,7 +74,7 @@ namespace PMS.Data.Models
         public DateTime EditedOn { get; set; }
 
 
-        public ICollection<ConsumableSupplier> ConsumablesSuppliers { get; set; } = new HashSet<ConsumableSupplier>();
+        public virtual ICollection<ConsumableSupplier> ConsumablesSuppliers { get; set; } = new HashSet<ConsumableSupplier>();
         public ICollection<SparepartSupplier> SparepartsSuppliers = new HashSet<SparepartSupplier>();
 
         public bool IsDleted { get; set; }

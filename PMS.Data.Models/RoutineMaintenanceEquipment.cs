@@ -9,12 +9,12 @@ namespace PMS.Data.Models
         public Guid RoutineMaintenanceId { get; set; } 
 
         [ForeignKey(nameof(RoutineMaintenanceId))]
-        public RoutineMaintenance RoutineMaintenance { get; set; } = null!;
+        public virtual RoutineMaintenance RoutineMaintenance { get; set; } = null!;
 
         public Guid EquipmentId { get; set; }
 
         [ForeignKey(nameof(EquipmentId))]   
-        public Equipment Equipment { get; set; } = null!;
+        public virtual Equipment Equipment { get; set; } = null!;
 
     }
 }

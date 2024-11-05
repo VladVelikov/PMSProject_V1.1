@@ -9,12 +9,12 @@ namespace PMS.Data.Models
         public Guid ConsumableId { get; set; } 
 
         [ForeignKey(nameof(ConsumableId))]
-        public Consumable Consumable { get; set; } = null!;
+        public virtual Consumable Consumable { get; set; } = null!;
 
         public Guid SupplierId { get; set; } 
 
         [ForeignKey(nameof(SupplierId))]
-        public Supplier Supplier { get; set; } = null!;
+        public virtual Supplier Supplier { get; set; } = null!;
 
     }
 }

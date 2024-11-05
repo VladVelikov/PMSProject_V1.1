@@ -40,7 +40,7 @@ namespace PMS.Data.Models
         [MaxLength(MaintenancePositionMaxLength)]
         [MinLength(MaintenancePositionMinLength)]
         [Comment("Position of the person responsible for the maintenance")]
-        public string ResponsiblePosition { get; set; }
+        public string ResponsiblePosition { get; set; } = null!;
 
         [Required]
         [Comment("Unique identifier of the creator of the maintenance")]
@@ -55,9 +55,9 @@ namespace PMS.Data.Models
         public DateTime EditedOn { get; set; }
 
         [ForeignKey(nameof(CReatorId))]
-        public PMSUser Creator { get; set; } = null!;
+        public virtual PMSUser Creator { get; set; } = null!;
 
-        public ICollection<RoutineMaintenanceEquipment> RoutineMaintenancesEquipments { get; set; } 
+        public virtual ICollection<RoutineMaintenanceEquipment> RoutineMaintenancesEquipments { get; set; } 
             = new HashSet<RoutineMaintenanceEquipment>();   
 
         public bool IsDeleted { get; set; }

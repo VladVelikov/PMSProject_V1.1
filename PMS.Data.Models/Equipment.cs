@@ -42,17 +42,17 @@ namespace PMS.Data.Models
         public string CreatorId { get; set; } = null!;
 
         [ForeignKey(nameof(CreatorId))]
-        public PMSUser Creator { get; set; } = null!;
+        public virtual PMSUser Creator { get; set; } = null!;
 
         [Required]
         [Comment("Unique identifier of the Maker")]
         public Guid MakerId { get; set; }
 
         [ForeignKey(nameof(MakerId))]
-        public Maker Maker { get; set; } = null!;
+        public virtual Maker Maker { get; set; } = null!;
 
 
-        public ICollection<RoutineMaintenanceEquipment> RoutineMaintenancesEquipments { get; set; } 
+        public virtual ICollection<RoutineMaintenanceEquipment> RoutineMaintenancesEquipments { get; set; } 
                                                        = new HashSet<RoutineMaintenanceEquipment>();
         
         public ICollection<SpecificMaintenance> SpecificMaintenances = new List<SpecificMaintenance>();  

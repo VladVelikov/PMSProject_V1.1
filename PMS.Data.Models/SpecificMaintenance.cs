@@ -44,7 +44,7 @@ namespace PMS.Data.Models
         public Guid EquipmentId { get; set; }
 
         [ForeignKey(nameof(EquipmentId))]
-        public Equipment Equipment { get; set; } = null!;
+        public virtual Equipment Equipment { get; set; } = null!;
 
         [Required]
         [MaxLength(MaintenancePositionMaxLength)]
@@ -58,7 +58,7 @@ namespace PMS.Data.Models
         public string CReatorId { get; set; } = null!;
 
         [ForeignKey(nameof(CReatorId))]
-        public PMSUser Creator { get; set; } = null!;
+        public virtual PMSUser Creator { get; set; } = null!;
 
         [Required]
         [Comment("Date when created on")]

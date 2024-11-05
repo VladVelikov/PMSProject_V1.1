@@ -39,7 +39,7 @@ namespace PMS.Data.Models
         public string CreatorId { get; set; } = null!;
 
         [ForeignKey(nameof(CreatorId))]
-        public PMSUser Creator { get; set; } = null!;
+        public virtual PMSUser Creator { get; set; } = null!;
 
         [Required]
         [Comment("Date when created on")]

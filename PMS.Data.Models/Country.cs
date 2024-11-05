@@ -24,6 +24,6 @@ namespace PMS.Data.Models
         public DateTime EditedOn { get; set; }
 
 
-        public ICollection<Supplier> Suppliers { get; set; } = new List<Supplier>();    
+        public virtual ICollection<Supplier> Suppliers { get; set; } = new List<Supplier>();    
     }
 }

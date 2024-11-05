@@ -28,28 +28,28 @@ namespace PMS.Data.Models
         public Guid MakerId { get; set; }
 
         [ForeignKey(nameof(MakerId))]
-        public Maker Maker { get; set; } = null!;
+        public virtual Maker Maker { get; set; } = null!;
 
 
         [Comment("Unique identifier of the equipment")]
         public Guid EquipmentId { get; set; }
 
         [ForeignKey(nameof(EquipmentId))]
-        public Equipment? Equipment { get; set; }    
+        public virtual Equipment? Equipment { get; set; }    
 
 
         [Comment("Unique identifier of the spare part")]
         public Guid SparepartId { get; set; }
 
         [ForeignKey(nameof(SparepartId))]
-        public Sparepart? Sparepart { get; set; }
+        public virtual Sparepart? Sparepart { get; set; }
 
         [Required]
         [Comment("Unique identifier of the Creator")]
         public string CreatorId { get; set; } = null!;
 
         [ForeignKey(nameof(CreatorId))]
-        public PMSUser Creator { get; set; } = null!;
+        public virtual PMSUser Creator { get; set; } = null!;
 
         [Required]
         [Comment("Date when created on")]
