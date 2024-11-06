@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Configuration;
 using PMS.Data;
 using PMS.Data.Models;
 using PMSWeb.ViewModels.Equipment;
@@ -99,7 +98,7 @@ namespace PMSWeb.Controllers
                 CreatedOn = DateTime.Now,
                 EditedOn = DateTime.Now,
                 CreatorId = GetUserId() ?? string.Empty,
-                MakerId = model.MakerId,    
+                MakerId = model.MakerId,
                 IsDeleted = false
             };
             await context.Equipments.AddAsync(equipment);
@@ -259,6 +258,7 @@ namespace PMSWeb.Controllers
             eq.Name = model.Name;   
             eq.Description = model.Description;
             eq.MakerId = model.MakerId;
+            eq.EditedOn = DateTime.Now; 
 
             var consEquipments = await context
                 .ConsumablesEquipments
@@ -323,6 +323,124 @@ namespace PMSWeb.Controllers
             await context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Select));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            EquipmentDetailsViewModel? model = await context
+                .Equipments
+                .Where(x=>!x.IsDeleted)
+                .Where(x=>x.EquipmentId.ToString().ToLower() == id.ToLower())
+                .AsNoTracking()
+                .Select(x=> new EquipmentDetailsViewModel() {
+                    EquipmentId = x.EquipmentId.ToString(),
+                    Name = x.Name,
+                    Description = x.Description,
+                    CreatedOn = x.CreatedOn.ToString(PMSRequiredDateFormat),
+                    EditedOn = x.EditedOn.ToString(PMSRequiredDateFormat),
+                    Creator = x.Creator.UserName,
+                    Maker = x.Maker.MakerName
+                })
+                .FirstOrDefaultAsync();
+            if (model == null)
+            {
+                return RedirectToAction(nameof(Select));
+            }
+                
+            List<string> routineMaintenances = await context
+                .RoutineMaintenancesEquipments
+                .Where(x=>x.EquipmentId.ToString().ToLower() == id.ToLower())
+                .Select(x=>x.RoutineMaintenance.Name)
+                .ToListAsync();
+
+            List<string> specificMaintenances = await context
+                .SpecificMaintenances
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.EquipmentId.ToString().ToLower() == id.ToLower())
+                .Select(x => x.Name)
+                .ToListAsync();
+
+            List<string> spareParts = await context
+                .Spareparts
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.EquipmentId.ToString().ToLower() == id.ToLower())
+                .Select(x => x.SparepartName)
+                .ToListAsync();
+
+            List<string> manuals = await context
+                .Manuals
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.EquipmentId.ToString().ToLower() == id.ToLower())
+                .Select(x => x.ManualName)
+                .ToListAsync();
+
+            List<string> consumables = await context
+                .ConsumablesEquipments
+                .Where(x => x.EquipmentId.ToString().ToLower() == id.ToLower())
+                .Select(x => x.Consumable.Name)
+                .ToListAsync();
+
+            if(routineMaintenances != null)
+                model.RoutineMaintenances = routineMaintenances;
+
+            if (specificMaintenances != null)
+                model.SpecificMaintenances = specificMaintenances;
+
+            if (spareParts != null)
+                model.SpareParts = spareParts;
+
+            if (manuals != null)
+                model.Manuals = manuals;
+
+            if (consumables != null)
+                model.Consumables = consumables;
+
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var model = await context
+                .Equipments
+                .Where(x => x.IsDeleted == false)
+                .Where(x => x.EquipmentId.ToString().ToLower() == id.ToLower())
+                .Select(x=> new EquipmentDeleteViewModel() {
+                    EquipmentId = x.EquipmentId.ToString(),
+                    Name = x.Name,  
+                    Description = x.Description,
+                    CreatedOn = x.CreatedOn.ToString(PMSRequiredDateFormat)
+                })
+                .FirstOrDefaultAsync();
+            if (model == null)
+            {
+                return RedirectToAction(nameof(Select));
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(EquipmentDeleteViewModel model)
+        {
+            if (model.EquipmentId == null)
+            {
+                return View(model);
+            }
+            var deleteRecord = await context
+                .Equipments
+                .Where(x => x.IsDeleted == false)
+                .Where(x => x.EquipmentId.ToString().ToLower() == model.EquipmentId.ToLower())
+                .FirstOrDefaultAsync();
+            if (deleteRecord == null) 
+            {
+                return View(model);
+            }
+            deleteRecord.IsDeleted = true;  
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Select)); 
         }
 
 

@@ -1,0 +1,36 @@
+﻿@using PMSWeb.ViewModels.Maker
+@model IEnumerable<MakerDisplayViewModel>
+
+@{
+    ViewData["Title"] = "Makers List";
+}
+
+<h2>Makers List</h2>
+<a asp-action="Create" class="btn btn-primary mb-3">Create New Maker</a>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var maker in Model)
+        {
+            <tr>
+                <td>@maker.Name</td>
+                <td>@maker.Description</td>
+                <td>@maker.Email</td>
+                <td>@maker.Phone</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Maker", new { id = maker.MakerId })" class="btn btn-primary">Edit</a>
+                    <a href="@Url.Action("Details", "Maker", new { id = maker.MakerId })" class="btn btn-info">Details</a>
+                    <a href="@Url.Action("Delete", "Maker", new { id = maker.MakerId })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

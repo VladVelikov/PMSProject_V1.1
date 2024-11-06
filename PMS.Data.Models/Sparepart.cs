@@ -74,7 +74,7 @@ namespace PMS.Data.Models
 
         public virtual ICollection<Manual> Manuals { get; set; } = new List<Manual>();
 
-        [Comment("Soft delete fpr spare part")]
+        [Comment("Soft delete for spare part")]
         public bool IsDeleted { get; set; }     
  
     }

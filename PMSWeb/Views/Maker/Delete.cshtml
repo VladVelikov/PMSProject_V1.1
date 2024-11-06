@@ -1,0 +1,29 @@
+﻿@using PMSWeb.ViewModels.Maker
+@model MakerDeleteViewModel
+
+@{
+    ViewData["Title"] = "Delete Maker";
+}
+
+<h2>Delete Maker</h2>
+
+<h4>Are you sure you want to delete this maker?</h4>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">Name</dt>
+        <dd class="col-sm-9">@Model.Name</dd>
+
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+
+        <dt class="col-sm-3">Phone</dt>
+        <dd class="col-sm-9">@Model.Phone</dd>
+    </dl>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="MakerId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Select" class="btn btn-secondary">Cancel</a>
+</form>

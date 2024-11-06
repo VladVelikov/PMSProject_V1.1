@@ -1,0 +1,88 @@
+﻿@using PMSWeb.ViewModels.Maker
+@model MakerDetailsViewModel
+
+@{
+    ViewData["Title"] = "Maker Details";
+}
+
+<h2>Maker Details</h2>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">Maker ID</dt>
+        <dd class="col-sm-9">@Model.MakerId</dd>
+
+        <dt class="col-sm-3">Name</dt>
+        <dd class="col-sm-9">@Model.Name</dd>
+
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">@Model.Description</dd>
+
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+
+        <dt class="col-sm-3">Phone</dt>
+        <dd class="col-sm-9">@Model.Phone</dd>
+
+        <dt class="col-sm-3">Created On</dt>
+        <dd class="col-sm-9">@Model.CreatedOn</dd>
+
+        <dt class="col-sm-3">Edited On</dt>
+        <dd class="col-sm-9">@Model.EditedOn</dd>
+    </dl>
+</div>
+
+<div style="display:flex; gap:3em; margin: 3em auto">
+    <div>
+        <h3>Equipments Made By @Model.Name</h3>
+        @if (Model.EquipmentsList != null && Model.EquipmentsList.Any())
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Equipment Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var equipment in Model.EquipmentsList)
+                    {
+                        <tr>
+                            <td>@equipment</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No equipments available.</p>
+        }
+    </div>
+    <div>
+        <h3>Manuals by @Model.Name</h3>
+        @if (Model.ManualsList != null && Model.ManualsList.Any())
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Manual Title</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var manual in Model.ManualsList)
+                    {
+                        <tr>
+                            <td>@manual</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No manuals available.</p>
+        }
+    </div>
+</div>
+
+<a asp-action="Select" class="btn btn-primary">Back</a>

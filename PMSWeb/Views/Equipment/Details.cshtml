@@ -1,0 +1,131 @@
+﻿@using PMSWeb.ViewModels.Equipment
+@model EquipmentDetailsViewModel
+
+@{
+    ViewData["Title"] = "Equipment Details";
+}
+<style>
+    ul{
+        list-style: none outside;
+    }
+    li{
+        margin: 0;
+        padding: 0;
+    }
+    
+</style>
+
+<h2>Welcome to Details Page</h2>
+
+<div>
+    <h4>Equipment Main Data</h4>
+    <dl class="row">
+        <dt class="col-sm-2">
+            Equipment ID
+        </dt>
+        <dd class="col-sm-10">
+            @Model.EquipmentId
+        </dd>
+
+        <dt class="col-sm-2">
+            Name
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Name
+        </dd>
+
+        <dt class="col-sm-2">
+            Description
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Description
+        </dd>
+
+        <dt class="col-sm-2">
+            Created On
+        </dt>
+        <dd class="col-sm-10">
+            @Model.CreatedOn
+        </dd>
+
+        <dt class="col-sm-2">
+            Edited On
+        </dt>
+        <dd class="col-sm-10">
+            @Model.EditedOn
+        </dd>
+
+        <dt class="col-sm-2">
+            Creator
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Creator
+        </dd>
+
+        <dt class="col-sm-2">
+            Maker
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Maker
+        </dd>
+    </dl>
+
+    <h4>Additional Data for the Equipment</h4>
+    
+
+    <div class="maintenance" style="display: flex; gap: 2em; margin-top: 2em;">
+        <div>
+            <h5>Routine Maintenances</h5>
+            <ul>
+                @foreach (string rm in Model.RoutineMaintenances)
+                {
+                    <li>@rm</li>
+                }
+            </ul>
+        </div>
+        <div>
+            <h5>Specific Maintenances</h5>
+            <ul>
+                @foreach (var sm in Model.SpecificMaintenances)
+                {
+                    <li>@sm</li>
+                }
+            </ul>
+        </div>
+        <div>
+            <h5>Manuals</h5>
+            <ul>
+                @foreach (var manual in Model.Manuals)
+                {
+                    <li>@manual</li>
+                }
+            </ul>
+        </div>
+       
+    </div>
+    <div class="spares" style="display:flex; gap:3em; margin-top: 2em;">
+        <div>
+            <h5>Spare Parts</h5>
+            <ul>
+                @foreach (var part in Model.SpareParts)
+                {
+                    <li>@part</li>
+                }
+            </ul>
+        </div>
+        <div>
+            <h5>Consumables</h5>
+            <ul>
+                @foreach (var consumable in Model.Consumables)
+                {
+                    <li>@consumable</li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.EquipmentId">Edit</a> |
+        <a asp-action="Select">Back to List</a>
+    </div>
+</div>
