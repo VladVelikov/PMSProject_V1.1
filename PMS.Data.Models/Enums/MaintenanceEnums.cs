@@ -22,4 +22,5 @@ namespace PMS.Data.Models.Enums
         WaitingSpares,
         InProgeress
     }
+
 }

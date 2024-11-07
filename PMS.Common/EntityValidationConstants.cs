@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 
 namespace PMS.Common
 {
@@ -13,6 +8,7 @@ namespace PMS.Common
         public const string PMSRequiredDateTimeFormat = "dd-MM-yyyy HH:mm";
         public const int UserNameMaxLength = 50;
         public const int UserNameMinLength = 3;
+        public static readonly string[] PMSPositions = { "Manager", "Technician", "Supervisor", "Engineer", "Operator" };
 
         public static class EquipmentConstants
         {

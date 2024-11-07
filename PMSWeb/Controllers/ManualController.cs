@@ -4,6 +4,7 @@ using PMS.Data;
 using PMS.Data.Models;
 using PMSWeb.ViewModels.Manual;
 using System.Security.Claims;
+using static PMS.Common.EntityValidationConstants;
 
 namespace PMSWeb.Controllers
 {
@@ -153,18 +154,39 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
-            var model = context
+            var model = await context
                 .Manuals
-                .Where(x=>!x.IsDeleted)
-                .
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.ManualId.ToString().ToLower() == id.ToLower())
+                .AsNoTracking()
+                .Select(x => new ManualDeleteViewModel() {
+                    ManualName = x.ManualName,
+                    MakerName = x.Maker.MakerName,
+                    EquipmentName = x.Equipment.Name,
+                    CreatedOn = x.CreatedOn.ToString(PMSRequiredDateFormat),
+                    ManualId = x.ManualId.ToString()
+                })
+                .FirstOrDefaultAsync();
 
-            return View(id);
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(ManualDeleteViewModel model)
         {
-
+            if (model != null && model.ManualId != null) 
+            {
+                var deleteModel = await context
+                    .Manuals
+                    .Where (x => !x.IsDeleted)  
+                    .Where(x=>x.ManualId.ToString().ToLower() == model.ManualId.ToLower())
+                    .FirstOrDefaultAsync();
+                if (deleteModel != null)
+                {
+                       deleteModel.IsDeleted = true;
+                }
+                await context.SaveChangesAsync();
+            }
             return RedirectToAction(nameof(Select));
         }
 

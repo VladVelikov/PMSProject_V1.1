@@ -30,12 +30,12 @@ namespace PMS.Data.Models
         [ForeignKey(nameof(MakerId))]
         public virtual Maker Maker { get; set; } = null!;
 
-
+        [Required]
         [Comment("Unique identifier of the equipment")]
         public Guid EquipmentId { get; set; }
 
         [ForeignKey(nameof(EquipmentId))]
-        public virtual Equipment? Equipment { get; set; }    
+        public virtual Equipment Equipment { get; set; }    
 
         [Required]
         [Comment("Unique identifier of the Creator")]

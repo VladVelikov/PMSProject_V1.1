@@ -1,0 +1,41 @@
+﻿@using PMSWeb.ViewModels.RM
+@model IEnumerable<RMDisplayViewModel>
+
+@{
+    ViewData["Title"] = "Routine Maintenance List";
+}
+
+<h2>Routine Maintenance List</h2>
+
+<table class="table table-bordered table-striped">
+    <a asp-action="Create" class="btn btn-success">Add New Routine Maintenance</a>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Last Completed Date</th>
+            <th>Interval (days)</th>
+            <th>Responsible Position</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.LastCompletedDate</td>
+                <td>@item.Interval</td>
+                <td>@item.ResponsiblePosition</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.RoutMaintId" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.RoutMaintId" class="btn btn-primary btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.RoutMaintId" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

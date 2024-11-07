@@ -12,6 +12,6 @@ namespace PMS.Data.Models.Identity
         [MinLength(UserNameMinLength)]
         public string? FullUserName { get; set; }
         
-        public Position? Position { get; set; }
+        
     }
 }
