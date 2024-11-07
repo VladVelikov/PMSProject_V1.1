@@ -27,7 +27,7 @@ namespace PMSWeb.ViewModels.Equipment
 
         public ICollection<Sparepart> SpareParts = new List<Sparepart>();
 
-        public ICollection<Manual> Manuals = new List<Manual>();
+        public ICollection<PMS.Data.Models.Manual> Manuals = new List<PMS.Data.Models.Manual>();
 
         public ICollection<ConsumableEquipment> ConsumablesEquipments = new HashSet<ConsumableEquipment>();
 

@@ -39,8 +39,4 @@
     <ProjectReference Include="..\PMSWeb.ViewModels\PMSWeb.ViewModels.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\TestImages\" />
-  </ItemGroup>
-
 </Project>

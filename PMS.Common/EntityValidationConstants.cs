@@ -66,6 +66,7 @@ namespace PMS.Common
             public const int SparePartIdStringMaxLength = 30;
             public const int SparePartROBMaxValue = 5000000;
             public const int SparePartPriceMaxValue = 5000000;
+            public const int SparePartImageURLMaxLength = 500;
 
         }
 

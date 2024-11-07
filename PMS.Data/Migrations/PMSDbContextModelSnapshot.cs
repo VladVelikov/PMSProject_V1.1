@@ -506,10 +506,6 @@ namespace PMSWeb.Data.Migrations
                         .HasColumnType("nvarchar(150)")
                         .HasComment("Name of the manual");
 
-                    b.Property<Guid>("SparepartId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasComment("Unique identifier of the spare part");
-
                     b.HasKey("ManualId");
 
                     b.HasIndex("CreatorId");
@@ -517,8 +513,6 @@ namespace PMSWeb.Data.Migrations
                     b.HasIndex("EquipmentId");
 
                     b.HasIndex("MakerId");
-
-                    b.HasIndex("SparepartId");
 
                     b.ToTable("Manuals");
                 });
@@ -622,6 +616,10 @@ namespace PMSWeb.Data.Migrations
                     b.Property<Guid>("EquipmentId")
                         .HasColumnType("uniqueidentifier")
                         .HasComment("Unique identifier of the related equipment");
+
+                    b.Property<string>("ImageURL")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit")
@@ -953,19 +951,11 @@ namespace PMSWeb.Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("PMS.Data.Models.Sparepart", "Sparepart")
-                        .WithMany("Manuals")
-                        .HasForeignKey("SparepartId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.Navigation("Creator");
 
                     b.Navigation("Equipment");
 
                     b.Navigation("Maker");
-
-                    b.Navigation("Sparepart");
                 });
 
             modelBuilder.Entity("PMS.Data.Models.RoutineMaintenance", b =>
@@ -1126,8 +1116,6 @@ namespace PMSWeb.Data.Migrations
 
             modelBuilder.Entity("PMS.Data.Models.Sparepart", b =>
                 {
-                    b.Navigation("Manuals");
-
                     b.Navigation("SparepartsSuppliers");
                 });
 

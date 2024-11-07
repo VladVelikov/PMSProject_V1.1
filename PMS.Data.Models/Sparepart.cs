@@ -69,10 +69,10 @@ namespace PMS.Data.Models
         [ForeignKey(nameof(CreatorId))]
         public virtual PMSUser Creator { get; set; } = null!;
 
+        [MaxLength(SparePartImageURLMaxLength)]
+        public string? ImageURL { get; set; }
 
         public virtual ICollection<SparepartSupplier> SparepartsSuppliers { get; set; } = new HashSet<SparepartSupplier>();
-
-        public virtual ICollection<Manual> Manuals { get; set; } = new List<Manual>();
 
         [Comment("Soft delete for spare part")]
         public bool IsDeleted { get; set; }     

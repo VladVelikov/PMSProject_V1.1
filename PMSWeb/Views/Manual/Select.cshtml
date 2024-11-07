@@ -1,0 +1,35 @@
+﻿@using PMSWeb.ViewModels.Manual
+@model IEnumerable<ManualDisplayViewModel>
+
+@{
+    ViewData["Title"] = "Manuals List";
+}
+
+<h2>List Of All Manuals</h2>
+<a asp-action="Create" class="btn btn-primary mb-3">Add New Manual</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Manual Name</th>
+            <th>Maker Name</th>
+            <th>Equipment Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var manual in Model)
+        {
+            <tr>
+                <td>@manual.ManualName</td>
+                <td>@manual.Maker</td>
+                <td>@manual.Equipment</td>
+                
+                <td>
+                    <a asp-action="Details" asp-route-id="@manual.ManualId" class="btn btn-info btn-sm">ShowContent</a>
+                    <a asp-action="Delete" asp-route-id="@manual.ManualId" class="btn btn-danger btn-sm">Delete Manual</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

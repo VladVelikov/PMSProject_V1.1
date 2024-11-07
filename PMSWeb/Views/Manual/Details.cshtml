@@ -1,0 +1,40 @@
+﻿@using PMSWeb.ViewModels.Manual
+@model ManualDetailsViewModel
+
+@{
+    ViewData["Title"] = "Manual Details";
+}
+
+<div style="display:flex; gap: 2em;">
+    <div>
+    <h2>Manual Details</h2>
+        <table class="table table-bordered">
+   
+            <tr>
+                <th>Name</th>
+                <td>@Model.Name</td>
+            </tr>
+    
+            <tr>
+                <th>Maker Name</th>
+                <td>@Model.MakerName</td>
+            </tr>
+   
+            <tr>
+                <th>Equipment Name</th>
+                <td>@Model.EquipmentName</td>
+            </tr>
+        </table>
+
+        <div>
+            <a asp-action="Select" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+    <div>
+        @{
+            string pdfUrl = Model.URL!;
+        }
+        <embed src="@pdfUrl" type="application/pdf" width="800" height="800" />
+    </div>
+</div>
+

@@ -37,13 +37,6 @@ namespace PMS.Data.Models
         [ForeignKey(nameof(EquipmentId))]
         public virtual Equipment? Equipment { get; set; }    
 
-
-        [Comment("Unique identifier of the spare part")]
-        public Guid SparepartId { get; set; }
-
-        [ForeignKey(nameof(SparepartId))]
-        public virtual Sparepart? Sparepart { get; set; }
-
         [Required]
         [Comment("Unique identifier of the Creator")]
         public string CreatorId { get; set; } = null!;

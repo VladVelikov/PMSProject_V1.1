@@ -20,12 +20,6 @@ namespace PMS.Data.Configurations
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder
-                .HasOne(x=>x.Sparepart)
-                .WithMany(x=>x.Manuals)
-                .HasForeignKey(x=>x.SparepartId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            builder
                 .HasOne(x=>x.Equipment)
                 .WithMany(x=>x.Manuals)
                 .HasForeignKey(x=>x.EquipmentId)

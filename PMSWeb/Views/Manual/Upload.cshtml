@@ -1,0 +1,14 @@
+﻿
+                           <h2>WELCOME TO UPLOAG PAGE</h2>
+
+<form asp-controller="Manual" asp-action="Upload" method="post" enctype="multipart/form-data">
+
+    <div style="display:flex; flex-direction:column;">
+        <label for="fileUpload" style="font-size:2em; margin-top:1em;">Plese Choose a file to upload (*.pdf):</label>
+        <input type="file" id="fileUpload" accept=".pdf,application/pdf" name="myFile" style="font-size:1.5em; margin-top:1em;" />
+    </div>
+    <div style="display:flex; gap: 1em; margin-top: 2em;">
+        <button type="submit" class="btn btn-primary" style="max-width:5em;">Upload</button>
+        <a asp-action="Create" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>

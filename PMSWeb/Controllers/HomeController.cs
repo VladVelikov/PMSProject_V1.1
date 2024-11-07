@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace PMSWeb.Controllers
 {
-    public class HomeController(PMSDbContext context) : Controller
+    public class HomeController : Controller
     {
 
         public IActionResult Index()
@@ -25,9 +25,8 @@ namespace PMSWeb.Controllers
             return View();
         }
         
-        public async Task<IActionResult> Dashboard()
+        public IActionResult Dashboard()
         {
-
             return View();
         }
 
