@@ -4,11 +4,16 @@ using PMS.Data.Models.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static PMS.Common.EntityValidationConstants.MaintenanceConstants;
+using static PMS.Common.EntityValidationConstants;
 
 namespace PMSWeb.ViewModels.RM
 {
     public class RMCreateViewModel
     {
+        public RMCreateViewModel() 
+        {
+            Positions = PMSPositions.ToList();
+        } 
 
         [Required]
         [MaxLength(MaintenanceNameMaxLength)]
@@ -29,6 +34,8 @@ namespace PMSWeb.ViewModels.RM
         [MaxLength(MaintenancePositionMaxLength)]
         [MinLength(MaintenancePositionMinLength)]
         public string ResponsiblePosition { get; set; } = null!;
+
+        public List<string> Positions { get; set; }
         
 
     }

@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "Create Routine Maintenance";
-    var positions = ViewBag.Positions as List<string>;
+    var positions = Model.Positions as List<string>;
 }
 
 
@@ -36,18 +36,19 @@
 
     <div class="form-group">
         <label asp-for="ResponsiblePosition" class="control-label">Responsible Person (Please Select One Of The Options:) </label>
-        <input asp-for="ResponsiblePosition" class="form-control" list="positionOptions" />
+        <input asp-for="ResponsiblePosition" class="form-control" list="positionOptions"/>
         <datalist id="positionOptions">
             @if (positions != null)
             {
                 @foreach (var position in positions)
                 {
-                    <option value="@position"></option>
+                    <option value="@position">@position</option>
                 }
             }
         </datalist>
         <span asp-validation-for="ResponsiblePosition" class="text-danger"></span>
     </div>
+    
 
     <button type="submit" class="btn btn-primary">Create</button>
     <a asp-action="Select" class="btn btn-secondary">Cancel</a>

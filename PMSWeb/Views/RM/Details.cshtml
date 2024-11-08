@@ -1,5 +1,72 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using PMSWeb.ViewModels.RM
+@model RMDetailsViewModel
+
 @{
+    ViewData["Title"] = "Routine Maintenance Details";
 }
+
+<h2>Routine Maintenance Details</h2>
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Routine Maintenance ID</th>
+                <td>@Model.RoutMaintId</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>@Model.Name</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>@Model.Description</td>
+            </tr>
+            <tr>
+                <th>Last Completed Date</th>
+                <td>@Model.LastCompletedDate</td>
+            </tr>
+            <tr>
+                <th>Maintenance Recommended Interval (Days)</th>
+                <td>@Model.Interval</td>
+            </tr>
+            <tr>
+                <th>Responsible Position</th>
+                <td>@Model.ResponsiblePosition</td>
+            </tr>
+            
+            <tr>
+                <th>Creator Name</th>
+                <td>@Model.CreatorName</td>
+            </tr>
+            <tr>
+                <th>Created On</th>
+                <td>@Model.CreatedOn</td>
+            </tr>
+            <tr>
+                <th>Last Edited On</th>
+                <td>@Model.EditedOn</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h3>Associated Equipments</h3>
+@if (Model.Equipments != null && Model.Equipments.Any())
+{
+    <ul>
+        @foreach (var equipment in Model.Equipments)
+        {
+            <li>@equipment</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No equipments associated with this maintenance.</p>
+}
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.RoutMaintId" class="btn btn-primary">Edit</a>
+    <a asp-action="Select" class="btn btn-secondary">Back</a>
+</div>

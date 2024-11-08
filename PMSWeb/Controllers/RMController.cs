@@ -23,6 +23,7 @@ namespace PMSWeb.Controllers
                 .OrderByDescending(x=>x.EditedOn)
                 .AsNoTracking()
                 .Select(x => new RMDisplayViewModel() {
+                    RoutMaintId = x.RoutMaintId.ToString(),
                     Name = x.Name,  
                     Description = x.Description,
                     LastCompletedDate = x.LastCompletedDate.ToString(PMSRequiredDateFormat),
@@ -30,14 +31,14 @@ namespace PMSWeb.Controllers
                     ResponsiblePosition = x.ResponsiblePosition.ToString()
                 })
                 .ToListAsync();
+
             return View(rmss);
         }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            ViewBag.Positions = PMSPositions.ToList();
-            return View();
+            return View(new RMCreateViewModel());
         }
 
         [HttpPost]
@@ -47,6 +48,18 @@ namespace PMSWeb.Controllers
             {
                 return RedirectToAction(nameof(Select));
             }
+
+            if (!PMSPositions.Contains(model.ResponsiblePosition))
+            {
+                ModelState.AddModelError("ResponsiblePosition", $"The Responsible positions supported are: {string.Join(", ",PMSPositions)}");
+                return View(model);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             RoutineMaintenance rm = new()
             {
                 Name = model.Name,
@@ -68,31 +81,144 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            return View();
+            var model = await context
+                .RoutineMaintenances
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.RoutMaintId.ToString().ToLower() == id.ToLower())
+                .AsNoTracking()
+                .Select(x=> new RMEditViewModel() { 
+                    Name = x.Name,
+                    Description = x.Description,
+                    Interval = x.Interval,
+                    ResponsiblePosition = x.ResponsiblePosition,
+                    RMId = x.RoutMaintId.ToString(),
+                })
+                .FirstOrDefaultAsync();
+            if (model == null)
+            {
+                return RedirectToAction(nameof(Select));  
+            }
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(RMEditViewModel model)
         {
-            return View();
+            if (GetUserId == null)
+            {
+                return RedirectToAction(nameof(Select));
+            }
+
+            if (!PMSPositions.Contains(model.ResponsiblePosition))
+            {
+                ModelState.AddModelError("ResponsiblePosition", $"The Responsible positions supported are: {string.Join(", ", PMSPositions)}");
+                return View(model);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var rm = await context
+                .RoutineMaintenances
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.RoutMaintId.ToString().ToLower() == model.RMId.ToLower())
+                .FirstOrDefaultAsync();
+            if (rm == null)
+            {
+                // Don't edit the record
+                return RedirectToAction(nameof(Select));
+            }
+            // Edit the RM record
+            rm.Name = model.Name;
+            rm.Description = model.Description;
+            rm.ResponsiblePosition = model.ResponsiblePosition;
+            rm.Interval = model.Interval;
+            rm.EditedOn = DateTime.Now;
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Select));
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
-            return View();
+            var model = await context
+                .RoutineMaintenances
+                .Where (x => !x.IsDeleted)  
+                .Where(x=>x.RoutMaintId.ToString().ToLower() == id.ToLower())
+                .AsNoTracking()
+                .Select(x=> new RMDeleteViewModel() {
+                    Name = x.Name,
+                    Description = x.Description,
+                    CreatedOn = x.CreatedOn.ToString(PMSRequiredDateFormat),
+                    RmId = x.RoutMaintId.ToString()
+                })
+                .FirstOrDefaultAsync();
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(RMDeleteViewModel model)
         {
-            return View();
+            if (model==null || !ModelState.IsValid || model.RmId == null)
+            {
+                //Don't delete
+                return RedirectToAction(nameof(Select));
+            }
+            var delModel = await context
+                .RoutineMaintenances
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.RoutMaintId.ToString().ToLower() == model.RmId.ToLower())
+                .FirstOrDefaultAsync();
+            if (delModel != null)
+            {
+                // Execute soft delete
+                delModel.IsDeleted = true;  
+                await context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Select));
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
-            return View();
+            var model = await context
+                .RoutineMaintenances
+                .Where (x => !x.IsDeleted)
+                .Where(x => x.RoutMaintId.ToString().ToLower() == id.ToLower())
+                .AsNoTracking()
+                .Select(x=> new RMDetailsViewModel() {
+                    RoutMaintId = x.RoutMaintId.ToString(),
+                    Name = x.Name,
+                    Description = x.Description,
+                    LastCompletedDate = x.LastCompletedDate.ToString(PMSRequiredDateFormat),
+                    Interval = x.Interval.ToString(),
+                    ResponsiblePosition = x.ResponsiblePosition,
+                    CreatorName = x.Creator.UserName ?? string.Empty,
+                    CreatedOn = x.CreatedOn.ToString(PMSRequiredDateFormat),
+                    EditedOn = x.EditedOn.ToString(PMSRequiredDateFormat),
+                })
+                .FirstOrDefaultAsync();
+            
+            if (model == null)
+            {
+                return RedirectToAction(nameof(Select));
+            }
+
+            var equipments = await context
+                .RoutineMaintenancesEquipments
+                .Where(x=>x.RoutineMaintenanceId.ToString().ToLower() == id.ToLower())
+                .AsNoTracking()
+                .Select(x=>x.Equipment.Name)
+                .ToListAsync();
+            if (equipments.Any())
+            {
+                model.Equipments = equipments;
+            }
+
+            return View(model);
         }
 
         public string? GetUserId()

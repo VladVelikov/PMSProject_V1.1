@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PMS.Data;
 using PMS.Data.Models;
@@ -8,6 +9,7 @@ using static PMS.Common.EntityValidationConstants;
 
 namespace PMSWeb.Controllers
 {
+    [Authorize]
     public class ManualController(PMSDbContext context) : Controller
     {
         [HttpGet]
