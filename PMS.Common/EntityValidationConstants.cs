@@ -101,5 +101,11 @@ namespace PMS.Common
 
 
         }
+
+        public class CityAndCountryConstants
+        {
+            public const int CityCountryNameMaxLength = 150;
+            public const int CityCountryNameMinLength = 3;
+        }
     }
 }

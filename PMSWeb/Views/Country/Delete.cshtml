@@ -1,0 +1,28 @@
+﻿@using PMSWeb.ViewModels.CountryVM
+@model CountryDeleteViewModel
+
+@{
+    ViewData["Title"] = "Delete City";
+}
+
+<h2>Delete city?</h2>
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <tr>
+            <th>Name</th>
+            <td>@Model.Name</td>
+        </tr>
+        <tr>
+            <th>Created On</th>
+            <td>@Model.CreatedOn</td>
+        </tr>
+       
+    </table>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="CountryId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

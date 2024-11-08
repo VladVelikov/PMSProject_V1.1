@@ -46,6 +46,9 @@ namespace PMS.Data.Models
         [Comment("Unique identifier of the creator of the maintenance")]
         public string CReatorId { get; set; } = null!;
 
+        [ForeignKey(nameof(CReatorId))]
+        public virtual PMSUser Creator { get; set; } = null!;
+        
         [Required]
         [Comment("Date when created on")]
         public DateTime CreatedOn { get; set; }
@@ -54,14 +57,10 @@ namespace PMS.Data.Models
         [Comment("Date when last edited")]
         public DateTime EditedOn { get; set; }
 
-        [ForeignKey(nameof(CReatorId))]
-        public virtual PMSUser Creator { get; set; } = null!;
-
         public virtual ICollection<RoutineMaintenanceEquipment> RoutineMaintenancesEquipments { get; set; } 
             = new HashSet<RoutineMaintenanceEquipment>();   
 
         public bool IsDeleted { get; set; }
-    
     }
 
 }

@@ -1,0 +1,53 @@
+﻿@using PMSWeb.ViewModels.SM
+@model SMEditViewModel
+
+@{
+    ViewData["Title"] = "Edit RM";
+    var positions = Model.Positions as List<string>;
+}
+
+
+<h2>Edit Routine Maitenance Record</h2>
+
+<form asp-action="Edit" method="post">
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Interval" class="control-label">Interval (days)</label>
+        <input asp-for="Interval" class="form-control" type="number" />
+        <span asp-validation-for="Interval" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ResponsiblePosition" class="control-label">Responsible Person (Please Select One Of The Options:) </label>
+        <input asp-for="ResponsiblePosition" class="form-control" list="positionOptions" />
+        <datalist id="positionOptions">
+            @if (positions != null)
+            {
+                @foreach (var position in positions)
+                {
+                    <option value="@position">@position</option>
+                }
+            }
+        </datalist>
+        <span asp-validation-for="ResponsiblePosition" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="Select" class="btn btn-secondary">Cancel</a>
+    <input type="hidden" asp-for="SMId" />
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

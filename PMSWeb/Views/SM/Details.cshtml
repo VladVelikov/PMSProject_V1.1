@@ -1,0 +1,61 @@
+﻿@using PMSWeb.ViewModels.SM
+@model SMDetailsViewModel
+
+@{
+    ViewData["Title"] = "Specific Maintenance Details";
+}
+
+<h2>Specific Maintenance Details</h2>
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Routine Maintenance ID</th>
+                <td>@Model.SpecMaintId</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>@Model.Name</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>@Model.Description</td>
+            </tr>
+            <tr>
+                <th>Equipment to maintain</th>
+                <td>@Model.Equipment</td>
+            </tr>
+            <tr>
+                <th>Last Completed Date</th>
+                <td>@Model.LastCompletedDate</td>
+            </tr>
+            <tr>
+                <th>Maintenance Recommended Interval (Days)</th>
+                <td>@Model.Interval</td>
+            </tr>
+            <tr>
+                <th>Responsible Position</th>
+                <td>@Model.ResponsiblePosition</td>
+            </tr>
+            
+            <tr>
+                <th>Creator Name</th>
+                <td>@Model.CreatorName</td>
+            </tr>
+            <tr>
+                <th>Created On</th>
+                <td>@Model.CreatedOn</td>
+            </tr>
+            <tr>
+                <th>Last Edited On</th>
+                <td>@Model.EditedOn</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.SpecMaintId" class="btn btn-primary">Edit</a>
+    <a asp-action="Select" class="btn btn-secondary">Back</a>
+</div>

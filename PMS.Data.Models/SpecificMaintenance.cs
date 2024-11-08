@@ -36,22 +36,11 @@ namespace PMS.Data.Models
         [Comment("Interval to do the maintanance")]
         public int Interval { get; set; }
 
-        [Comment("Is it postponed - the maintenance")]
-        public bool IsPostponed { get; set; }
-
-        [Required]
-        [Comment("Unique identifier of the equipment maintained")]
-        public Guid EquipmentId { get; set; }
-
-        [ForeignKey(nameof(EquipmentId))]
-        public virtual Equipment Equipment { get; set; } = null!;
-
         [Required]
         [MaxLength(MaintenancePositionMaxLength)]
         [MinLength(MaintenancePositionMinLength)]
         [Comment("Position of the person responsible for the maintenance")]
-        public string ResponsiblePosition { get; set; }
-
+        public string ResponsiblePosition { get; set; } = null!;
 
         [Required]
         [Comment("Unique identifier of the creator of the maintenance")]
@@ -68,10 +57,15 @@ namespace PMS.Data.Models
         [Comment("Date when last edited")]
         public DateTime EditedOn { get; set; }
 
-        public bool IsDeleted { get; set; }
+        [Required]
+        [Comment("Unique identifier of the equipment maintained")]
+        public Guid EquipmentId { get; set; }
 
+        [ForeignKey(nameof(EquipmentId))]
+        public virtual Equipment Equipment { get; set; } = null!;
+        
+        public bool IsDeleted { get; set; }
     }
-   
 
 }
 
