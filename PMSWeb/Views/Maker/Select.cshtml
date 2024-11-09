@@ -25,8 +25,8 @@
                 <td>@maker.Description</td>
                 <td>@maker.Email</td>
                 <td>@maker.Phone</td>
-                <td>
-                    <a href="@Url.Action("Edit", "Maker", new { id = maker.MakerId })" class="btn btn-primary">Edit</a>
+                <td style ="display:flex; flex-direction:column; gap:0.2em;">
+                    <a href="@Url.Action("Edit", "Maker", new { id = maker.MakerId })" class="btn btn-warning">Edit</a>
                     <a href="@Url.Action("Details", "Maker", new { id = maker.MakerId })" class="btn btn-info">Details</a>
                     <a href="@Url.Action("Delete", "Maker", new { id = maker.MakerId })" class="btn btn-danger">Delete</a>
                 </td>

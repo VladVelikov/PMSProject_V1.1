@@ -4,10 +4,12 @@
     ViewBag.Title = "Select Consumables";
 }
 
+<h2>List Of All Spare Parts</h2>
+<hr />
 <a asp-action="Create" class="btn btn-primary mb-3">Create New Spare Part</a>
 
-<div style="display:flex; flex-direction:column; height: 40em; max-width: 50em; flex-wrap:wrap; overflow:auto;">
-        <table>
+<div>
+    <table class="table table-bordered table-striped">
         <thead>
             <tr style="border: 0.5em  solid white;">
                 <th>Name</th>

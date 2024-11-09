@@ -4,10 +4,12 @@
     ViewBag.Title = "Select Consumables";
 }
 
+<h2>List Of All Consumables</h2>
+<hr />
 <a asp-action="Create" class="btn btn-primary mb-3">Create New Consumable</a>
 
-<div style="display:flex; flex-direction:column; height: 40em; max-width: 50em; flex-wrap:wrap; overflow:auto;">
-        <table>
+<div>
+    <table class="table table-bordered table-striped">
         <thead>
             <tr style="border: 0.5em  solid white;">
                 <th>Name</th>
@@ -31,7 +33,7 @@
                     <td>@consumable.ROB</td>
                     <td style="display:flex; flex-direction:column; gap:0.2em;">
                         <a asp-action="Edit" asp-route-id="@consumable.ConsumableId" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="Details" asp-route-id="@consumable.ConsumableId" class="btn btn-sm btn-info">View</a>
+                        <a asp-action="Details" asp-route-id="@consumable.ConsumableId" class="btn btn-sm btn-info">Details</a>
                         <a asp-action="Delete" asp-route-id="@consumable.ConsumableId" class="btn btn-sm btn-danger">Delete</a>
                     </td>
                 </tr>

@@ -12,7 +12,11 @@
         margin: 0;
         padding: 0;
     }
-    
+   h2{
+       max-width: 30em;
+       margin: 1em auto;
+       text-decoration: underline;
+   } 
 </style>
 
 <h2>Welcome to Details Page</h2>
@@ -71,61 +75,80 @@
     </dl>
 
     <h4>Additional Data for the Equipment</h4>
-    
 
-    <div class="maintenance" style="display: flex; gap: 2em; margin-top: 2em;">
-        <div>
-            <h5>Routine Maintenances</h5>
-            <ul>
-                @foreach (string rm in Model.RoutineMaintenances)
-                {
-                    <li>@rm</li>
-                }
-            </ul>
-        </div>
-        <div>
-            <h5>Specific Maintenances</h5>
-            <ul>
-                @foreach (var sm in Model.SpecificMaintenances)
-                {
-                    <li>@sm</li>
-                }
-            </ul>
-        </div>
-        <div>
-            <h5>Manuals</h5>
-            <ul>
-                @foreach (var manual in Model.Manuals)
-                {
-                    <li>@manual</li>
-                }
-            </ul>
-        </div>
-       
-    </div>
-    <div class="spares" style="display:flex; gap:3em; margin-top: 2em;">
-        <div>
-            <h5>Spare Parts</h5>
-            <ul>
-                @foreach (var part in Model.SpareParts)
-                {
-                    <li>@part</li>
-                }
-            </ul>
-        </div>
-        <div>
-            <h5>Consumables</h5>
-            <ul>
-                @foreach (var consumable in Model.Consumables)
-                {
-                    <li>@consumable</li>
-                }
-            </ul>
-        </div>
-    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Routine Maintenances</strong></td>
+                <td>
+                    <ul>
+                        @foreach (string rm in Model.RoutineMaintenances)
+                        {
+                            <li>@rm</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+
+            <tr>
+                <td><strong>Specific Maintenances</strong></td>
+                <td>
+                    <ul>
+                        @foreach (var sm in Model.SpecificMaintenances)
+                        {
+                            <li>@sm</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+
+            <tr>
+                <td><strong>Manuals</strong></td>
+                <td>
+                    <ul>
+                        @foreach (var manual in Model.Manuals)
+                        {
+                            <li>@manual</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+
+            <tr>
+                <td><strong>Spare Parts</strong></td>
+                <td>
+                    <ul>
+                        @foreach (var part in Model.SpareParts)
+                        {
+                            <li>@part</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+
+            <tr>
+                <td><strong>Consumables</strong></td>
+                <td>
+                    <ul>
+                        @foreach (var consumable in Model.Consumables)
+                        {
+                            <li>@consumable</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
 
     <div>
-        <a asp-action="Edit" asp-route-id="@Model.EquipmentId">Edit</a> |
-        <a asp-action="Select">Back to List</a>
+        <a asp-action="Edit" asp-route-id="@Model.EquipmentId" class="btn btn-info btn-sm">Edit</a> or
+        <a asp-action="Select" class="btn btn-secondary btn-sm">Back to List</a>
     </div>
 </div>

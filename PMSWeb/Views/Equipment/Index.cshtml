@@ -1,0 +1,53 @@
+﻿<h4>Additional Data for the Equipment</h4>
+
+
+<div class="maintenance" style="display: flex; gap: 2em; margin-top: 2em;">
+    <div>
+        <h5>Routine Maintenances</h5>
+        <ul>
+            @foreach (string rm in Model.RoutineMaintenances)
+            {
+                <li>@rm</li>
+            }
+        </ul>
+    </div>
+    <div>
+        <h5>Specific Maintenances</h5>
+        <ul>
+            @foreach (var sm in Model.SpecificMaintenances)
+            {
+                <li>@sm</li>
+            }
+        </ul>
+    </div>
+    <div>
+        <h5>Manuals</h5>
+        <ul>
+            @foreach (var manual in Model.Manuals)
+            {
+                <li>@manual</li>
+            }
+        </ul>
+    </div>
+
+</div>
+<div class="spares" style="display:flex; gap:3em; margin-top: 2em;">
+    <div>
+        <h5>Spare Parts</h5>
+        <ul>
+            @foreach (var part in Model.SpareParts)
+            {
+                <li>@part</li>
+            }
+        </ul>
+    </div>
+    <div>
+        <h5>Consumables</h5>
+        <ul>
+            @foreach (var consumable in Model.Consumables)
+            {
+                <li>@consumable</li>
+            }
+        </ul>
+    </div>
+</div>
