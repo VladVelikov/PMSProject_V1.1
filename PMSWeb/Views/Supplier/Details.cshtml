@@ -1,5 +1,101 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using PMSWeb.ViewModels.SupplierVM
+@model SupplierDetailsViewModel
+
 @{
+    ViewData["Title"] = "Supplier Details";
 }
+
+<h2>Supplier Details</h2>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">Supplier ID</dt>
+        <dd class="col-sm-9">@Model.SupplierId</dd>
+
+        <dt class="col-sm-3">Name</dt>
+        <dd class="col-sm-9">@Model.Name</dd>
+
+        <dt class="col-sm-3">Address</dt>
+        <dd class="col-sm-9">@Model.Address</dd>
+
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+
+        <dt class="col-sm-3">Phone Number</dt>
+        <dd class="col-sm-9">@Model.PhoneNumber</dd>
+
+        <dt class="col-sm-3">City</dt>
+        <dd class="col-sm-9">@Model.City</dd>
+
+        <dt class="col-sm-3">Country</dt>
+        <dd class="col-sm-9">@Model.Country</dd>
+
+        <dt class="col-sm-3">Creator ID</dt>
+        <dd class="col-sm-9">@Model.Creator</dd>
+
+        <dt class="col-sm-3">Created On</dt>
+        <dd class="col-sm-9">@Model.CreatedOn</dd>
+
+    </dl>
+</div>
+
+<div style="display:flex; gap: 5em; margin-top:2em; border-top: 2px solid black; padding-top: 2em; max-width:30em;">
+    <section>
+        <h3>Consumables</h3>
+        <h5>from @Model.Name</h5>
+        @if (Model.Consumables.Any())
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Consumable Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var consumable in Model.Consumables)
+                    {
+                        <tr>
+                            <td>@consumable</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No consumables supplied.</p>
+        }
+    </section>
+    <section>
+        <h3>Spareparts</h3>
+        <h5>from @Model.Name</h5>
+        @if (Model.Spareparts.Any())
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Sparepart Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sparepart in Model.Spareparts)
+                    {
+                        <tr>
+                            <td>@sparepart</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No parts supplied.</p>
+        }
+    </section>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.SupplierId" class="btn btn-primary">Edit</a>
+    <a asp-action="Select" class="btn btn-secondary">Back</a>
+</div>
+

@@ -161,6 +161,7 @@ namespace PMSWeb.Controllers
                    SparepartId = x.SparepartId.ToString(),
                    Name = x.SparepartName,
                    Description = x.Description ?? string.Empty,
+                   Equipment = x.Equipment.Name,
                    Price = x.Price.ToString("C"),
                    Units = x.Units,
                    ROB = x.ROB.ToString(),

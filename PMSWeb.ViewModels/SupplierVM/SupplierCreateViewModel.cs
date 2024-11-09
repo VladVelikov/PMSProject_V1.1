@@ -39,5 +39,11 @@ namespace PMSWeb.ViewModels.SupplierVM
             public List<PairViewModel> Cities { get; set; } =   new List<PairViewModel>();
 
             public List<PairViewModel> Countries { get; set; } = new List<PairViewModel>();
+            
+            public List<PairGuidViewModel> Spareparts { get; set; } = new List<PairGuidViewModel>();
+        
+            public List<PairGuidViewModel> Consumables { get; set; } = new List<PairGuidViewModel>();
+
+            
     }
 }

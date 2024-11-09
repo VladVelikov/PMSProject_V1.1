@@ -44,6 +44,36 @@
         <span asp-validation-for="CountryId" class="text-danger"></span>
     </div>
 
+    <div style="display: flex; gap: 2em; margin-top: 2em; margin-bottom: 2em;">
+        <!-- SparepartsSupplier (Checkbox List) -->
+        <div class="form-group">
+            <label class="control-label">Spare Parts</label>
+            <div>
+                @foreach (var part in Model.Spareparts)
+                {
+                    <div class="form-check">
+                        <input type="checkbox" name="Spareparts" value="@part.Id" class="form-check-input" />
+                        <label class="form-check-label">@part.Name</label>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- ConsumablesSupplier(Checkbox List) -->
+        <div class="form-group">
+            <label class="control-label">Consumables</label>
+            <div>
+                @foreach (var consumable in Model.Consumables)
+                {
+                    <div class="form-check">
+                        <input type="checkbox" name="Consumables" value="@consumable.Id" class="form-check-input" />
+                        <label class="form-check-label">@consumable.Name</label>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
     <button type="submit" class="btn btn-primary">Create Supplier</button>
     <a asp-action="Select" class="btn btn-secondary">Cancel</a>
 </form>
