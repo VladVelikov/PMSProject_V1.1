@@ -22,7 +22,7 @@
 
     <div class="form-group">
         <label asp-for="MakerId" class="control-label">Select Maker</label>
-        <select asp-for="MakerId" asp-items="ViewBag.Makers" class="form-control">
+        <select asp-for="MakerId" asp-items="@(new SelectList(Model.Makers,"Id","Name"))" class="form-control">
             <option value="">-- Select Maker --</option>
         </select>
         <span asp-validation-for="MakerId" class="text-danger"></span>
@@ -35,11 +35,11 @@
     <div class="form-group">
         <label class="control-label">Routine Maintenances</label>
         <div>
-            @foreach (var routineMaintenance in (IEnumerable<SelectListItem>)ViewBag.RoutineMaintenances)
+            @foreach (var routineMaintenance in Model.RoutineMaintenances)
             {
                 <div class="form-check">
-                    <input type="checkbox" name="RoutineMaintenances" value="@routineMaintenance.Value" class="form-check-input" />
-                    <label class="form-check-label">@routineMaintenance.Text</label>
+                    <input type="checkbox" name="RoutineMaintenances" value="@routineMaintenance.Id" class="form-check-input" />
+                    <label class="form-check-label">@routineMaintenance.Name</label>
                 </div>
             }
         </div>
@@ -49,11 +49,11 @@
     <div class="form-group">
         <label class="control-label">Consumables</label>
         <div>
-            @foreach (var item in (IEnumerable<SelectListItem>)ViewBag.Consumables)
+            @foreach (var item in Model.Consumables)
             {
                 <div class="form-check">
-                    <input type="checkbox" name="Consumables" value="@item.Value" class="form-check-input" />
-                    <label class="form-check-label">@item.Text</label>
+                    <input type="checkbox" name="Consumables" value="@item.Id" class="form-check-input" />
+                    <label class="form-check-label">@item.Name</label>
                 </div>
             }
         </div>

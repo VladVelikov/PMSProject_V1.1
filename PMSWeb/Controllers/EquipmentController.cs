@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PMS.Data;
 using PMS.Data.Models;
+using PMSWeb.ViewModels.CommonVM;
 using PMSWeb.ViewModels.Equipment;
 using System.Security.Claims;
 using static PMS.Common.EntityValidationConstants;
@@ -43,13 +44,14 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
+            var model = new EquipmentCreateViewModel();
             var makers = await context
                 .Makers
                 .Where(x => x.IsDeleted == false)
                 .AsNoTracking()
-                .Select(x=> new {
-                    x.MakerId,
-                    x.MakerName
+                .Select(x=> new PairGuidViewModel{
+                    Id = x.MakerId,
+                    Name = x.MakerName
                 })
                 .ToListAsync(); 
 
@@ -57,9 +59,9 @@ namespace PMSWeb.Controllers
                 .RoutineMaintenances
                 .Where(x => x.IsDeleted == false)
                 .AsNoTracking()
-                .Select(x=> new {
-                    RoutineMaintenanceName = x.Name,
-                    RoutineMaintenanceId = x.RoutMaintId
+                .Select(x=> new PairGuidViewModel(){
+                    Name = x.Name,
+                    Id = x.RoutMaintId
                 })
                 .ToListAsync();
 
@@ -67,17 +69,17 @@ namespace PMSWeb.Controllers
                 .Consumables
                 .Where(x=>x.IsDeleted == false)
                 .AsNoTracking()
-                .Select(x => new
+                .Select(x => new PairGuidViewModel()
                 {
-                    ConsName = x.Name,
-                    ConsId = x.ConsumableId
+                    Name = x.Name,
+                    Id = x.ConsumableId
                 })
                 .ToListAsync();
 
-            ViewBag.RoutineMaintenances = new SelectList(routineMaintenances, "RoutineMaintenanceId", "RoutineMaintenanceName");
-            ViewBag.Consumables = new SelectList(consumables, "ConsId", "ConsName");
-            ViewBag.Makers = new SelectList(makers, "MakerId", "MakerName");
-            return View(new EquipmentCreateViewModel());
+            model.RoutineMaintenances = routineMaintenances;
+            model.Consumables = consumables;
+            model.Makers = makers;
+            return View(model);
         }
 
         [HttpPost]
@@ -155,14 +157,15 @@ namespace PMSWeb.Controllers
                     MakerId = x.MakerId
                 })
                 .FirstOrDefaultAsync();
+            if (model == null) { return RedirectToAction(nameof(Select)); }
 
             var makers = await context
                 .Makers
                 .Where(x => x.IsDeleted == false)
                 .AsNoTracking()
-                .Select (x => new {
-                    x.MakerName,
-                    x.MakerId
+                .Select (x => new PairGuidViewModel(){
+                    Name = x.MakerName,
+                    Id = x.MakerId
                 })
                 .ToListAsync();
 
@@ -170,10 +173,10 @@ namespace PMSWeb.Controllers
                 .ConsumablesEquipments
                 .Where(x => x.EquipmentId.ToString().ToLower() == id.ToLower())
                 .AsNoTracking()
-                .Select(x => new
+                .Select(x => new PairGuidViewModel()
                 {
-                    ConsumableName = x.Consumable.Name,
-                    ConsumableId = x.ConsumableId
+                    Name = x.Consumable.Name,
+                    Id = x.ConsumableId
                 })
                 .ToListAsync();
 
@@ -181,10 +184,10 @@ namespace PMSWeb.Controllers
                 .RoutineMaintenancesEquipments
                 .Where(x => x.EquipmentId.ToString().ToLower() == id.ToLower())
                 .AsNoTracking()
-                .Select(x => new
+                .Select(x => new PairGuidViewModel()
                 {
-                    MaintenanceName = x.RoutineMaintenance.Name,
-                    MaintenanceId = x.RoutineMaintenanceId
+                    Name = x.RoutineMaintenance.Name,
+                    Id = x.RoutineMaintenanceId
                 })
                 .ToListAsync();
 
@@ -192,15 +195,15 @@ namespace PMSWeb.Controllers
                 .Consumables
                 .Where(x=>x.IsDeleted == false)
                 .AsNoTracking()
-                .Select(x => new
+                .Select(x => new PairGuidViewModel()
                 {
-                    ConsumableName = x.Name,
-                    ConsumableId = x.ConsumableId
+                    Name = x.Name,
+                    Id = x.ConsumableId
                 })
                 .ToListAsync();
             foreach (var cons in consumables)
             {
-                var avcToRemove = availableConsumables.FirstOrDefault(ac => ac.ConsumableId == cons.ConsumableId);
+                var avcToRemove = availableConsumables.FirstOrDefault(ac => ac.Id == cons.Id);
                 if (avcToRemove != null)
                 {
                     availableConsumables.Remove(avcToRemove);
@@ -211,15 +214,15 @@ namespace PMSWeb.Controllers
                 .RoutineMaintenances
                 .Where(x=>x.IsDeleted == false)
                 .AsNoTracking()
-                .Select(x => new
+                .Select(x => new PairGuidViewModel()
                 {
-                    MaintenanceName = x.Name,
-                    MaintenanceId = x.RoutMaintId
+                    Name = x.Name,
+                    Id = x.RoutMaintId
                 })
                 .ToListAsync();
             foreach (var rtm in routineMaintenances)
             {
-                var rtmToRemove = availableRoutineMaintenances.FirstOrDefault(rm => rm.MaintenanceId == rtm.MaintenanceId);
+                var rtmToRemove = availableRoutineMaintenances.FirstOrDefault(rm => rm.Id == rtm.Id);
                 if (rtmToRemove != null)
                 {
                     availableRoutineMaintenances.Remove(rtmToRemove);
@@ -227,11 +230,11 @@ namespace PMSWeb.Controllers
 
             }
 
-            ViewBag.Makers = new SelectList(makers, "MakerId", "MakerName");
-            ViewBag.Consumables = new SelectList(consumables, "ConsumableId", "ConsumableName");
-            ViewBag.RoutineMaintenances = new SelectList(routineMaintenances, "MaintenanceId","MaintenanceName");
-            ViewBag.AvailableRoutineMaintenances = new SelectList(availableRoutineMaintenances, "MaintenanceId", "MaintenanceName");
-            ViewBag.AvailableConsumables = new SelectList(availableConsumables, "ConsumableId", "ConsumableName");
+            model.Makers = makers;
+            model.Consumables = consumables;
+            model.RoutineMaintenances = routineMaintenances;
+            model.AvailableRoutineMaintenances = availableRoutineMaintenances;
+            model.AvailableConsumables = availableConsumables;
 
             return View(model);
         }
@@ -442,8 +445,6 @@ namespace PMSWeb.Controllers
 
             return RedirectToAction(nameof(Select)); 
         }
-
-
 
         private string? GetUserId()
         {
