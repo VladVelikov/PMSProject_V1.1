@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMSWeb.ViewModels.Manual
+namespace PMSWeb.ViewModels.CommonVM
 {
     public class PairViewModel
     {

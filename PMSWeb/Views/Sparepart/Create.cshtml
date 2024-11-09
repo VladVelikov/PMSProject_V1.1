@@ -1,8 +1,8 @@
-﻿@using PMSWeb.ViewModels.Consumable
-@model ConsumableCreateViewModel
+﻿@using PMSWeb.ViewModels.SparepartVM
+@model SparepartCreateViewModel
 
 @{
-    ViewData["Title"] = "Create Consumable";
+    ViewData["Title"] = "Create Spare Part";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -36,6 +36,20 @@
         <label asp-for="ROB" class="control-label"></label>
         <input asp-for="ROB" class="form-control" />
         <span asp-validation-for="ROB" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ImageUrl" class="control-label"></label>
+        <input asp-for="ImageUrl" class="form-control" />
+        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EquipmentId" class="control-label">Equipment</label>
+        <select asp-for="EquipmentId" class="form-control" asp-items="@(new SelectList(Model.Equipments,"Id", "Name"))">
+            <option value="">-- Select Equipment --</option>
+        </select>
+        <span asp-validation-for="EquipmentId" class="text-danger"></span>
     </div>
     <div style="margin-top: 0.5em;">
         <button type="submit" class="btn btn-primary">Create</button>

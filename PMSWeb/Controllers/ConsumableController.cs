@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration.UserSecrets;
-using PMS.Data;
 using PMS.Data.Models;
 using PMS.Data.Repository.Interfaces;
 using PMS.Services.Data.Interfaces;

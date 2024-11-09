@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using PMSWeb.ViewModels.Manual;
+using PMSWeb.ViewModels.CommonVM;
 using System.ComponentModel.DataAnnotations;
 using static PMS.Common.EntityValidationConstants;
 using static PMS.Common.EntityValidationConstants.MaintenanceConstants;

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using PMSWeb.ViewModels.CommonVM;
 using static PMS.Common.EntityValidationConstants.ManualClassConstants;
 
 namespace PMSWeb.ViewModels.Manual

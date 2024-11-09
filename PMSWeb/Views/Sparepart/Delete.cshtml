@@ -1,0 +1,33 @@
+﻿@using PMSWeb.ViewModels.SparepartVM
+@model SparepartDeleteViewModel
+
+@{
+    ViewData["Title"] = "Delete Spare Part";
+}
+
+<h1>Delete Spare Part</h1>
+
+<h4>Are you sure you want to delete this Spare Part?</h4>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Spare Part Name</dt>
+        <dd class="col-sm-10">@Model.Name</dd>
+
+        <dt class="col-sm-2">Description</dt>
+        <dd class="col-sm-10">@Model.Description</dd>
+
+        <dt class="col-sm-2">Created On</dt>
+        <dd class="col-sm-10">@Model.CreatedOn</dd>
+    </dl>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="SparepartId"/>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Select" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
