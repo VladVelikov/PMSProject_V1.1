@@ -2,7 +2,6 @@
 using PMS.Data.Models.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Cryptography;
 using static PMS.Common.EntityValidationConstants.SupplierConstatnts;
 
 namespace PMS.Data.Models
@@ -15,35 +14,35 @@ namespace PMS.Data.Models
         }   
 
         [Key]
-        [Comment("UniqueIdentifierOf The Supplier")]
+        [Comment("Unique Identifier Of The Supplier")]
         public Guid SupplierId { get; set; }
 
         [Required]
         [MinLength(SupplierNameMinLength)]
         [MaxLength(SupplierNameMaxLength)]
-        [Comment("The name of equipment")]
+        [Comment("The name of supplier")]
         public string Name { get; set; } = null!;
 
         [Required]
         [MinLength(SupplierAddressMinLength)]
         [MaxLength(SupplierAddressMaxLength)]
-        [Comment("The name of equipment")]
+        [Comment("The address of supplier")]
         public string Address { get; set; } = null!;
 
         [Required]
         [MinLength(SupplierEmailMinLength)]
         [MaxLength(SupplierEmailMaxLength)]
-        [Comment("The name of equipment")]
+        [Comment("The email of supplier")]
         public string Email { get; set; } = null!;
 
         [Required]
         [MinLength(SupplierPhoneMinLength)]
         [MaxLength(SupplierPhoneMaxLength)]
-        [Comment("The name of equipment")]
+        [Comment("The phone number of supplier")]
         public string PhoneNumber { get; set; } = null!;
 
         [Required]
-        [Comment("UniqueIdentifierOf The City")]
+        [Comment("Unique Identifier Of The City")]
         public Guid CityId { get; set; } 
 
         [ForeignKey(nameof(CityId))]
@@ -51,14 +50,14 @@ namespace PMS.Data.Models
 
 
         [Required]
-        [Comment("UniqueIdentifierOf The Country")]
+        [Comment("Unique Identifier Of The Country")]
         public Guid CountryId { get; set; } 
 
         [ForeignKey(nameof(CountryId))]
         public virtual Country Country { get; set; } = null!;
 
         [Required]
-        [Comment("UniqueIdentifierOf The Creator")]
+        [Comment("Unique Identifier Of The Creator")]
         public string CreatorId { get; set; } = null!;
 
 

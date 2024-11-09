@@ -143,6 +143,7 @@ namespace PMSWeb.Controllers
                 editModel.Units = model.Units;
                 editModel.ROB = model.ROB;
                 editModel.ImageURL = model.ImageUrl;
+                editModel.EditedOn = DateTime.Now;
             await context.SaveChangesAsync(); 
             return RedirectToAction(nameof(Select));
         }
