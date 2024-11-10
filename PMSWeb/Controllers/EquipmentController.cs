@@ -1,19 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using PMS.Data;
-using PMS.Data.Models;
 using PMS.Services.Data.Interfaces;
-using PMSWeb.ViewModels.CommonVM;
 using PMSWeb.ViewModels.Equipment;
 using System.Security.Claims;
-using static PMS.Common.EntityValidationConstants;
 
 namespace PMSWeb.Controllers
 {
     [Authorize]
-    public class EquipmentController(PMSDbContext context, IEquipmentService equipmentService) : Controller
+    public class EquipmentController(IEquipmentService equipmentService) : Controller
     {
         public IActionResult Index()
         {

@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PMS.Data.Models;
-using PMS.Data.Repository.Interfaces;
 using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.Consumable;
 using System.Security.Claims;
@@ -9,7 +7,7 @@ using System.Security.Claims;
 namespace PMSWeb.Controllers
 {
     [Authorize]
-    public class ConsumableController(IRepository<Consumable, Guid> consumables, IConsumableService consumableService) : Controller
+    public class ConsumableController(IConsumableService consumableService) : Controller
     {
 
         public IActionResult Index()

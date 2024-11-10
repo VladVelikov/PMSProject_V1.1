@@ -2,10 +2,10 @@
 @model CountryDeleteViewModel
 
 @{
-    ViewData["Title"] = "Delete City";
+    ViewData["Title"] = "Delete Country";
 }
 
-<h2>Delete city?</h2>
+<h2>Delete this Country?</h2>
 
 <div class="table-responsive">
     <table class="table table-bordered">
@@ -24,5 +24,5 @@
 <form asp-action="Delete" method="post">
     <input type="hidden" asp-for="CountryId" />
     <button type="submit" class="btn btn-danger">Delete</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    <a asp-action="Select" class="btn btn-secondary">Cancel</a>
 </form>

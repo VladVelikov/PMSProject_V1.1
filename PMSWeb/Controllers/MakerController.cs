@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace PMSWeb.Controllers
 {
     [Authorize]
-    public class MakerController(PMSDbContext context, IMakerService makerService) : Controller
+    public class MakerController(IMakerService makerService) : Controller
     {
         public async Task<IActionResult> Select()
         {
