@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Error handling page";
+}
+
+<h2>
+    Hello dear! Unfrotunately we fall into some trouble!
+</h2>
+
+<hr />
+<h3 style="color: red;">@ViewBag.Message</h3>
+
+<hr />
+<a asp-controller="@ViewBag.Controller" asp-action="Select" class="btn btn-primary mb-3">Confirm and Return</a>

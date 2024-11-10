@@ -25,6 +25,8 @@ namespace PMS.Data.Repository.Interfaces
             Task<bool> DeleteByIdAsync(I id);
 
             Task<bool> DeleteByCompositeIdAsync(params I[] id);
+
+            Task<bool> RemoveItemAsync(T item);
         }
     
 }

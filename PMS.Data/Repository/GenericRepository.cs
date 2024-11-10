@@ -65,6 +65,13 @@ namespace PMS.Data.Repository
             return true;
         }
 
+        public async Task<bool> RemoveItemAsync(T item)
+        {
+            dbSet.Remove(item);
+            await context.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<bool> UpdateAsync(T item)
         {
             dbSet.Attach(item);

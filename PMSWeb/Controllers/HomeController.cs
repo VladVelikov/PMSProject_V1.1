@@ -25,9 +25,13 @@ namespace PMSWeb.Controllers
             return View();
         }
         
-        public IActionResult Dashboard()
+        public IActionResult CreatorPage()
         {
             return View();
+        }
+        public IActionResult Select()
+        {
+            return RedirectToAction(nameof(CreatorPage));
         }
 
 

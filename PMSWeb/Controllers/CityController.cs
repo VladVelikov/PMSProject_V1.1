@@ -1,32 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PMS.Data;
-using PMS.Data.Models;
+using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.CityVM;
-using static PMS.Common.EntityValidationConstants;
 
 namespace PMSWeb.Controllers
 {
-    public class CityController(PMSDbContext context) : Controller
+    public class CityController(ICityService cityService) : Controller
     {
         [HttpGet]
         public async Task<IActionResult> Select()
         {
-            var modelList = await context
-                .Cities
-                .AsNoTracking()
-                .OrderByDescending(x=>x.CreatedOn)
-                .Select(x => new CityDisplayViewModel() {
-                    Name = x.Name,
-                    CreatedOn = x.CreatedOn.ToString(PMSRequiredDateFormat),
-                    CityId = x.CityId.ToString()
-                })
-                .ToListAsync();
-            return View(modelList);
+            return View(await cityService.GetListOfCitiesAsync());
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View(new CityCreateViewModel());
         }
@@ -34,13 +21,16 @@ namespace PMSWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CityCreateViewModel model)
         {
-            City city = new City() {
-                Name = model.Name,
-                CreatedOn = DateTime.Now,
-                EditedOn = DateTime.Now
-            };
-            await context.Cities.AddAsync(city);
-            await context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("NotCreated", "Crushes");
+            }
+
+            bool isCreated = await cityService.CreateCityAsync(model);
+            if (!isCreated)
+            {
+                return RedirectToAction("NotCreated","Crushes");   
+            }
 
             return RedirectToAction(nameof(Select));
         }
@@ -48,16 +38,7 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
-            var model = await context
-                .Cities
-                .AsNoTracking()
-                .Where(x => x.CityId.ToString().ToLower() == id.ToLower())
-                .Select(x => new CityDeleteViewModel() {
-                    CityId = x.CityId.ToString(),
-                    Name = x.Name,
-                    CreatedOn = x.CreatedOn.ToString(PMSRequiredDateTimeFormat)
-                })
-                .FirstOrDefaultAsync();
+            var model = await cityService.GetDeleteCityModelAsync(id);
             return View(model);
         }
 
@@ -66,22 +47,16 @@ namespace PMSWeb.Controllers
         {
             if (!ModelState.IsValid || model == null || model.CityId == null)
             {
-                return RedirectToAction(nameof(Select));
+                return RedirectToAction("ModelNotFound", "Crushes");
             }
-            var modelDel = await context
-                .Cities
-                .Where(x => x.CityId.ToString().ToLower() == model.CityId.ToLower())
-                .FirstOrDefaultAsync();
-
-            if (modelDel != null)
+            
+            bool isDeleted = await cityService.DeleteCityModelAsync(model);
+            if (!isDeleted)
             {
-                context.Cities.Remove(modelDel);
-                await context.SaveChangesAsync();
+                return RedirectToAction("NotDeleted", "Crushes");
             }
-
             return RedirectToAction(nameof(Select));
         }
-
 
     }
 }
