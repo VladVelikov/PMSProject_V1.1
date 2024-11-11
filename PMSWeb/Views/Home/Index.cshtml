@@ -2,7 +2,88 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    /* Full-page gradient background */
+    html, body {
+        background-color: lightslategrey;
+       /*  background: linear-gradient(135deg, #1f1c2c, #928dab); */
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+    }
+   
+    /* Centered container */
+    .container {
+        max-width: 400px;
+        text-align: center;
+        padding: 20px;
+    }
+
+    /* Header image styling */
+    .header-image img {
+        width: 100%;
+        height: auto;
+        border: 2px solid grey;
+    }
+
+    .header-image{
+        margin-top: 4em;
+        border: 2px solid grey;
+        border-radius: 2em;
+        overflow: hidden;
+        margin-bottom: 2em;
+    }
+
+    /* Button container */
+    .button-container {
+        margin: 20px;
+        display: flex; gap: 0.5em;
+        flex-direction: column;
+        /* border: 2px solid red; */
+        
+    }
+
+    /* Button styling */
+    .btn-signup, .btn-login {
+        padding: 12px 24px;
+        font-size: 18px;
+        margin: 0 10px;
+        border-radius: 25px;
+        text-decoration: none;
+        color: #ffffff;
+        display: inline-block;
+        transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Gradient buttons */
+    .btn-signup {
+        background: linear-gradient(135deg, #56CCF2, #2F80ED);
+    }
+
+    .btn-login {
+        background: linear-gradient(135deg, #F2994A, #F2C94C);
+    }
+
+        /* Button hover effects */
+        .btn-signup:hover, .btn-login:hover {
+            transform: scale(1.05);
+            filter: brightness(1.15);
+        }
+
+</style>
+
+
+<div class="gradient-background">
+    <div class="container text-center">
+        <!-- Header Image -->
+        <div class="header-image">
+            <img src="~/images/PMSLogoFull.jpg" alt="Welcome Image" class="img-fluid rounded" style="max-width:20em;" />
+        </div>
+
+        <!-- Sign Up and Log In buttons -->
+        <div class="button-container">
+            <a class="btn btn-signup" asp-area="Identity" asp-page="/Account/Register">SignUp</a>
+            <a>Or</a>
+            <a class="btn btn-login" asp-area="Identity" asp-page="/Account/Login">LogIn</a>
+        </div>
+    </div>
 </div>
