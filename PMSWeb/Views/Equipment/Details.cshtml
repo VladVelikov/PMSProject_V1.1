@@ -17,9 +17,12 @@
        margin: 1em auto;
        text-decoration: underline;
    } 
+   p{
+       margin: 0;
+   }
 </style>
 
-<h2>Welcome to Details Page</h2>
+<h2>Welcome to Equipment Details Page</h2>
 
 <div>
     <h4>Equipment Main Data</h4>
@@ -80,67 +83,57 @@
         <thead>
             <tr>
                 <th>Category</th>
-                <th>Details</th>
+                <th>Selected for @Model.Name</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td><strong>Routine Maintenances</strong></td>
                 <td>
-                    <ul>
-                        @foreach (string rm in Model.RoutineMaintenances)
-                        {
-                            <li>@rm</li>
-                        }
-                    </ul>
+                    @foreach (string rm in Model.RoutineMaintenances)
+                    {
+                        <p>@rm</p>
+                    }
                 </td>
             </tr>
 
             <tr>
                 <td><strong>Specific Maintenances</strong></td>
-                <td>
-                    <ul>
-                        @foreach (var sm in Model.SpecificMaintenances)
-                        {
-                            <li>@sm</li>
-                        }
-                    </ul>
-                </td>
+                 <td>
+                     @foreach (string sm in Model.SpecificMaintenances)
+                     {
+                         <p>@sm</p>
+                     }
+                 </td>
             </tr>
 
             <tr>
                 <td><strong>Manuals</strong></td>
                 <td>
-                    <ul>
-                        @foreach (var manual in Model.Manuals)
-                        {
-                            <li>@manual</li>
-                        }
-                    </ul>
+                     @foreach (var manual in Model.Manuals)
+                     {
+                         <p>@manual</p>
+                     }
                 </td>
             </tr>
 
             <tr>
                 <td><strong>Spare Parts</strong></td>
                 <td>
-                    <ul>
-                        @foreach (var part in Model.SpareParts)
-                        {
-                            <li>@part</li>
-                        }
-                    </ul>
+                     @foreach (var part in Model.SpareParts)
+                     {
+                         <p>@part</p>
+                     }
                 </td>
             </tr>
 
             <tr>
                 <td><strong>Consumables</strong></td>
                 <td>
-                    <ul>
-                        @foreach (var consumable in Model.Consumables)
-                        {
-                            <li>@consumable</li>
-                        }
-                    </ul>
+                     @foreach (var consumable in Model.Consumables)
+                     {
+                         <p>@consumable</p>
+                     }
                 </td>
             </tr>
         </tbody>

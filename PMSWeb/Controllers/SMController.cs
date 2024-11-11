@@ -1,17 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PMS.Data;
-using PMS.Data.Models;
 using PMS.Services.Data.Interfaces;
-using PMSWeb.ViewModels.CommonVM;
 using PMSWeb.ViewModels.SM;
 using System.Security.Claims;
 using static PMS.Common.EntityValidationConstants;
-using static PMS.Common.EntityValidationConstants.MaintenanceConstants;
 
 namespace PMSWeb.Controllers
 {
-    public class SMController(PMSDbContext context, ISMService smService) : Controller
+    public class SMController(ISMService smService) : Controller
     {
         public async Task<IActionResult> Select()
         {

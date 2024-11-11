@@ -1,49 +1,151 @@
-﻿
-<style>
+﻿@{
+    ViewData["Title"] = "Creator's Page";
+}
 
-    ul{
-       list-style: none;
-    }
+<h1 class="text-center text-white mt-4">Welcome to Creator's Page</h1>
+<div class="container-fluid bg-dark py-5">
+    <div class="row">
+        <!-- Consumables Block-->
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card bg-secondary text-white shadow-lg">
+                <img src="~/images/consumables.jpg" class="card-img-top" alt="Consumables Image">
+                <div class="card-body">
+                    <h5 class="card-title">Consumables</h5>
+                    <p class="card-text">Explore a variety of consumables available for selection.</p>
+                    <a asp-area="" asp-controller="Consumable" asp-action="Select" class="btn btn-light">Start Creating</a>
+                </div>
+            </div>
+        </div>
 
-</style>
+        <!-- Equipments Block -->
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card bg-secondary text-white shadow-lg">
+                <img src="~/images/equipment.jpg" class="card-img-top" alt="Equipment Image">
+                <div class="card-body">
+                    <h5 class="card-title">Equipment</h5>
+                    <p class="card-text">Discover the latest equipment for creators.</p>
+                    <a asp-area="" asp-controller="Equipment" asp-action="Select" class="btn btn-light">Start Creating</a>
+                </div>
+            </div>
+        </div>
 
-<h1>Welcome to Creator's Page</h1>
-<div class="container-fluid">
-    <nav>
-        <ul style="display: flex; flex-direction:column; gap: 1em;">
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Consumable" asp-action="Select">Consumables</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Equipment" asp-action="Select">Equipment</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Maker" asp-action="Select">Maker</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Manual" asp-action="Select">Manual</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="RM" asp-action="Select">RM</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="SM" asp-action="Select">SM</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Sparepart" asp-action="Select">Sparepart</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Supplier" asp-action="Select">Supplier</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="City" asp-action="Select">City</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Country" asp-action="Select">Country</a>
-            </li>
-        </ul>
+        <!-- Maker Block -->
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card bg-secondary text-white shadow-lg">
+                <img src="~/images/maker.jpg" class="card-img-top" alt="Maker Image">
+                <div class="card-body">
+                    <h5 class="card-title">Maker</h5>
+                    <p class="card-text">Find information about various makers.</p>
+                    <a asp-area="" asp-controller="Maker" asp-action="Select" class="btn btn-light">Start Creating</a>
+                </div>
+            </div>
+        </div>
 
-    </nav>
+        <!-- Manual Block-->
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card bg-secondary text-white shadow-lg">
+                <img src="~/images/manual.jpg" class="card-img-top" alt="Manual Image">
+                <div class="card-body">
+                    <h5 class="card-title">Manual</h5>
+                    <p class="card-text">Access detailed manuals and instructions.</p>
+                    <a asp-area="" asp-controller="Manual" asp-action="Select" class="btn btn-light">Start Creating</a>
+                </div>
+            </div>
+        </div>
 
+        <!-- Routine Maintenance -->
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card bg-secondary text-white shadow-lg">
+                <img src="~/images/rm.jpg" class="card-img-top" alt="RM Image">
+                <div class="card-body">
+                    <h5 class="card-title">Routine Maintenances</h5>
+                    <p class="card-text">Learn more about RM products and services.</p>
+                    <a asp-area="" asp-controller="RM" asp-action="Select" class="btn btn-light">Start Creating</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Specific Maintenance -->
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card bg-secondary text-white shadow-lg">
+                <img src="~/images/sm.jpg" class="card-img-top" alt="SM Image">
+                <div class="card-body">
+                    <h5 class="card-title">Specific Maintenances</h5>
+                    <p class="card-text">Explore SM tools and resources creation.</p>
+                    <a asp-area="" asp-controller="SM" asp-action="Select" class="btn btn-light">Start Creating</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sparepart Block -->
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card bg-secondary text-white shadow-lg">
+                <img src="~/images/sparepart.jpg" class="card-img-top" alt="Sparepart Image">
+                <div class="card-body">
+                    <h5 class="card-title">Sparepart</h5>
+                    <p class="card-text">Browse through spare parts for equipment.</p>
+                    <a asp-area="" asp-controller="Sparepart" asp-action="Select" class="btn btn-light">Start Creating</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Suppliers block -->
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card bg-secondary text-white shadow-lg">
+                <img src="~/images/supplier.jpg" class="card-img-top" alt="Supplier Image">
+                <div class="card-body">
+                    <h5 class="card-title">Supplier</h5>
+                    <p class="card-text">Find suppliers for various materials and services.</p>
+                    <a asp-area="" asp-controller="Supplier" asp-action="Select" class="btn btn-light">Start Creating</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- City Block -->
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card bg-secondary text-white shadow-lg">
+                <img src="~/images/city.jpg" class="card-img-top" alt="City Image">
+                <div class="card-body">
+                    <h5 class="card-title">City</h5>
+                    <p class="card-text">Explore city-based resources and options.</p>
+                    <a asp-area="" asp-controller="City" asp-action="Select" class="btn btn-light">Start Creating</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Country Block -->
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card bg-secondary text-white shadow-lg">
+                <img src="~/images/country.jpg" class="card-img-top" alt="Country Image">
+                <div class="card-body">
+                    <h5 class="card-title">Country</h5>
+                    <p class="card-text">View resources and information by country.</p>
+                    <a asp-area="" asp-controller="Country" asp-action="Select" class="btn btn-light">Start Creating</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
+<style>
+    body {
+        background-color: #2c2f33;
+    }
+
+    h1 {
+        font-weight: bold;
+    }
+    a:hover{
+        box-shadow: 0 0 0.2em 0.2em pink;
+        transition: 0.3s ease-in;
+    }
+
+    .col-md-4:hover{
+        box-shadow: 0 0 0.5em 0.2em white inset;
+        transition: 0.3s ease-in;
+    }
+    .col-md-4{
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+    }
+</style>

@@ -50,6 +50,8 @@ namespace PMSWeb
             builder.Services.AddScoped<IManualService, ManualService>();
             builder.Services.AddScoped<IRMService, RMService>();
             builder.Services.AddScoped<ISMService, SMService>();
+            builder.Services.AddScoped<ISparepartService, SparepartService>();
+            builder.Services.AddScoped<ISupplierService, SupplierService>();
 
             var app = builder.Build();
 

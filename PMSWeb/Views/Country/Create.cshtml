@@ -13,9 +13,10 @@
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-
-    <button type="submit" class="btn btn-primary">Create</button>
-    <a asp-action="Select" class="btn btn-secondary">Back to List</a>
+    <div style="margin-top:0.5em;">
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-action="Select" class="btn btn-secondary">Back to List</a>
+    </div>
 </form>
 
 @section Scripts {
