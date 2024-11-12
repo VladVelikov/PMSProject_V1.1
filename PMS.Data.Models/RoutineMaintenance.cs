@@ -59,8 +59,6 @@ namespace PMS.Data.Models
 
         public virtual ICollection<RoutineMaintenanceEquipment> RoutineMaintenancesEquipments { get; set; } 
             = new HashSet<RoutineMaintenanceEquipment>();  
-        
-        public virtual ICollection<JobOrder> JobOrders { get; set; } = new List<JobOrder>();
 
         public bool IsDeleted { get; set; }
     }

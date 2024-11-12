@@ -1,0 +1,57 @@
+﻿@using PMSWeb.ViewModels.JobOrderVM
+@model IEnumerable<JobOrderDisplayViewModel>
+
+@{
+    ViewBag.Title = "Job Orders";
+}
+
+<h2>Job Orders</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Job Name</th>
+            <th>Due Date</th>
+            <th>Last Done Date</th>
+            <th>Type</th>
+            <th>Responsible Position</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var job in Model)
+        {
+            <tr>
+                <td>@job.JobName</td>
+                <td>@job.DueDate</td>
+                <td>@job.LastDoneDate</td>
+                <td>@job.Type</td>
+                <td>@job.ResponsiblePosition</td>
+                <td>
+                    <a asp-action="Complete" asp-route-id="@job.JobId" class="btn btn-primary btn-sm">Complete The Job</a>
+                    <a asp-action="Delete" asp-route-id="@job.JobId" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+
+    .table th, .table td {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+    }
+
+    .table th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+        text-align: left;
+    }
+</style>
+

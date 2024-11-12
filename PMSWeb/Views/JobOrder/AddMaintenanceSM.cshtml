@@ -1,0 +1,41 @@
+﻿@using PMSWeb.ViewModels.JobOrderVM
+@model JobOrderAddMaintenanceViewModel
+
+@{
+    ViewBag.Title = "Create Job Order - Select Maintenance";
+}
+
+<h4>Create Job Order</h4>
+
+<form asp-action="Create" method="get" class="form-horizontal">
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="EquipmentId" />
+        <input type="hidden" asp-for="TypeId" />
+        <input type="hidden" asp-for="EquipmentName" />
+        <label>@Model.EquipmentName</label>
+
+        <div class="form-group">
+            <label asp-for="MaintenanceId" class="control-label col-md-2">Please select maintenances for @Model.EquipmentName</label>
+            <div class="col-md-10">
+                <select asp-for="MaintenanceId" asp-items=@(new SelectList(Model.Maintenances,"Id", "Name")) class="form-control">
+                    <option value="">Select @Model.TypeId Maintenance</option>
+                </select>
+                <span asp-validation-for="MaintenanceId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Select" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>  <!-- Class-form-horizontal ends here -->
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

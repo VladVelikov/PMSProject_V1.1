@@ -63,8 +63,6 @@ namespace PMS.Data.Models
 
         [ForeignKey(nameof(EquipmentId))]
         public virtual Equipment Equipment { get; set; } = null!;
-
-        public virtual ICollection<JobOrder> JobOrders { get; set; } = new List<JobOrder>();
         
         public bool IsDeleted { get; set; }
     }

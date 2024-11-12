@@ -1,0 +1,47 @@
+﻿@using PMSWeb.ViewModels.JobOrderVM
+@model JobOrderAddEquipmentViewModel
+
+@{
+    ViewBag.Title = "Create Job Order - Select Equipment";
+}
+
+<h2>Create Job Order</h2>
+
+<form asp-action="AddEquipment" method="post" class="form-horizontal">
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>Job Order</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div style="display:flex; gap: 2em;">
+        <div class="form-group">
+            <label asp-for="EquipmentId" class="control-label col-md-6" style="min-width:20em;">Plase Select Equipment to be Maintained</label>
+            <div class="col-md-10">
+                <select asp-for="EquipmentId" asp-items=@(new SelectList(Model.EquipmentList,"Id", "Name")) class="form-control" style="min-width:20em;"></select>
+                <span asp-validation-for="EquipmentId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TypeId" class="control-label col-md-6" style="min-width:20em;">Maintenance Type</label>
+            <div class="col-md-10">
+                <select asp-for="TypeId" asp-items=@(new SelectList(Model.TypeList,"Id", "Name")) class="form-control" style="min-width:20em;"></select>
+                <span asp-validation-for="TypeId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label></label>
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Select" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+

@@ -8,6 +8,11 @@ namespace PMS.Data.Models
 {
     public class JobOrder
     {
+        public JobOrder() 
+        {
+            this.JobId = Guid.NewGuid();    
+        }   
+
         [Key]
         [Comment("Unique identifier of the Job Order.")]
         public Guid JobId { get; set; }
@@ -61,18 +66,11 @@ namespace PMS.Data.Models
         [ForeignKey(nameof(EquipmentId))]
         public virtual Equipment Equipment { get; set; } = null!;
 
-        [Comment("Unique identifier of the routine maintenance selected if any")]
-        public Guid RoutineMaintenanceId { get; set; }
+        [Required]
+        [Comment("Unique identifier for the current Type Of Maintenance")]
+        public Guid MaintenanceId { get; set; } 
 
-        [ForeignKey(nameof(RoutineMaintenanceId))]
-        public RoutineMaintenance? RoutineMaintenance { get; set; }
-
-        [Comment("Unique identifier of the specific maintenance selected if any")]
-        public Guid SpecificMaintenanceId { get; set; }
-        
-        [ForeignKey(nameof(SpecificMaintenanceId))]
-        public SpecificMaintenance? SpecificMaintenance { get; set; }
-
-        bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
+        public bool IsHistory { get; set; }
     }
 }
