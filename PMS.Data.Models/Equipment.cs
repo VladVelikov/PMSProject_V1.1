@@ -54,15 +54,15 @@ namespace PMS.Data.Models
 
         public virtual ICollection<RoutineMaintenanceEquipment> RoutineMaintenancesEquipments { get; set; } 
                                                        = new HashSet<RoutineMaintenanceEquipment>();
-        
-        public ICollection<SpecificMaintenance> SpecificMaintenances = new List<SpecificMaintenance>();  
+        public virtual ICollection<SpecificMaintenance> SpecificMaintenances { get; set; } = new List<SpecificMaintenance>();  
                                                       
+        public virtual ICollection<Sparepart> SpareParts { get; set; } = new List<Sparepart>();
 
-        public ICollection<Sparepart> SpareParts = new List<Sparepart>();
+        public virtual ICollection<Manual> Manuals { get; set; } = new List<Manual>();    
 
-        public ICollection<Manual> Manuals = new List<Manual>();    
+        public virtual ICollection<ConsumableEquipment> ConsumablesEquipments { get; set; } = new HashSet<ConsumableEquipment>();
 
-        public ICollection<ConsumableEquipment> ConsumablesEquipments = new HashSet<ConsumableEquipment>();
+        public virtual ICollection<JobOrder> JobOrders { get; set; } = new List<JobOrder>();   
 
         public bool IsDeleted { get; set; }
 

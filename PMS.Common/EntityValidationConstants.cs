@@ -107,5 +107,17 @@ namespace PMS.Common
             public const int CityCountryNameMaxLength = 150;
             public const int CityCountryNameMinLength = 3;
         }
+
+        public class JobOrderConstants
+        {
+            public const int JobOrderNameMaxLength = 50;
+            public const int JobOrderNameMinLength = 4;
+            public const int JobOrderDescriptionMaxLength = 200;
+            public const int JobOrderDescriptionMinLength = 3;
+            public const int JobOrderResponsiblePositionMaxLength = 30;
+            public const int JobOrderResponsiblePositionMinLength = 2;
+            public const int JobOrderTypeMaxLength = 30;
+            public const int JobOrderTypeMinLength = 4;
+        }
     }
 }

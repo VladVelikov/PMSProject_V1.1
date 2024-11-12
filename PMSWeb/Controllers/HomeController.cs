@@ -17,19 +17,23 @@ namespace PMSWeb.Controllers
 
         public IActionResult Index()
         {
+            if (User.Identity!.IsAuthenticated)
+            {
+                return RedirectToAction(nameof(Dashboard));
+            }
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Dashboard()
         {
             return View();
         }
-        
+
         public IActionResult CreatorPage()
         {
             return View();
         }
-        public IActionResult Select()
+        public IActionResult Select()  // TO DO - erase rerouting after error handling module completed
         {
             return RedirectToAction(nameof(CreatorPage));
         }

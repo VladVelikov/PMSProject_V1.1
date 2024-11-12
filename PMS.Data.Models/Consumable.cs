@@ -59,9 +59,9 @@ namespace PMS.Data.Models
         [Comment("The remaining quantity on stock")]
         public double  ROB { get; set; }
 
-        public ICollection<ConsumableEquipment> ConsumablesEquipments = new HashSet<ConsumableEquipment>();
+        public virtual ICollection<ConsumableEquipment> ConsumablesEquipments { get; set; } = new HashSet<ConsumableEquipment>();
         
-        public ICollection<ConsumableSupplier> ConsumablesSuppliers = new HashSet<ConsumableSupplier>(); 
+        public virtual ICollection<ConsumableSupplier> ConsumablesSuppliers { get; set; } = new HashSet<ConsumableSupplier>(); 
 
         public bool IsDeleted { get; set; } 
     }

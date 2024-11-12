@@ -58,7 +58,9 @@ namespace PMS.Data.Models
         public DateTime EditedOn { get; set; }
 
         public virtual ICollection<RoutineMaintenanceEquipment> RoutineMaintenancesEquipments { get; set; } 
-            = new HashSet<RoutineMaintenanceEquipment>();   
+            = new HashSet<RoutineMaintenanceEquipment>();  
+        
+        public virtual ICollection<JobOrder> JobOrders { get; set; } = new List<JobOrder>();
 
         public bool IsDeleted { get; set; }
     }

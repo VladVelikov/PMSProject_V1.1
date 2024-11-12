@@ -1,0 +1,102 @@
+﻿<aside class="container-fluid" style="border-radius:0.5em;">
+    <div>
+        <div class="dropdown">
+            <button>Creators Page</button>
+            <div class="content">
+                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Creator's Page</a>
+                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Help Notes</a>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="dropdown">
+            <button>Jobs Handling</button>
+            <div class="content">
+                <a class="btn btn-info" asp-controller="Home" asp-action="CreatorPage">Due Jobs</a>
+                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">New Job Order</a>
+            </div>
+        </div>
+    </div>
+   
+    <div>
+        <div class="dropdown">
+            <button>Inventory</button>
+            <div class="content">
+                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Spares Inventory</a>
+                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Consumables Inventory</a>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="dropdown">
+            <button>Purchasing</button>
+            <div class="content">
+                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Create Requisition</a>
+                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Approve Requisition</a>
+                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Receive Goods</a>
+            </div>
+        </div>
+    </div>
+</aside>
+
+
+
+<style>
+    html, body{
+        background-color: darkgrey;
+    }
+    .dropdown {
+        display: inline-block;
+        margin: 0 auto;
+    }
+        .dropdown button {
+            background-color: grey;
+            padding: 0.5em;
+            cursor: pointer;
+            width: 15em;
+            border-radius: 0.5em;
+            font-weight: 600;
+            opacity: 100%;
+        }
+        .dropdown a {
+            display: block;
+            color: black;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 0.5em 1em;
+            margin-top: 0.5em;
+            border: 2px solid white;
+            border-radius: 0.5em;
+            
+        }
+        .dropdown .content {
+            display: none;
+            position: absolute;
+        }
+        .dropdown:hover .content{
+            display: flex;
+            flex-direction: column;
+            z-index: 1;
+            background-color: transparent;
+            width:15em;
+            text-align: center;
+        }
+        .dropdown:hover button {
+            background-color: lightgray;
+            transition: 0.5s ease-in;
+        }
+        
+        .dropdown a:hover {
+            border: 1px solid black;
+        }
+aside {
+    padding: 2em;
+    background-color: lightgray;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 2em;
+}
+
+</style>
+
