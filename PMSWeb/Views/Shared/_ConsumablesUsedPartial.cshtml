@@ -1,0 +1,46 @@
+﻿@using PMSWeb.ViewModels.JobOrderVM
+@model PartialViewModel
+
+<form asp-action="ConfirmConsumablesUsed" method="post">
+    <h4>Consumables Used</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Available</th>
+                <th>Used</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+
+            @for (int i = 0; i < Model.InventoryList.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <input type="hidden" asp-for="InventoryList[i].Id" />
+                        @* @Model.InventoryList[i].Id *@ *
+                    </td>
+                    <td>
+                        <input asp-for="InventoryList[i].Name" class="form-control" readonly/>
+                    </td>
+                    <td>
+                        <input asp-for="InventoryList[i].Available" class="form-control" readonly/>
+                    </td>
+                    <td>
+                        <input asp-for="InventoryList[i].Units" class="form-control" readonly />
+                    </td>
+                    <td>
+                        <input asp-for="InventoryList[i].Used" class="form-control" />
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <input type="hidden" asp-for="EquipmentId"/>
+    <input type="hidden" asp-for="JobId"/>
+    <button type="submit" class="btn btn-info">Confirm</button>
+</form>
+

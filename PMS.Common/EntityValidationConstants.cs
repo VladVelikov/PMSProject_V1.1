@@ -112,7 +112,7 @@ namespace PMS.Common
         {
             public const int JobOrderNameMaxLength = 50;
             public const int JobOrderNameMinLength = 4;
-            public const int JobOrderDescriptionMaxLength = 200;
+            public const int JobOrderDescriptionMaxLength = 500;
             public const int JobOrderDescriptionMinLength = 3;
             public const int JobOrderResponsiblePositionMaxLength = 30;
             public const int JobOrderResponsiblePositionMinLength = 2;

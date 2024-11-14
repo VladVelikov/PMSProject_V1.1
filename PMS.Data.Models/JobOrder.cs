@@ -68,7 +68,10 @@ namespace PMS.Data.Models
 
         [Required]
         [Comment("Unique identifier for the current Type Of Maintenance")]
-        public Guid MaintenanceId { get; set; } 
+        public Guid MaintenanceId { get; set; }
+
+        [MaxLength(JobOrderNameMaxLength)]
+        public string? CompletedBy { get; set; }
 
         public bool IsDeleted { get; set; }
         public bool IsHistory { get; set; }

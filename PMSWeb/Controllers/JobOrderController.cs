@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PMS.Data;
 using PMS.Data.Models;
 using PMSWeb.ViewModels.CommonVM;
+using PMSWeb.ViewModels.InventoryVM;
 using PMSWeb.ViewModels.JobOrderVM;
 using System.Security.Claims;
 using static PMS.Common.EntityValidationConstants;
@@ -32,7 +33,6 @@ namespace PMSWeb.Controllers
 
             return View(modelList);
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Create(JobOrderAddMaintenanceViewModel inputModel)
@@ -214,6 +214,164 @@ namespace PMSWeb.Controllers
             }
             return RedirectToAction(nameof(AddMaintenanceSM));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var jobToDelete = await context
+                .JobOrders
+                .FindAsync(Guid.Parse(id));
+            if (jobToDelete != null) 
+                jobToDelete.IsDeleted = true;
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Select));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CompleteJob(string id)
+        {
+            var model = await context
+                .JobOrders
+                .Where(x => !x.IsDeleted && !x.IsHistory)
+                .Where(x => x.JobId.ToString().ToLower() == id.ToLower())
+                .AsNoTracking()
+                .Select(x=> new CompleteTheJobViewModel() { 
+                    JobId = x.JobId.ToString(),
+                    JobName = x.JobName,
+                    Details = string.Empty,
+                    DueDate = x.DueDate.ToString(PMSRequiredDateFormat),
+                    ResponsiblePosition = x.ResponsiblePosition,
+                    Equipment = x.Equipment.Name
+                })
+                .FirstOrDefaultAsync();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CloseJob(CompleteTheJobViewModel model)
+        {
+            return RedirectToAction(nameof(Select));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SparesUsedPartial(string id)
+        {
+            var job = context.JobOrders.Find(Guid.Parse(id));
+
+            var sparesList = await context
+                .Spareparts
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.EquipmentId == job.EquipmentId)
+                .AsNoTracking()
+                .Select(x=> new InventoryItemViewModel() {
+                    Name = x.SparepartName,
+                    Id = x.SparepartId.ToString(),
+                    Available = x.ROB,
+                    Units = x.Units,    
+                    Used = 0
+                })
+                .ToListAsync();
+            var model = new PartialViewModel()
+            {
+                JobId = job.JobId.ToString(),
+                EquipmentId = job.EquipmentId.ToString(),
+                InventoryList = sparesList  
+            };
+
+            var spares = new List<InventoryItemViewModel>(); 
+            return PartialView("_SparesUsedPartial", model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ConsumablesUsedPartial(string id)
+        {
+            var job = context.JobOrders.Find(Guid.Parse(id));
+
+            var consumables = await context
+                .ConsumablesEquipments
+                .Where(x => x.EquipmentId == job.EquipmentId)
+                .AsNoTracking()
+                .Select(x=> new InventoryItemViewModel() {
+                    Name = x.Consumable.Name,
+                    Id = x.ConsumableId.ToString(),
+                    Available = x.Consumable.ROB,
+                    Units = x.Consumable.Units,
+                    Used = 0
+                })
+                .ToListAsync();
+            
+            var model = new PartialViewModel() {
+                JobId = job.JobId.ToString(),
+                EquipmentId = job.EquipmentId.ToString(),
+                InventoryList = consumables
+            };
+              
+            return PartialView("_ConsumablesUsedPartial", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmSparesUsed(PartialViewModel model)
+        {
+            var mySpares = await context
+                .Spareparts
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.EquipmentId.ToString().ToLower() == model.EquipmentId.ToLower())
+                .ToListAsync();
+
+            foreach (var item in model.InventoryList)
+            {
+                var spare = mySpares.FirstOrDefault(x => x.SparepartId.ToString().ToLower() == item.Id.ToLower());
+                if (item.Used < 0)
+                {
+                    //do nothing
+                    //spare.ROB -= item.Used;  // for testing only 
+                }
+                else if (item.Used > spare.ROB)
+                {
+                    spare.ROB = 0;
+                }
+                else 
+                {
+                    spare.ROB -= item.Used; 
+                }
+            }    
+            await context.SaveChangesAsync();
+            return RedirectToAction("CompleteJob", new { id = model.JobId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmConsumablesUsed(PartialViewModel model)
+        {
+            var myConsumables = await context
+                .ConsumablesEquipments
+                .Where(x => x.EquipmentId.ToString().ToLower() == model.EquipmentId.ToLower())
+                .Select(x=>x.Consumable)
+                .ToListAsync();
+
+            foreach (var item in model.InventoryList)
+            {
+                var spare = myConsumables.FirstOrDefault(x => x.ConsumableId.ToString().ToLower() == item.Id.ToLower());
+                if (item.Used < 0)
+                {
+                    //do nothing
+                    //spare.ROB -= item.Used;  // for testing only 
+                }
+                else if (item.Used > spare.ROB)
+                {
+                    spare.ROB = 0;
+                }
+                else
+                {
+                    spare.ROB -= item.Used;
+                }
+            }
+            await context.SaveChangesAsync();
+            return RedirectToAction("CompleteJob", new { id = model.JobId });
+        }
+
+
 
         public string? GetUserId()
         {
