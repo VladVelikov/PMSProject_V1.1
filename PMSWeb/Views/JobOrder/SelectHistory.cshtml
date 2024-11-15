@@ -1,19 +1,18 @@
 ﻿@using PMSWeb.ViewModels.JobOrderVM
-@model IEnumerable<JobOrderDisplayViewModel>
+@model IEnumerable<JobOrderHistoryViewModel>
 
 @{
-    ViewBag.Title = "Job Orders";
+    ViewBag.Title = "Jobs History";
 }
 
-<h2>Job Orders</h2>
+<h2>Jobs History</h2>
 
 <table class="table table-striped">
     <thead>
         <tr>
             <th>Job Name</th>
-            <th>Equipment</th>
-            <th>Due Date</th>
-            <th>Last Done</th>
+            <th>Completed By</th>
+            <th>Last Done Date</th>
             <th>Type</th>
             <th>Responsible Position</th>
             <th>Actions</th>
@@ -24,17 +23,12 @@
         {
             <tr>
                 <td>@job.JobName</td>
-                <td>@job.EquipmentName</td>
-                <td>@job.DueDate</td>
+                <td>@job.CompletedBy</td>
                 <td>@job.LastDoneDate</td>
                 <td>@job.Type</td>
                 <td>@job.ResponsiblePosition</td>
                 <td>
-                    <a asp-action="CompleteJob" asp-route-id="@job.JobId" class="btn btn-primary btn-sm">Complete The Job</a>
-                    <a asp-action="Delete" asp-route-id="@job.JobId" class="btn btn-danger btn-sm" 
-                                   onclick="return confirm('Are you sure you want to delete this Job?');">
-                        Delete
-                    </a>
+                    <a asp-action="ShowHistory" asp-route-id="@job.JobId" class="btn btn-primary btn-sm">Show Details</a>
                 </td>
             </tr>
         }

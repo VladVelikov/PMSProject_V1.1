@@ -1,0 +1,50 @@
+﻿@using PMSWeb.ViewModels.InventoryVM
+@model ConsumablesInventoryViewModel
+
+<div class="container mt-4">
+    <h2 class="mb-4">@Model.Name</h2>
+
+    <form asp-action="UpdateConsumablesInventory" method="post">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>InventoryStock</th>
+                    <th>Units</th>
+                    <th>RealStock</th>
+                    <th>LastEdition</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Consumables.Count; i++)
+
+                {
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>
+                            <input type="hidden" name="Consumables[@i].Id" value="@Model.Consumables[i].Id" />
+                            @Model.Consumables[i].Name
+                        </td>
+                        <td>
+                            <input type="number" step="0.01" name="Consumables[@i].Available" value="@Model.Consumables[i].Available" class="form-control" readonly />
+                        </td>
+                        <td>@Model.Consumables[i].Units</td>
+                        <td>
+                            <input type="number" step="0.01" name="Consumables[@i].Used" value="@Model.Consumables[i].Used" class="form-control" />
+                        </td>
+                        <td>@Model.Consumables[i].EditedOn.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>
+                            <input type="text" name="Consumables[@i].Price" value="@Model.Consumables[i].Price" class="form-control" readonly />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div style="display: flex; gap: 1em;">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a asp-controller="Home" asp-action="Dashboard" class="btn btn-success">Dashboard</a>
+        </div>
+    </form>
+</div>

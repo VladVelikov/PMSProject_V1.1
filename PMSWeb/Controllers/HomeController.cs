@@ -33,6 +33,13 @@ namespace PMSWeb.Controllers
         {
             return View();
         }
+
+        public IActionResult CreatorHelpNotes()
+        {
+            return View();
+        }
+
+
         public IActionResult Select()  // TO DO - erase rerouting after error handling module completed
         {
             return RedirectToAction(nameof(CreatorPage));

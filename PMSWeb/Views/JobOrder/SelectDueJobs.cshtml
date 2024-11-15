@@ -2,10 +2,10 @@
 @model IEnumerable<JobOrderDisplayViewModel>
 
 @{
-    ViewBag.Title = "Job Orders";
+    ViewBag.Title = "Due Job";
 }
 
-<h2>Job Orders</h2>
+<h2>Due Job</h2>
 
 <table class="table table-striped">
     <thead>
@@ -13,7 +13,7 @@
             <th>Job Name</th>
             <th>Equipment</th>
             <th>Due Date</th>
-            <th>Last Done</th>
+            <th>Last Done Date</th>
             <th>Type</th>
             <th>Responsible Position</th>
             <th>Actions</th>
@@ -31,8 +31,8 @@
                 <td>@job.ResponsiblePosition</td>
                 <td>
                     <a asp-action="CompleteJob" asp-route-id="@job.JobId" class="btn btn-primary btn-sm">Complete The Job</a>
-                    <a asp-action="Delete" asp-route-id="@job.JobId" class="btn btn-danger btn-sm" 
-                                   onclick="return confirm('Are you sure you want to delete this Job?');">
+                    <a asp-action="Delete" asp-route-id="@job.JobId" class="btn btn-danger btn-sm"
+                       onclick="return confirm('Are you sure you want to delete this Job?');">
                         Delete
                     </a>
                 </td>

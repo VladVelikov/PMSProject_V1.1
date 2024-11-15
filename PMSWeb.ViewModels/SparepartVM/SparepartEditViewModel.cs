@@ -30,7 +30,7 @@ namespace PMSWeb.ViewModels.SparepartVM
         [Range(0, SparePartROBMaxValue)]
         public double ROB { get; set; }
         
-        [Required]
+        
         [MaxLength(SparePartImageURLMaxLength)]
         public string? ImageUrl { get; set; } 
     }

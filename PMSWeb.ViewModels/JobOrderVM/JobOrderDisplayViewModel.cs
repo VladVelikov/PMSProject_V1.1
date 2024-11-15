@@ -8,6 +8,7 @@
         public string LastDoneDate { get; set; }
         public string Type { get; set; }
         public string ResponsiblePosition { get; set; }
+        public string EquipmentName { get; set; }
 
 
     }

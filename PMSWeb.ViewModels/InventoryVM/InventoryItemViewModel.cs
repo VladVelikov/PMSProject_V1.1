@@ -20,5 +20,7 @@ namespace PMSWeb.ViewModels.InventoryVM
 
         public DateTime EditedOn { get; set; }
 
+        public string? Price { get; set; }
+
     }
 }

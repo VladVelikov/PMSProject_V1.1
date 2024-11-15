@@ -4,7 +4,7 @@
             <button>Creators Page</button>
             <div class="content">
                 <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Creator's Page</a>
-                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Help Notes</a>
+                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorHelpNotes">Help Notes</a>
             </div>
         </div>
     </div>
@@ -12,8 +12,10 @@
         <div class="dropdown">
             <button>Jobs Handling</button>
             <div class="content">
-                <a class="btn btn-info" asp-controller="JobOrder" asp-action="Select">Due Jobs</a>
-                <a class="butn btn-info" asp-controller="JobOrder" asp-action="AddEquipment">New Job Order</a>
+                <a class="butn btn-info" asp-controller="JobOrder" asp-action="SelectDueJobs">Jobs For Today</a>
+                <a class="butn btn-info" asp-controller="JobOrder" asp-action="SelectHistory">JobsHistory</a>
+                <a class="btn btn-info" asp-controller="JobOrder" asp-action="Select">All Scheduled</a>
+                <a class="butn btn-warning" asp-controller="JobOrder" asp-action="AddEquipment">Create Job Order</a>
             </div>
         </div>
     </div>
@@ -22,8 +24,8 @@
         <div class="dropdown">
             <button>Inventory</button>
             <div class="content">
-                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Spares Inventory</a>
-                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Consumables Inventory</a>
+                <a class="butn btn-info" asp-controller="Inventory" asp-action="SparesInventory">Spares Inventory</a>
+                <a class="butn btn-info" asp-controller="Inventory" asp-action="ConsumablesInventory">Consumables Inventory</a>
             </div>
         </div>
     </div>

@@ -24,16 +24,87 @@ namespace PMSWeb.Controllers
                 {
                     JobId = x.JobId.ToString(),
                     JobName = x.JobName,
+                    EquipmentName = x.Equipment.Name,
                     DueDate = x.DueDate.ToString(PMSRequiredDateFormat),
-                    LastDoneDate = x.LastDoneDate.ToString(PMSRequiredDateTimeFormat),
-                    Type = x.Type,  
+                    LastDoneDate = x.LastDoneDate.ToString(PMSRequiredDateFormat),
+                    Type = x.Type,
                     ResponsiblePosition = x.ResponsiblePosition
                 })
                 .ToListAsync();
 
             return View(modelList);
         }
-
+        
+        [HttpGet]
+        public async Task<IActionResult> SelectDueJobs()
+        {
+            var dueJobsList = await context
+                .JobOrders
+                .Where(x => !x.IsDeleted)
+                .Where(x => !x.IsHistory)
+                .Where(x => x.DueDate < DateTime.UtcNow)
+                .AsNoTracking()
+                .Select(x => new JobOrderDisplayViewModel()
+                {
+                    JobId = x.JobId.ToString(),
+                    JobName = x.JobName,
+                    EquipmentName= x.Equipment.Name,    
+                    DueDate = x.DueDate.ToString(PMSRequiredDateFormat),
+                    LastDoneDate = x.LastDoneDate.ToString(PMSRequiredDateFormat),
+                    Type = x.Type,
+                    ResponsiblePosition = x.ResponsiblePosition
+                })
+                .ToListAsync();
+            return View(dueJobsList);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> SelectHistory()
+        {
+            var dueJobsList = await context
+               .JobOrders
+               .Where(x => !x.IsDeleted)
+               .Where(x => x.IsHistory)
+               .AsNoTracking()
+               .OrderByDescending(x=>x.LastDoneDate)
+               .ThenBy(x=>x.JobName)
+               .Select(x => new JobOrderHistoryViewModel()
+               {
+                   JobId = x.JobId.ToString(),
+                   JobName = x.JobName,
+                   CompletedBy = x.CompletedBy ?? "Unknown :)",
+                   LastDoneDate = x.LastDoneDate.ToString(PMSRequiredDateTimeFormat),
+                   Type = x.Type,
+                   ResponsiblePosition = x.ResponsiblePosition
+               })
+               .ToListAsync();
+            return View(dueJobsList);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> ShowHistory(string id)
+        {
+            var model = await context
+                .JobOrders
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.IsHistory)
+                .Where(x => x.JobId.ToString().ToLower() == id.ToLower())
+                .Include(x=>x.Equipment)
+                .AsNoTracking()
+                .Select (x => new JobHistoryDetailsViewModel() {
+                    JobId = x.JobId.ToString(),
+                    JobName = x.JobName,
+                    CompletedBy = x.CompletedBy ?? string.Empty,
+                    LastDoneDate = x.LastDoneDate.ToString(PMSRequiredDateFormat),
+                    Type = x.Type,
+                    ResponsiblePosition= x.ResponsiblePosition,
+                    MaintainedEquipment = x.Equipment.Name,
+                    Desription = x.JobDescription
+                })
+                .FirstOrDefaultAsync();
+            return View(model);
+        }
+        
         [HttpGet]
         public async Task<IActionResult> Create(JobOrderAddMaintenanceViewModel inputModel)
         {
@@ -285,7 +356,7 @@ namespace PMSWeb.Controllers
             await context.JobOrders.AddAsync(newJob);
             await context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Select));
+            return RedirectToAction(nameof(SelectHistory));
         }
 
         [HttpGet]

@@ -1,0 +1,45 @@
+﻿@using PMSWeb.ViewModels.JobOrderVM
+@model JobHistoryDetailsViewModel
+
+<div class="container mt-4">
+    <h2 class="mb-4">Job Details</h2>
+
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Job ID</th>
+                <td>@Model.JobId</td>
+            </tr>
+            <tr>
+                <th>Job Name</th>
+                <td>@Model.JobName</td>
+            </tr>
+            <tr>
+                <th>Completed By</th>
+                <td>@Model.CompletedBy</td>
+            </tr>
+            <tr>
+                <th>Last Done Date</th>
+                <td>@Model.LastDoneDate</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>@Model.Type</td>
+            </tr>
+            <tr>
+                <th>Responsible Position</th>
+                <td>@Model.ResponsiblePosition</td>
+            </tr>
+            <tr>
+                <th>Maintained Equipment</th>
+                <td>@Model.MaintainedEquipment</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>@Model.Desription</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="@Url.Action("SelectHistory", "JobOrder")" class="btn btn-primary">Back to List</a>
+</div>
