@@ -12,6 +12,8 @@ namespace PMSWeb.ViewModels.JobOrderVM
         [Required]
         [MaxLength(JobOrderDescriptionMaxLength)]
         public string Details { get; set; }
+
+        public string Description { get; set; }
         
         public string DueDate { get; set; }
         

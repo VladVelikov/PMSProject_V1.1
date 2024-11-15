@@ -1,6 +1,8 @@
 ﻿@using PMSWeb.ViewModels.JobOrderVM
 @model CompleteTheJobViewModel
-
+@{
+    TempData["Details"] = Model.Details;
+}
     <h2 style="margin-bottom: 1em;">Complete the Job - @Model.JobName</h2>
 <div class="container-fluid" style="display:flex; gap:4em;">
     <div>
@@ -12,8 +14,10 @@
                 <dt>Job Name:</dt>
                 <dd>@Model.JobName</dd>
 
-                <dt>Details:</dt>
-                <dd>@Model.Details</dd>
+                <dt>Description:</dt>
+                <dd>@Model.Description</dd>
+
+                <a asp-controller="JobOrder" asp-action="Manuals" asp-route-id="@Model.JobId" class="btn btn-secondary">Check The Manual For Guidance</a>
 
                 <dt>Due Date:</dt>
                 <dd>@Model.DueDate</dd>
@@ -31,8 +35,10 @@
                         <span asp-validation-for="Details" class="text-danger"></span>
                     </div>
                     <div style="margin-top: 1em;">
+                        <input type="hidden" asp-for="JobId" />
+                        <input type="hidden" asp-for="Details" />
                         <button type="submit" class="btn btn-primary">Complete The Job</button>
-                        <a href="@Url.Action("CheckManual", "Job", new { id = Model.JobId })" class="btn btn-secondary">Check Manual</a>
+                        
                     </div>
                 </form>
             </dl>

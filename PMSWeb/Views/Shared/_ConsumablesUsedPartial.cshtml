@@ -6,9 +6,10 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>No</th> 
                 <th>Name</th>
                 <th>Available</th>
+                <th>Units</th>
                 <th>Used</th>
             </tr>
         </thead>
@@ -20,7 +21,7 @@
                 <tr>
                     <td>
                         <input type="hidden" asp-for="InventoryList[i].Id" />
-                        @* @Model.InventoryList[i].Id *@ *
+                        @($"{i + 1}")
                     </td>
                     <td>
                         <input asp-for="InventoryList[i].Name" class="form-control" readonly/>

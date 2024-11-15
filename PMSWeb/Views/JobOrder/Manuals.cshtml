@@ -1,0 +1,42 @@
+﻿@using PMSWeb.ViewModels.JobOrderVM
+@model SelectManualViewModel
+
+<h1>Manuals for @Model.EquipmentName</h1>
+
+@if (Model.Manuals != null && Model.Manuals.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Maker</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var manual in Model.Manuals)
+            {
+                <form asp-action="OpenManual" method="get">
+                    <tr>
+                        <td>@manual.ManualName</td>
+                        <td>@manual.Maker.MakerName</td>
+                    <td>
+                        <!-- Hidden input for JobId -->
+                        <input type="hidden" name="JobId" value="@Model.JobId" />
+
+                        <!-- Hidden input for ManualId -->
+                        <input type="hidden" name="ManualId" value="@manual.ManualId" />
+
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-success">Open</button>
+                    </td>
+                    </tr>
+                </form>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No manuals are available for this equipment.</p>
+}

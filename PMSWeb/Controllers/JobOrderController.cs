@@ -239,10 +239,12 @@ namespace PMSWeb.Controllers
                 .Select(x=> new CompleteTheJobViewModel() { 
                     JobId = x.JobId.ToString(),
                     JobName = x.JobName,
+                    Description = x.JobDescription,
                     Details = string.Empty,
                     DueDate = x.DueDate.ToString(PMSRequiredDateFormat),
                     ResponsiblePosition = x.ResponsiblePosition,
-                    Equipment = x.Equipment.Name
+                    Equipment = x.Equipment.Name,
+                    EquipmentId = x.EquipmentId.ToString()
                 })
                 .FirstOrDefaultAsync();
 
@@ -252,6 +254,37 @@ namespace PMSWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> CloseJob(CompleteTheJobViewModel model)
         {
+            var jobToClose = await context
+                .JobOrders
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.JobId.ToString().ToLower() == model.JobId.ToLower())
+                .FirstOrDefaultAsync();
+            string defaultDescreiption = jobToClose.JobDescription;
+            jobToClose.JobDescription = model.Details;
+            jobToClose.LastDoneDate = DateTime.UtcNow;
+            jobToClose.CompletedBy = User.FindFirstValue(ClaimTypes.Name);
+            jobToClose.IsHistory = true;
+            //await context.SaveChangesAsync();
+
+            var newJob = new JobOrder()
+            {
+                JobId = Guid.NewGuid(),
+                JobName = jobToClose.JobName,
+                JobDescription = defaultDescreiption,
+                DueDate = jobToClose.LastDoneDate.AddDays(jobToClose.Interval),
+                LastDoneDate = DateTime.UtcNow, 
+                Interval = jobToClose.Interval,
+                Type = jobToClose.Type,
+                ResponsiblePosition = jobToClose.ResponsiblePosition,
+                CreatorId = jobToClose.CreatorId,
+                EquipmentId = jobToClose.EquipmentId,
+                MaintenanceId = jobToClose.MaintenanceId,
+                IsHistory = false,
+                IsDeleted = false
+            };
+            await context.JobOrders.AddAsync(newJob);
+            await context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Select));
         }
 
@@ -371,6 +404,61 @@ namespace PMSWeb.Controllers
             return RedirectToAction("CompleteJob", new { id = model.JobId });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Manuals(string id)
+        {
+            var job = await context
+                .JobOrders
+                .Where(x=>!x.IsDeleted)
+                .Where(x=>x.JobId.ToString().ToLower() == id.ToLower())
+                .Include(x=>x.Equipment)
+                .FirstOrDefaultAsync();
+            
+            var model = new SelectManualViewModel()
+            {
+                EquipmentName = job.Equipment.Name,
+                JobId = job.JobId.ToString()
+            };
+            var modelManuals = await context
+                .Manuals
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.EquipmentId.ToString().ToLower() 
+                              == job.EquipmentId.ToString().ToLower())
+                .Include(x=>x.Maker)
+                .Include(x=>x.Equipment)
+                .AsNoTracking()
+                .ToListAsync();
+            if (modelManuals.Any())
+            {
+                model.Manuals = modelManuals;
+            }
+            else 
+            {
+                model.EquipmentName = "No Manuals Found";
+                model.Manuals = new List<Manual> { };
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> OpenManual(string jobid, string manualid)
+        {
+            var model = await context
+                .Manuals
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.ManualId.ToString().ToLower() == manualid.ToLower())
+                .AsNoTracking()
+                .Select(x=> new OpenManualViewModel() {
+                    JobId = jobid,
+                    URL = x.ContentURL,
+                    Name = x.ManualName,
+                    MakerName = x.Maker.MakerName,
+                    EquipmentName = x.Equipment.Name
+                })
+                .FirstOrDefaultAsync();
+
+            return View(model);
+        }
 
 
         public string? GetUserId()
