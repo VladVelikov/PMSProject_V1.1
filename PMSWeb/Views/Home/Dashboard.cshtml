@@ -33,7 +33,9 @@
         <div class="dropdown">
             <button>Purchasing</button>
             <div class="content">
-                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Create Requisition</a>
+                <a class="butn btn-info" asp-controller="Requisition" asp-action="CreateSpareparts">Create <span style="font-weight:bold; color: darkmagenta;">SpareParts</span> Requisition</a>
+                <a class="butn btn-info" asp-controller="Requisition" asp-action="CreateConsumables">Create <span style="font-weight:bold; color: blue;">Consumables</span> Requisition</a>
+                <a class="butn btn-info" asp-controller="Requisition" asp-action="Select">AllRequisitionsList</a>
                 <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Approve Requisition</a>
                 <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Receive Goods</a>
             </div>

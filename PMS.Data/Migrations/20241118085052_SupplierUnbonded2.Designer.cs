@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PMS.Data;
 
@@ -11,9 +12,11 @@ using PMS.Data;
 namespace PMSWeb.Data.Migrations
 {
     [DbContext(typeof(PMSDbContext))]
-    partial class PMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241118085052_SupplierUnbonded2")]
+    partial class SupplierUnbonded2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,29 +160,6 @@ namespace PMSWeb.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("PMS.Data.Models.Budget", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasComment("Unique identifier of the budget record.");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Ballance")
-                        .HasColumnType("DECIMAL(18,2)")
-                        .HasColumnName("Ballance")
-                        .HasComment("Remaining funds in budget.");
-
-                    b.Property<DateTime>("LastChangeDate")
-                        .HasColumnType("datetime2")
-                        .HasComment("Date When Last Time The Budget Was Increased or Decreased");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Budget");
                 });
 
             modelBuilder.Entity("PMS.Data.Models.City", b =>
@@ -628,9 +608,6 @@ namespace PMSWeb.Data.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasComment("Unique identifier of the user who created the requisition");
 
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -662,7 +639,7 @@ namespace PMSWeb.Data.Migrations
                     b.Property<Guid>("ItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasComment("Unique identifier of the RequisitionItem in the Requisition Item Table");
+                        .HasComment("Unique identifier of the ReqItem");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2")
@@ -682,10 +659,6 @@ namespace PMSWeb.Data.Migrations
                         .HasColumnType("DECIMAL(18,2)")
                         .HasColumnName("Price")
                         .HasComment("Price of the requisition item");
-
-                    b.Property<Guid>("PurchasedItemId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasComment("Unique identifier of the item, that will be purchased -> Consumable or Spare");
 
                     b.Property<Guid>("RequisitionId")
                         .HasColumnType("uniqueidentifier")

@@ -75,6 +75,7 @@ namespace PMS.Data.Models
 
         public virtual ICollection<ConsumableSupplier> ConsumablesSuppliers { get; set; } = new HashSet<ConsumableSupplier>();
         public virtual ICollection<SparepartSupplier> SparepartsSuppliers { get; set; } = new HashSet<SparepartSupplier>();
+       
 
         public bool IsDleted { get; set; }
     }

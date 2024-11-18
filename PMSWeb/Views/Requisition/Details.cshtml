@@ -1,0 +1,95 @@
+﻿@using PMSWeb.ViewModels.RequisitionVM
+@model RequisitionDetailsViewModel
+
+@{
+    ViewData["Title"] = "Requisition Details";
+}
+
+<h2>Requisition Details</h2>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>@Model.RequisitionName</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Requisition ID</th>
+                                <td>@Model.RequisitionId</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Created On</th>
+                                <td>@Model.CreatedOn</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Requisition Type</th>
+                                <td>@Model.RequisitionType</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Creator</th>
+                                <td>@Model.Creator</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Total Cost</th>
+                                <td>@Model.TotalCost</td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.requisitionItems != null && Model.requisitionItems.Any())
+    {
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <h3>Requisition Items</h3>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Item Name</th>
+                            <th>Quantity Ordered</th>
+                            <th>Units</th>
+                            <th>Price</th>
+                            <th>Supplier Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.requisitionItems)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.Name</td>
+                                <td>@item.ToOrdered</td>
+                                <td>@item.Units</td>
+                                <td>@item.Price</td>
+                                <td>@item.SupplierName</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <p class="text-muted">No items associated with this requisition.</p>
+            </div>
+        </div>
+    }
+
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <a asp-action="Select" class="btn btn-info">Back To List</a>
+        </div>
+    </div>
+</div>

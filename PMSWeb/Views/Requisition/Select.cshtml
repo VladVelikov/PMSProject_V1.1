@@ -1,0 +1,55 @@
+﻿@using PMSWeb.ViewModels.RequisitionVM
+@model IEnumerable<RequisitionDisplayViewModel>
+
+@{
+    ViewData["Title"] = "Requisitions";
+}
+
+<h2>Requisitions</h2>
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Requisition ID</th>
+                        <th>Name</th>
+                        <th>Created On</th>
+                        <th>Type</th>
+                        <th>Creator</th>
+                        <th>Total Cost</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var requisition in Model)
+                        {
+                            <tr>
+                                <td>@requisition.RequisitionId</td>
+                                <td>@requisition.RequisitionName</td>
+                                <td>@requisition.CreatedOn</td>
+                                <td>@requisition.RequisitionType</td>
+                                <td>@requisition.Creator</td>
+                                <td>@requisition.TotalCost</td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@requisition.RequisitionId" class="btn btn-info btn-sm">Details</a>
+                                    <a asp-action="Approve" asp-route-id="@requisition.RequisitionId" class="btn btn-success btn-sm">Approve</a>
+                                    <a asp-action="Delete" asp-route-id="@requisition.RequisitionId" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center">No requisitions available.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

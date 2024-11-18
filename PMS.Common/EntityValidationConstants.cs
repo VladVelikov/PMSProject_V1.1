@@ -25,7 +25,7 @@ namespace PMS.Common
 
         public static class ConsumableConstants
         {
-            public const int ConsumableNameMaxLength = 50;
+            public const int ConsumableNameMaxLength = 100;  // should be same as Spare Part Name Max Length
             public const int ConsumableNameMinLength = 2;
             public const int ConsumableDescriptionMaxLength = 150;
             public const int ConsumableDescriptionMinLength = 5;
@@ -52,7 +52,7 @@ namespace PMS.Common
 
         public static class SparePartConstants
         {
-            public const int SparePartNameMaxLength = 100;
+            public const int SparePartNameMaxLength = 100; // should be same as Consumable Name Max Length
             public const int SparePartNameMinLength = 3;
             public const int SparePartDescriptionMaxLength = 90;
             public const int SparePartDescriptionMinLength = 5;
@@ -118,6 +118,18 @@ namespace PMS.Common
             public const int JobOrderResponsiblePositionMinLength = 2;
             public const int JobOrderTypeMaxLength = 30;
             public const int JobOrderTypeMinLength = 4;
+        }
+
+        public class RequisitionConstants
+        {
+            public const int RequisitionNameMaxLength = 50;  
+            public const int RequisitionNameMinLength = 4;
+            public const int RequisitionItemNameMaxLength = 100; // shouyld be same as Spare Part ans Consumables Name Max Length
+            public const int RequisitionItemNameMinLength = 4;
+            public const int RequisitionUnitsMaxLength = 50;
+            public const int RequisitionUnitsMinLength = 4;
+            public const int RequisitionTypeMaxLength = 50;
+            public const int RequisitionTypeMinLength = 4;
         }
     }
 }

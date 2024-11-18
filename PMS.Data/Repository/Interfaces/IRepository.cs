@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PMS.Data.Repository.Interfaces
+﻿namespace PMS.Data.Repository.Interfaces
 {
-        public interface IRepository<T, I>   /// Generic for all common cases, T= Type , I = id
+    public interface IRepository<T, I>   /// Generic for all common cases, T= Type , I = id
         {
             Task<T> GetByIdAsync(I id);
 

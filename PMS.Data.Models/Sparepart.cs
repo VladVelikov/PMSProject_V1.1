@@ -75,7 +75,6 @@ namespace PMS.Data.Models
         public virtual ICollection<SparepartSupplier> SparepartsSuppliers { get; set; } = new HashSet<SparepartSupplier>();
 
         [Comment("Soft delete for spare part")]
-        public bool IsDeleted { get; set; }     
- 
+        public bool IsDeleted { get; set; }
     }
 }

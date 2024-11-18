@@ -26,6 +26,7 @@ namespace PMS.Data
             builder.ApplyConfiguration(new ManualConfiguration());
             builder.ApplyConfiguration(new SparepartSupplierConfiguration());
             builder.ApplyConfiguration(new JobOrderConfiguration());
+          
 
             base.OnModelCreating(builder);
         }
@@ -44,6 +45,9 @@ namespace PMS.Data
         public virtual DbSet<SparepartSupplier> SparepartsSuppliers { get; set; }
         public virtual DbSet<RoutineMaintenanceEquipment> RoutineMaintenancesEquipments { get; set; }
         public virtual DbSet<ConsumableSupplier> ConsumablesSuppliers { get; set; }
-        public virtual DbSet<JobOrder> JobOrders { get; set; }  
+        public virtual DbSet<JobOrder> JobOrders { get; set; } 
+        public virtual DbSet<Requisition> Requisitions { get; set; }    
+        public virtual DbSet<RequisitionItem> RequisitionItems { get; set; }   
+        public virtual DbSet<Budget> Budget { get; set; }
     }
 }

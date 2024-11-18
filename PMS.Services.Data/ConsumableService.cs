@@ -140,12 +140,13 @@ namespace PMS.Services.Data
             {
                 consToDelete.IsDeleted = true;
                 await consumables.UpdateAsync(consToDelete);
+                return true;
             }
             else
             {
                 return false;
             }
-            return true;
+           
         }
 
         public async Task<ConsumableDeleteViewModel> GetItemToDeleteAsync(string id)
