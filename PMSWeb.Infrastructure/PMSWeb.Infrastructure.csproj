@@ -24,4 +24,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PMS.Data.Models\PMS.Data.Models.csproj" />
+    <ProjectReference Include="..\PMS.Data\PMS.Data.csproj" />
+    <ProjectReference Include="..\PMS.Services.Data\PMS.Services.Data.csproj" />
+  </ItemGroup>
+
 </Project>

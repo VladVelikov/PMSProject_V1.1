@@ -27,7 +27,6 @@
   <ItemGroup>
     <ProjectReference Include="..\PMS.Data.Models\PMS.Data.Models.csproj" />
     <ProjectReference Include="..\PMS.Data\PMS.Data.csproj" />
-    <ProjectReference Include="..\PMSWeb.Infrastructure\PMSWeb.Infrastructure.csproj" />
     <ProjectReference Include="..\PMSWeb.ViewModels\PMSWeb.ViewModels.csproj" />
   </ItemGroup>
 

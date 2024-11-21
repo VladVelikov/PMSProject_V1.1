@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace PMSWeb.Controllers
 {
     [Authorize]
-    public class EquipmentController(IEquipmentService equipmentService) : Controller
+    public class EquipmentController(IEquipmentService equipmentService) : BasicController
     {
         public IActionResult Index()
         {
@@ -93,10 +93,10 @@ namespace PMSWeb.Controllers
             return RedirectToAction(nameof(Select)); 
         }
 
-        private string? GetUserId()
-        {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier);
-        }
+        //private string? GetUserId()
+        //{
+        //    return User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //}
     }
 
 }

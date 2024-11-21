@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using PMS.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PMSWeb.Controllers
 {
+    [Authorize]
     public class InventoryController(PMSDbContext context) : Controller
     {
         [HttpGet]
@@ -17,6 +19,7 @@ namespace PMSWeb.Controllers
                 .Spareparts
                 .Where(x => !x.IsDeleted)
                 .AsNoTracking()
+                .OrderByDescending(x=>x.EditedOn)
                 .Select(x => new InventoryItemViewModel() {
                     Id = x.SparepartId.ToString(),
                     Name = x.SparepartName,
@@ -66,6 +69,7 @@ namespace PMSWeb.Controllers
                 .Consumables
                 .Where(x => !x.IsDeleted)
                 .AsNoTracking()
+                .OrderByDescending(x=>x.EditedOn)
                 .Select(x => new InventoryItemViewModel()
                 {
                     Id = x.ConsumableId.ToString(),

@@ -1,11 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PMS.Data;
-using PMS.Data.Models;
 using PMS.Data.Models.Identity;
-using PMS.Data.Repository;
-using PMS.Data.Repository.Interfaces;
-using PMS.Services.Data;
-using PMS.Services.Data.Interfaces;
+using PMSWeb.Infrastructure.Extensions;
 
 namespace PMSWeb
 {
@@ -24,34 +20,8 @@ namespace PMSWeb
                 .AddEntityFrameworkStores<PMSDbContext>();
             builder.Services.AddControllersWithViews();
 
-            /// Adding scoped services Repos
-            builder.Services.AddScoped<IRepository<Consumable, Guid>, GenericRepository<Consumable,Guid>>();
-            builder.Services.AddScoped<IRepository<City, Guid>, GenericRepository<City, Guid>>();
-            builder.Services.AddScoped<IRepository<Country, Guid>, GenericRepository<Country, Guid>>();
-            builder.Services.AddScoped<IRepository<Equipment, Guid>, GenericRepository<Equipment, Guid>>();
-            builder.Services.AddScoped<IRepository<Maker, Guid>, GenericRepository<Maker, Guid>>();
-            builder.Services.AddScoped<IRepository<Manual, Guid>, GenericRepository<Manual, Guid>>();
-            builder.Services.AddScoped<IRepository<RoutineMaintenance, Guid>, GenericRepository<RoutineMaintenance, Guid>>();
-            builder.Services.AddScoped<IRepository<Sparepart, Guid>, GenericRepository<Sparepart, Guid>>();
-            builder.Services.AddScoped<IRepository<SpecificMaintenance, Guid>, GenericRepository<SpecificMaintenance, Guid>>();
-            builder.Services.AddScoped<IRepository<Supplier, Guid>, GenericRepository<Supplier, Guid>>();
-            builder.Services.AddScoped<IRepository<ConsumableEquipment, Guid[]>, GenericRepository<ConsumableEquipment, Guid[]>>();
-            builder.Services.AddScoped<IRepository<RoutineMaintenanceEquipment, Guid[]>, GenericRepository<RoutineMaintenanceEquipment, Guid[]>>();
-            builder.Services.AddScoped<IRepository<ConsumableSupplier, Guid[]>, GenericRepository<ConsumableSupplier, Guid[]>>();
-            builder.Services.AddScoped<IRepository<SparepartSupplier, Guid[]>, GenericRepository<SparepartSupplier, Guid[]>>();
-
-            
-            /// Adding scoped services Services
-            builder.Services.AddScoped<IConsumableService, ConsumableService>();
-            builder.Services.AddScoped<ICityService, CityService>();
-            builder.Services.AddScoped<ICountryService, CountryService>();
-            builder.Services.AddScoped<IEquipmentService, EquipmentService>();
-            builder.Services.AddScoped<IMakerService, MakerService>();
-            builder.Services.AddScoped<IManualService, ManualService>();
-            builder.Services.AddScoped<IRMService, RMService>();
-            builder.Services.AddScoped<ISMService, SMService>();
-            builder.Services.AddScoped<ISparepartService, SparepartService>();
-            builder.Services.AddScoped<ISupplierService, SupplierService>();
+            builder.Services.RegisterRepositories();  /// Adding scoped services Repos via extension class method
+            builder.Services.RegisterMyServices();    /// Adding scoped services Services via extension class method
 
             var app = builder.Build();
 

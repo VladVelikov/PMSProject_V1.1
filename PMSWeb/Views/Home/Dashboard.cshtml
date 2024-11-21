@@ -35,13 +35,47 @@
             <div class="content">
                 <a class="butn btn-info" asp-controller="Requisition" asp-action="CreateSpareparts">Create <span style="font-weight:bold; color: darkmagenta;">SpareParts</span> Requisition</a>
                 <a class="butn btn-info" asp-controller="Requisition" asp-action="CreateConsumables">Create <span style="font-weight:bold; color: blue;">Consumables</span> Requisition</a>
-                <a class="butn btn-info" asp-controller="Requisition" asp-action="Select">AllRequisitionsList</a>
-                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Approve Requisition</a>
-                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Receive Goods</a>
+                <a class="butn btn-info" asp-controller="Requisition" asp-action="Select">All Requisitions List</a>
+                <a class="butn btn-success" asp-controller="Requisition" asp-action="SelectReadyForApproval">Ready For Approval</a>
+                <a class="butn btn-info" asp-controller="Requisition" asp-action="SelectAlreadyApproved">Completed Requisitions</a>
             </div>
         </div>
     </div>
 </aside>
+
+<div class="container mt-4" style="max-width: 10em; display:inline-block; margin-inline: 1em;">
+    <table class="table" style="border: 2px solid #4CAF50; background-color: #f9f9f9; border-radius: 8px; overflow: hidden;">
+        <thead style="background-color: #4CAF50; color: white;">
+            <tr>
+                <th style="text-align: center; padding: 15px; font-size: 1.5em;">Completed Requisitions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align: center; padding: 20px; font-size: 2em; color: #333; box-shadow:  0em 0 0.2em 0.1em purple inset;">
+                    @ViewBag.CompletedRequisitions
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="container mt-4" style="max-width: 10em; display:inline-block;">
+    <table class="table" style="border: 2px solid #4CAF50; background-color: #f9f9f9; border-radius: 8px; overflow: hidden;">
+        <thead style="background-color: #4CAF50; color: white;">
+            <tr>
+                <th style="text-align: center; padding: 15px; font-size: 1.5em;"> Remaining Budget</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align: center; padding: 20px; font-size: 2em; color: #333; box-shadow:  0em 0 0.2em 0.1em purple inset;">
+                    @ViewBag.Budget
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 
 
 

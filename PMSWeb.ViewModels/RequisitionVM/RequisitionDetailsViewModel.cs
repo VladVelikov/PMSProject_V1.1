@@ -8,6 +8,7 @@
         public string RequisitionType { get; set; }
         public string Creator {  get; set; }
         public string TotalCost { get; set; }
+        public bool IsApproved { get; set; }
 
         public List<RequisitionItemViewModel> requisitionItems { get; set; } = new List<RequisitionItemViewModel>();    
 

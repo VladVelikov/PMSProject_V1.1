@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace PMSWeb.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(PMSDbContext context) : BasicController
     {
 
         public IActionResult Index()
@@ -24,8 +24,22 @@ namespace PMSWeb.Controllers
             return View();
         }
 
-        public IActionResult Dashboard()
+        public async Task<IActionResult> Dashboard()
         {
+            var completedReq = await context
+                .Requisitions
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.IsApproved)
+                .CountAsync();
+            ViewBag.CompletedRequisitions = completedReq;
+
+            var budget = await context
+                .Budget
+                .OrderByDescending(x => x.LastChangeDate)
+                .Select(x=>x.Ballance)
+                .FirstAsync();
+            ViewBag.Budget = budget;
+
             return View();
         }
 
@@ -54,9 +68,9 @@ namespace PMSWeb.Controllers
         }
 
 
-        public string? GetUserId()
-        {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier)!.ToString();
-        }
+        //public string? GetUserId()
+        //{
+        //    return User.FindFirstValue(ClaimTypes.NameIdentifier)!.ToString();
+        //}
     }
 }
