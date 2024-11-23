@@ -6,9 +6,11 @@ namespace PMS.Common
     {
         public const string PMSRequiredDateFormat = "dd-MM-yyyy";
         public const string PMSRequiredDateTimeFormat = "dd-MM-yyyy HH:mm";
-        public const int UserNameMaxLength = 50;
-        public const int UserNameMinLength = 3;
-        public static readonly string[] PMSPositions = { "Manager", "Technician", "Supervisor", "Engineer", "Operator" };
+        public const int UserNameMaxLength = 100;
+        public const int UserNameMinLength = 2;
+        public const int PositionMaxLength = 50;
+        public const int PositionMinLength = 2;
+        public static readonly string[] PMSPositions = { "Manager", "Engineer", "Technician" };
 
         public static class EquipmentConstants
         {

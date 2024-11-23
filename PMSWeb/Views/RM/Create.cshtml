@@ -1,4 +1,5 @@
-﻿@using PMSWeb.ViewModels.RM
+﻿@using PMS.Common
+@using PMSWeb.ViewModels.RM
 @model RMCreateViewModel
 
 @{
@@ -35,7 +36,7 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="ResponsiblePosition" class="control-label">Responsible Person (Please Select One Of The Options:) </label>
+        <label asp-for="ResponsiblePosition" class="control-label">Responsible Position (Please Select One Of The Options:) </label>
         <input asp-for="ResponsiblePosition" class="form-control" list="positionOptions"/>
         <datalist id="positionOptions">
             @if (positions != null)
@@ -48,7 +49,6 @@
         </datalist>
         <span asp-validation-for="ResponsiblePosition" class="text-danger"></span>
     </div>
-    
     <div style="margin-top:0.5em;">
         <button type="submit" class="btn btn-primary">Create</button>
         <a asp-action="Select" class="btn btn-secondary">Cancel</a>

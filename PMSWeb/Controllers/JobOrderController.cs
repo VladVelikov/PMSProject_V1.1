@@ -304,6 +304,10 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> CompleteJob(string id)
         {
+            if (id == null)
+            {
+                return RedirectToAction("ModelNotValid","Crushes");
+            }
             var model = await context
                 .JobOrders
                 .Where(x => !x.IsDeleted && !x.IsHistory)
@@ -320,6 +324,11 @@ namespace PMSWeb.Controllers
                     EquipmentId = x.EquipmentId.ToString()
                 })
                 .FirstOrDefaultAsync();
+
+            if (model == null)
+            {
+                return View(new CompleteTheJobViewModel());
+            }
 
             return View(model);
         }
