@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,6 @@ namespace PMSWeb.Controllers
 {
     public class HomeController(PMSDbContext context) : BasicController
     {
-
         public IActionResult Index()
         {
             if (User.Identity!.IsAuthenticated)

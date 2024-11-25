@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PMS.Data;
 using PMS.Data.Models.Identity;
@@ -13,11 +14,35 @@ namespace PMSWeb
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            
             builder.Services.AddDbContext<PMSDbContext>(options =>
                 options.UseSqlServer(connectionString));
+            
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            
+            //IDENTITY SECTION
             builder.Services.AddDefaultIdentity<PMSUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<PMSDbContext>();
+                .AddEntityFrameworkStores<PMSDbContext>()
+                .AddDefaultTokenProviders();   // add default token prov for e-mail change, usernamechange , confirm e-mail etc. 
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Identity/Account/Login";
+                
+                //options.LoginPath = "/Home/Dashboard";
+                // add other configurations here
+            });
+
+            //builder.Services.AddAuthentication()
+                
+
+            //builder.Services.AddAuthorization(options => {
+            //    options.AddPolicy("NeededClaim", policy => policy.RequireClaim("GoldenClaim"));
+            //});
+            
+             
+            //IDENTITY END
+
             builder.Services.AddControllersWithViews();
 
             builder.Services.RegisterRepositories();  /// Adding scoped services Repos via extension class method

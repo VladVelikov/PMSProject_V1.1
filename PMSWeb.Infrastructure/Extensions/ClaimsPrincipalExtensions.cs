@@ -1,4 +1,4 @@
-﻿namespace PMSWeb.Infrastructure.Extensions
+﻿namespace Microsoft.Extensions.DependencyInjection
 {
     using System.Security.Claims;
 
