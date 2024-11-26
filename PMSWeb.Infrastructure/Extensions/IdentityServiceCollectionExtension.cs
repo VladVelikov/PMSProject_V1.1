@@ -34,7 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.Cookie.HttpOnly = true;
             });
 
-            //builder.Services.AddAuthentication()
+            //builder.Services.AddAuthentication() // TODO Later
 
 
             //builder.Services.AddAuthorization(options => {
