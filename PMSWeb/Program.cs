@@ -1,53 +1,31 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using PMS.Data;
-using PMS.Data.Models.Identity;
 using PMSWeb.Infrastructure.Extensions;
 
 namespace PMSWeb
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            
-            builder.Services.AddDbContext<PMSDbContext>(options =>
-                options.UseSqlServer(connectionString));
-            
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-            
-            //IDENTITY SECTION
-            builder.Services.AddDefaultIdentity<PMSUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<PMSDbContext>()
-                .AddDefaultTokenProviders();   // add default token prov for e-mail change, usernamechange , confirm e-mail etc. 
+            //Adding database only services - see extensions
+            builder.Services.AddPMSDatabase(builder.Configuration);
 
-            builder.Services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/Identity/Account/Login";
-                
-                //options.LoginPath = "/Home/Dashboard";
-                // add other configurations here
-            });
+            //Adding Identity services - see extensions
+            builder.Services.AddPMSIdentity(builder.Configuration);
 
-            //builder.Services.AddAuthentication()
-                
+            //Additional services if any not related to main business logic - see extensions
+            builder.Services.AddPMSServices(builder.Configuration);
 
-            //builder.Services.AddAuthorization(options => {
-            //    options.AddPolicy("NeededClaim", policy => policy.RequireClaim("GoldenClaim"));
-            //});
-            
-             
-            //IDENTITY END
+            //Adding the repositories - see extensions
+            builder.Services.RegisterRepositories();
 
+            //Adding business related services - see extensions
+            builder.Services.RegisterMyServices();   
+
+            //Adding controllers and views for ASP.Net
             builder.Services.AddControllersWithViews();
-
-            builder.Services.RegisterRepositories();  /// Adding scoped services Repos via extension class method
-            builder.Services.RegisterMyServices();    /// Adding scoped services Services via extension class method
-
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -72,8 +50,6 @@ namespace PMSWeb
             //    await next();
             //});
 
-
-
             app.UseHttpsRedirection();  // if this on receives HTTP he will redirect to HTTPS !!!
             app.UseStaticFiles();       // app can work with static files .json .img etc
 
@@ -86,6 +62,12 @@ namespace PMSWeb
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
+
+            // Auto apply migrations at app start - see extensions
+            app.ApplyMigrations();
+
+            // Check and create roles for access levels if not already created at app start - see extensions
+            await app.CreateRolesAsync();
 
             app.Run();           // delegate with run will close the pipeline
         }

@@ -1,4 +1,14 @@
-﻿<aside class="container-fluid" style="border-radius:0.5em;">
+﻿@using Microsoft.AspNetCore.Identity
+@using PMS.Data.Models.Identity
+@inject SignInManager<PMSUser> SignInManager
+@inject UserManager<PMSUser> UserManager
+
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+
+<aside class="container-fluid" style="border-radius:0.5em;">
     <div>
         <div class="dropdown">
             <button>Creators Page</button>
@@ -59,24 +69,26 @@
         </tbody>
     </table>
 </div>
-<div class="container mt-4" style="max-width: 10em; display:inline-block;">
-    <table class="table" style="border: 2px solid #4CAF50; background-color: #f9f9f9; border-radius: 8px; overflow: hidden;">
-        <thead style="background-color: #4CAF50; color: white;">
-            <tr>
-                <th style="text-align: center; padding: 15px; font-size: 1.5em;"> Remaining Budget</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="text-align: center; padding: 20px; font-size: 2em; color: #333; box-shadow:  0em 0 0.2em 0.1em purple inset;">
-                    @ViewBag.Budget
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
 
-
+@if (User.IsInRole("Manager"))
+{
+    <div class="container mt-4" style="max-width: 10em; display:inline-block;">
+        <table class="table" style="border: 2px solid #4CAF50; background-color: #f9f9f9; border-radius: 8px; overflow: hidden;">
+            <thead style="background-color: #4CAF50; color: white;">
+                <tr>
+                    <th style="text-align: center; padding: 15px; font-size: 1.5em;"> Remaining Budget</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: center; padding: 20px; font-size: 2em; color: #333; box-shadow:  0em 0 0.2em 0.1em purple inset;">
+                        @ViewBag.Budget
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
 
 
 <style>
