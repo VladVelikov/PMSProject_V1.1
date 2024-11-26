@@ -34,7 +34,14 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.Cookie.HttpOnly = true;
             });
 
-            //builder.Services.AddAuthentication() // TODO Later
+            var clientId = config.GetValue<string>("Google:ClientId");
+            var clientSecret = config.GetValue<string>("Google:ClientSecret");
+            services.AddAuthentication()
+                .AddGoogle(googleOptions =>
+                {
+                    googleOptions.ClientId = clientId;
+                    googleOptions.ClientSecret = clientSecret;
+                });
 
 
             //builder.Services.AddAuthorization(options => {
