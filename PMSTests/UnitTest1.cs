@@ -5,6 +5,7 @@ namespace PMSTests
         [SetUp]
         public void Setup()
         {
+            /// simple comment here
         }
 
         [Test]
