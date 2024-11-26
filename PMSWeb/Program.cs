@@ -23,7 +23,7 @@ namespace PMSWeb
             //Adding business related services - see extensions
             builder.Services.RegisterMyServices();   
 
-            //Adding controllers and views for ASP.Net
+            //Adding controllers and views for ASP.Net - not customized
             builder.Services.AddControllersWithViews();
             
             var app = builder.Build();
