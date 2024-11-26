@@ -4,6 +4,7 @@ using PMSWeb.ViewModels.CityVM;
 
 namespace PMSWeb.Controllers
 {
+
     public class CityController(ICityService cityService) : Controller
     {
         [HttpGet]

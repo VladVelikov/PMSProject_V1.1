@@ -1,161 +1,4 @@
-﻿@* @{
-    ViewData["Title"] = "Home Page";
-}
-
-<style>
-    /* Full-page gradient background */
-    html, body {
-        background-color: lightslategrey;
-       /*  background: linear-gradient(135deg, #1f1c2c, #928dab); */
-        color: #ffffff;
-        font-family: Arial, sans-serif;
-    }
-   
-    /* Centered container */
-    .container {
-        max-width: 400px;
-        text-align: center;
-        padding: 20px;
-    }
-
-    /* Header image styling */
-    .header-image img {
-        width: 100%;
-        height: auto;
-        border: 2px solid grey;
-    }
-
-    .header-image{
-        margin-top: 4em;
-        border: 2px solid grey;
-        border-radius: 2em;
-        overflow: hidden;
-        margin-bottom: 2em;
-    }
-
-    /* Button container */
-    .button-container {
-        margin: 20px;
-        display: flex; gap: 0.5em;
-        flex-direction: column;
-        /* border: 2px solid red; */
-        
-    }
-
-    /* Button styling */
-    .btn-signup, .btn-login {
-        padding: 12px 24px;
-        font-size: 18px;
-        margin: 0 10px;
-        border-radius: 25px;
-        text-decoration: none;
-        color: #ffffff;
-        display: inline-block;
-        transition: background 0.3s ease, transform 0.3s ease;
-    }
-
-    /* Gradient buttons */
-    .btn-signup {
-        background: linear-gradient(135deg, #56CCF2, #2F80ED);
-    }
-
-    .btn-login {
-        background: linear-gradient(135deg, #F2994A, #F2C94C);
-    }
-
-        /* Button hover effects */
-        .btn-signup:hover, .btn-login:hover {
-            transform: scale(1.05);
-            filter: brightness(1.15);
-        }
-
-
-    .logo-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 200px; /* Adjust container size as needed */
-        width: 200px;
-        margin: auto;
-    }
-
-    /* Oscillating Circular Logo Styling */
-    .oscillating-logo {
-        width: 100%; /* Ensures logo fits within container */
-        height: auto;
-        border-radius: 50%; /* Makes the logo perfectly circular */
-        animation: oscillate 6s ease-in-out infinite;
-        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8)); /* Glowing effect */
-    }
-
-    /* Keyframes for Oscillation */
-    @@keyframes oscillate {
-        0% {
-            transform: rotate(0deg);
-        }
-
-        50% {
-            transform: rotate(360deg);
-        }
-
-        100% {
-            transform: rotate(0deg);
-        }
-    }
-
-
-</style>
-
-<div>
-
-    <div class="left-rounds">
-        <div class="logo-container">
-            <img src="https://images.unsplash.com/photo-1490650034439-fd184c3c86a5?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0cyUyMHNxdWFyZXxlbnwwfHwwfHx8MA%3D%3D" alt="Oscillating Logo" class="oscillating-logo" />
-        </div>
-        <div class="logo-container">
-            <img src="https://images.unsplash.com/photo-1490650034439-fd184c3c86a5?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0cyUyMHNxdWFyZXxlbnwwfHwwfHx8MA%3D%3D" alt="Oscillating Logo" class="oscillating-logo" />
-        </div>
-    </div>
-    
-    <div class="gradient-background">
-        <div class="container text-center">
-            <!-- Header Image -->
-            <div class="header-image">
-                <img src="~/images/PMSLogoFull.jpg" alt="Welcome Image" class="img-fluid rounded" style="max-width:20em;" />
-            </div>
-
-            <!-- Sign Up and Log In buttons -->
-            <div class="button-container">
-                <a class="btn btn-signup" asp-area="Identity" asp-page="/Account/Register">SignUp</a>
-                <a>Or</a>
-                <a class="btn btn-login" asp-area="Identity" asp-page="/Account/Login">LogIn</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="right-rounds">
-        <div class="logo-container">
-            <img src="https://images.unsplash.com/photo-1490650034439-fd184c3c86a5?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0cyUyMHNxdWFyZXxlbnwwfHwwfHx8MA%3D%3D" alt="Oscillating Logo" class="oscillating-logo" />
-        </div>
-        <div class="logo-container">
-            <img src="https://images.unsplash.com/photo-1490650034439-fd184c3c86a5?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2F0cyUyMHNxdWFyZXxlbnwwfHwwfHx8MA%3D%3D" alt="Oscillating Logo" class="oscillating-logo" />
-        </div>
-    </div>
-</div>
-
-
-
-
-
-
-
-
-
-
- *@
-
-
- @{
+﻿ @{
     ViewData["Title"] = "Home Page";
 }
 
@@ -174,7 +17,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        height: 80vh;
         width: 100%;
     }
 
@@ -231,6 +74,11 @@
         border: 2px solid grey;
         border-radius: 2em;
         margin-bottom: 2em;
+        
+    }
+    .header-image img:hover{
+        box-shadow: 0 0 0.5em 0.2em white;
+        transition: 0.5s ease-in-out;
     }
 
     /* Button container */
@@ -269,6 +117,8 @@
         font-size: 1.2em;
         color: #ccc;
     }
+
+
 </style>
 
 <div class="home-page-wrapper">

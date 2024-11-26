@@ -132,8 +132,10 @@ namespace PMSWeb.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    //one exrta row for the role assignment 
+                    await _userManager.AddToRoleAsync(user, user.Position);  // the user registers wiht a position, and the position will be his role.
 
+                    _logger.LogInformation("User created a new account with password.");
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
