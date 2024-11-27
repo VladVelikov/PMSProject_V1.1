@@ -41,6 +41,7 @@ namespace PMSWeb.Infrastructure.Extensions
             services.AddScoped<ISparepartService, SparepartService>();
             services.AddScoped<ISupplierService, SupplierService>();
             services.AddScoped<IJoborderService, JoborderService>();
+            services.AddScoped<IInventoryService, InventoryService>();
         }
     }
 }

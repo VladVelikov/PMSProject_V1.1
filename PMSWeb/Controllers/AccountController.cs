@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using PMS.Data.Models.Identity;
@@ -7,7 +8,11 @@ using System.Security.Claims;
 
 namespace PMSWeb.Controllers
 {
-    public class AccountController(SignInManager<PMSUser> signInManager, UserManager<PMSUser> userManager) : Controller
+    /// <summary>
+    /// Below controller will not be reworked to services, because all the business logic is using the Identity services anyway. 
+    /// </summary>
+   
+    public class AccountController(SignInManager<PMSUser> signInManager, UserManager<PMSUser> userManager) : BasicController
     {
         [HttpGet]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
@@ -28,11 +33,11 @@ namespace PMSWeb.Controllers
 
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
 
-            // Check if user exists
+            /// Check if user already exists
             var user = await userManager.FindByEmailAsync(email);
             if (user == null)
             {
-                // Redirect to Complete Registration
+                /// Redirect to Complete the Registration
                 return RedirectToAction(nameof(CompleteRegistration), new { email, returnUrl });
             }
 

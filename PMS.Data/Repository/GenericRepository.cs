@@ -79,5 +79,17 @@ namespace PMS.Data.Repository
             await context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> UpdateRange(IEnumerable<T> itemList)
+        {
+            dbSet.AttachRange(itemList);
+            foreach (var item in itemList)
+            {
+               context.Entry(item).State = EntityState.Modified;
+            }
+            await context.SaveChangesAsync();
+            return true;
+        }
+
     }
 }

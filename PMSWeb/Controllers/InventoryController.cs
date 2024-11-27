@@ -1,112 +1,47 @@
-﻿using PMSWeb.ViewModels.InventoryVM;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PMS.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
+using PMS.Services.Data.Interfaces;
+using PMSWeb.ViewModels.InventoryVM;
 
 namespace PMSWeb.Controllers
 {
     [Authorize]
-    public class InventoryController(PMSDbContext context) : Controller
+    public class InventoryController(PMSDbContext context, IInventoryService inventoryService) : Controller
     {
         [HttpGet]
         public async Task<IActionResult> SparesInventory()
         {
-            var model = new SparesInventoryViewModel();
-            model.Name = "Spare Parts Inventory";
-
-            var sparesList = await context
-                .Spareparts
-                .Where(x => !x.IsDeleted)
-                .AsNoTracking()
-                .OrderByDescending(x=>x.EditedOn)
-                .Select(x => new InventoryItemViewModel() {
-                    Id = x.SparepartId.ToString(),
-                    Name = x.SparepartName,
-                    Available = x.ROB,
-                    Units = x.Units,
-                    Used = x.ROB,
-                    Price = x.Price.ToString(),
-                    EditedOn = x.EditedOn
-                })
-                .ToListAsync();  
-            model.Spares = sparesList;
+            var model = await inventoryService.GetSparesInventoryViewModelAsync();
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateSparesInventory(SparesInventoryViewModel model)
         {
-            var mySpares = await context
-                .Spareparts
-                .Where(x => !x.IsDeleted)
-                .ToListAsync();
-            foreach (var item in model.Spares)
+            bool result = await inventoryService.UpdateSparesInventoryAsync(model);
+            if (!result)
             {
-                var spare = mySpares.FirstOrDefault(x => x.SparepartId.ToString().ToLower() == item.Id.ToLower());
-                if (item.Used < 0)  // in this case real stock
-                {
-                    //do nothing
-                    //spare.ROB -= item.Used;  // for testing only 
-                }
-                else 
-                {
-                    spare.ROB = item.Used;  // item.RealStock
-                }
-                
+                return RedirectToAction("NotUpdated", "Crushes");
             }
-            await context.SaveChangesAsync();
             return RedirectToAction(nameof(SparesInventory));
         }
 
         [HttpGet]
         public async Task<IActionResult> ConsumablesInventory()
         {
-            var model = new ConsumablesInventoryViewModel();
-            model.Name = "Consumables Inventory";
-
-            var consumablesList = await context
-                .Consumables
-                .Where(x => !x.IsDeleted)
-                .AsNoTracking()
-                .OrderByDescending(x=>x.EditedOn)
-                .Select(x => new InventoryItemViewModel()
-                {
-                    Id = x.ConsumableId.ToString(),
-                    Name = x.Name,
-                    Available = x.ROB,
-                    Units = x.Units,
-                    Used = x.ROB,
-                    Price = x.Price.ToString(),
-                    EditedOn = x.EditedOn
-                })
-                .ToListAsync();
-            model.Consumables = consumablesList;
+            var model = await inventoryService.GetConsumablesInventoryViewModelAsync();
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateConsumablesInventory(ConsumablesInventoryViewModel model)
         {
-            var myConsumables = await context
-               .Consumables
-               .Where(x => !x.IsDeleted)
-               .ToListAsync();
-
-            foreach (var item in model.Consumables)
+            bool result = await inventoryService.UpdateConsumablesInventoryAsync(model);
+            if (!result)
             {
-                var consumable = myConsumables.FirstOrDefault(x => x.ConsumableId.ToString().ToLower() == item.Id.ToLower());
-                if (item.Used < 0)  // in this case real stock
-                {
-                    //do nothing
-                    //spare.ROB -= item.Used;  // for testing only 
-                }
-                else
-                {
-                    consumable.ROB = item.Used;  // item.RealStock
-                }
+                return RedirectToAction("NotUpdated", "Crushes");
             }
-            await context.SaveChangesAsync();
             return RedirectToAction(nameof(ConsumablesInventory));
         }
     }
