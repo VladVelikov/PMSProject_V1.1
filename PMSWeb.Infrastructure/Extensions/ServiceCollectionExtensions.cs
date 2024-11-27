@@ -25,6 +25,7 @@ namespace PMSWeb.Infrastructure.Extensions
             services.AddScoped<IRepository<RoutineMaintenanceEquipment, Guid[]>, GenericRepository<RoutineMaintenanceEquipment, Guid[]>>();
             services.AddScoped<IRepository<ConsumableSupplier, Guid[]>, GenericRepository<ConsumableSupplier, Guid[]>>();
             services.AddScoped<IRepository<SparepartSupplier, Guid[]>, GenericRepository<SparepartSupplier, Guid[]>>();
+            services.AddScoped<IRepository<JobOrder, Guid>, GenericRepository<JobOrder, Guid>>();
         }
 
         public static void RegisterMyServices(this IServiceCollection services) 
@@ -39,6 +40,7 @@ namespace PMSWeb.Infrastructure.Extensions
             services.AddScoped<ISMService, SMService>();
             services.AddScoped<ISparepartService, SparepartService>();
             services.AddScoped<ISupplierService, SupplierService>();
+            services.AddScoped<IJoborderService, JoborderService>();
         }
     }
 }

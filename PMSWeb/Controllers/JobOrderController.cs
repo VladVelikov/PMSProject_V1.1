@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PMS.Data;
 using PMS.Data.Models;
+using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.CommonVM;
 using PMSWeb.ViewModels.InventoryVM;
 using PMSWeb.ViewModels.JobOrderVM;
@@ -12,170 +13,47 @@ using static PMS.Common.EntityValidationConstants;
 namespace PMSWeb.Controllers
 {
     [Authorize]
-    public class JobOrderController(PMSDbContext context) : Controller
+    public class JobOrderController(PMSDbContext context, IJoborderService joborderService) : Controller
     {
         [HttpGet]
         public async Task<IActionResult> Select()
         {
-            var modelList = await context
-                .JobOrders
-                .Where(x => !x.IsDeleted)
-                .Where(x => !x.IsHistory)
-                .AsNoTracking()
-                .Select(x => new JobOrderDisplayViewModel()
-                {
-                    JobId = x.JobId.ToString(),
-                    JobName = x.JobName,
-                    EquipmentName = x.Equipment.Name,
-                    DueDate = x.DueDate.ToString(PMSRequiredDateFormat),
-                    LastDoneDate = x.LastDoneDate.ToString(PMSRequiredDateFormat),
-                    Type = x.Type,
-                    ResponsiblePosition = x.ResponsiblePosition
-                })
-                .ToListAsync();
-
+            var modelList = await joborderService.GetListOfAllJobsAsync();
             return View(modelList);
         }
         
         [HttpGet]
         public async Task<IActionResult> SelectDueJobs()
         {
-            var dueJobsList = await context
-                .JobOrders
-                .Where(x => !x.IsDeleted)
-                .Where(x => !x.IsHistory)
-                .Where(x => x.DueDate < DateTime.UtcNow)
-                .AsNoTracking()
-                .Select(x => new JobOrderDisplayViewModel()
-                {
-                    JobId = x.JobId.ToString(),
-                    JobName = x.JobName,
-                    EquipmentName= x.Equipment.Name,    
-                    DueDate = x.DueDate.ToString(PMSRequiredDateFormat),
-                    LastDoneDate = x.LastDoneDate.ToString(PMSRequiredDateFormat),
-                    Type = x.Type,
-                    ResponsiblePosition = x.ResponsiblePosition
-                })
-                .ToListAsync();
+            var dueJobsList = await joborderService.GetListOfDueJobsAsync();
             return View(dueJobsList);
         }
         
         [HttpGet]
         public async Task<IActionResult> SelectHistory()
         {
-            var dueJobsList = await context
-               .JobOrders
-               .Where(x => !x.IsDeleted)
-               .Where(x => x.IsHistory)
-               .AsNoTracking()
-               .OrderByDescending(x=>x.LastDoneDate)
-               .ThenBy(x=>x.JobName)
-               .Select(x => new JobOrderHistoryViewModel()
-               {
-                   JobId = x.JobId.ToString(),
-                   JobName = x.JobName,
-                   CompletedBy = x.CompletedBy ?? "Unknown :)",
-                   LastDoneDate = x.LastDoneDate.ToString(PMSRequiredDateTimeFormat),
-                   Type = x.Type,
-                   ResponsiblePosition = x.ResponsiblePosition
-               })
-               .ToListAsync();
-            return View(dueJobsList);
+            var historyJobsList = await joborderService.GetListOfHistoryJobsAsync();
+            return View(historyJobsList);
         }
         
         [HttpGet]
         public async Task<IActionResult> ShowHistory(string id)
         {
-            var model = await context
-                .JobOrders
-                .Where(x => !x.IsDeleted)
-                .Where(x => x.IsHistory)
-                .Where(x => x.JobId.ToString().ToLower() == id.ToLower())
-                .Include(x=>x.Equipment)
-                .AsNoTracking()
-                .Select (x => new JobHistoryDetailsViewModel() {
-                    JobId = x.JobId.ToString(),
-                    JobName = x.JobName,
-                    CompletedBy = x.CompletedBy ?? string.Empty,
-                    LastDoneDate = x.LastDoneDate.ToString(PMSRequiredDateFormat),
-                    Type = x.Type,
-                    ResponsiblePosition= x.ResponsiblePosition,
-                    MaintainedEquipment = x.Equipment.Name,
-                    Desription = x.JobDescription
-                })
-                .FirstOrDefaultAsync();
+            var model = await joborderService.GetHistoryDetailsAsync(id);
             return View(model);
         }
         
         [HttpGet]
         public async Task<IActionResult> Create(JobOrderAddMaintenanceViewModel inputModel)
         {
-            var model = new JobOrderCreateViewModel();
-            if (inputModel.TypeId == "Routine")
-            {
-                model = await context
-                    .RoutineMaintenances
-                    .Where(x => !x.IsDeleted)
-                    .Where(x=>x.RoutMaintId == inputModel.MaintenanceId)
-                    .Select(x=> new JobOrderCreateViewModel() {
-                       LastDoneDate = x.LastCompletedDate,
-                       Interval = x.Interval,
-                       Type = inputModel.TypeId,
-                       ResponsiblePosition = x.ResponsiblePosition,
-                       EquipmentId = inputModel.EquipmentId,
-                       RoutineMaintenanceId = inputModel.MaintenanceId,
-                       SpecificMaintenanceId = inputModel.MaintenanceId,
-                       MaintenanceName = x.Name,
-                       EquipmentName = inputModel.EquipmentName,
-                       MaintenanceType = inputModel.TypeId,
-                       JobDescription = x.Description ?? string.Empty
-                    })
-                    .FirstOrDefaultAsync();
-            }
-            else 
-            {
-                model = await context
-                    .SpecificMaintenances
-                    .Where(x => !x.IsDeleted)
-                    .Where(x => x.SpecMaintId == inputModel.MaintenanceId)
-                    .Select(x => new JobOrderCreateViewModel()
-                    {
-                        LastDoneDate = x.LastCompletedDate,
-                        Interval = x.Interval,
-                        Type = inputModel.TypeId,
-                        ResponsiblePosition = x.ResponsiblePosition,
-                        EquipmentId = inputModel.EquipmentId,
-                        RoutineMaintenanceId = inputModel.MaintenanceId,
-                        SpecificMaintenanceId = inputModel.MaintenanceId,
-                        MaintenanceName = x.Name,
-                        EquipmentName = inputModel.EquipmentName,
-                        MaintenanceType = inputModel.TypeId,
-                        JobDescription = x.Description ?? string.Empty
-                    })
-                    .FirstOrDefaultAsync();
-            }
+            var model = await joborderService.GetCreateJobModelAsync(inputModel);
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(JobOrderCreateViewModel model)
         {
-            JobOrder jobOrder = new JobOrder() 
-            {
-                JobName = model.JobName,
-                JobDescription = model.JobDescription,
-                DueDate = model.DueDate,
-                LastDoneDate = model.LastDoneDate,
-                Interval = model.Interval,
-                Type = model.Type,
-                ResponsiblePosition= model.ResponsiblePosition,
-                CreatorId = GetUserId(),
-                EquipmentId= model.EquipmentId,
-                MaintenanceId = model.SpecificMaintenanceId
-            };
-            await context.JobOrders.AddAsync(jobOrder);
-            await context.SaveChangesAsync();
-
+            bool result = await joborderService.CreateJobOrderAsync(model, GetUserId());   
             return RedirectToAction(nameof(Select));
         }
 
@@ -186,30 +64,7 @@ namespace PMSWeb.Controllers
             var maintenanceType = TempData["MaintenanceType"].ToString();
             Guid equipmentId = Guid.Parse(stringId);
 
-            var model = await context
-                .Equipments
-                .Where(x => !x.IsDeleted)
-                .Where(x => x.EquipmentId == equipmentId)
-                .AsNoTracking()
-                .Select(x => new JobOrderAddMaintenanceViewModel()
-                {
-                    EquipmentId = equipmentId,
-                    EquipmentName = x.Name,
-                    TypeId = maintenanceType
-                })
-                .FirstOrDefaultAsync();
-
-            var routineMaintenances = await context
-                .RoutineMaintenancesEquipments
-                .Where(x => x.EquipmentId == equipmentId)
-                .AsNoTracking()
-                .Select(x => new PairGuidViewModel()
-                {
-                    Name = x.RoutineMaintenance.Name,
-                    Id = x.RoutineMaintenanceId
-                })
-                .ToListAsync();
-            model.Maintenances = routineMaintenances;
+            var model = await joborderService.GetAddRoutineMaintenanceViewModelAsync(equipmentId, maintenanceType);
             return View(model);
         }
 
@@ -220,59 +75,14 @@ namespace PMSWeb.Controllers
             var maintenanceType = TempData["MaintenanceType"].ToString();
             Guid equipmentId = Guid.Parse(stringId);
 
-            var model = await context
-                .Equipments
-                .Where(x => !x.IsDeleted)
-                .Where(x => x.EquipmentId == equipmentId)
-                .AsNoTracking()
-                .Select(x => new JobOrderAddMaintenanceViewModel()
-                {
-                    EquipmentId = equipmentId,
-                    EquipmentName = x.Name,
-                    TypeId = maintenanceType
-                })
-                .FirstOrDefaultAsync();
-
-            var routineMaintenances = await context
-                .RoutineMaintenancesEquipments
-                .Where(x => x.EquipmentId == equipmentId)
-                .AsNoTracking()
-                .Select(x => new PairGuidViewModel()
-                {
-                    Name = x.RoutineMaintenance.Name,
-                    Id = x.RoutineMaintenanceId
-                })
-                .ToListAsync();
-
-            var specificManintenances = await context
-                .SpecificMaintenances
-                .Where(x => x.EquipmentId == equipmentId)
-                .AsNoTracking()
-                .Select(x => new PairGuidViewModel()
-                {
-                    Name = x.Name,
-                    Id = x.SpecMaintId
-                })
-                .ToListAsync();
-            model.Maintenances = specificManintenances;
+            var model = await joborderService.GetAddSpecificMaintenanceViewModelAsync(equipmentId, maintenanceType);
             return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> AddEquipment()
         {
-            var model = new JobOrderAddEquipmentViewModel();
-            
-            var equipments = await context
-                .Equipments
-                .Where(x=>!x.IsDeleted)
-                .AsNoTracking()
-                .Select(x=> new PairGuidViewModel() { 
-                    Name = x.Name,
-                    Id = x.EquipmentId
-                })
-                .ToListAsync();
-            model.EquipmentList = equipments;
+            var model = await joborderService.GetAddEquipmentModelAsync();
             return View(model);
         }
 
@@ -291,13 +101,11 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
-            var jobToDelete = await context
-                .JobOrders
-                .FindAsync(Guid.Parse(id));
-            if (jobToDelete != null) 
-                jobToDelete.IsDeleted = true;
-            await context.SaveChangesAsync();
-
+            bool result = await joborderService.DeleteJobOrderAsync(id);
+            if (!result)
+            {
+                return RedirectToAction("NotDeleted", "Crushes");
+            }
             return RedirectToAction(nameof(Select));
         }
 
@@ -308,64 +116,25 @@ namespace PMSWeb.Controllers
             {
                 return RedirectToAction("ModelNotValid","Crushes");
             }
-            var model = await context
-                .JobOrders
-                .Where(x => !x.IsDeleted && !x.IsHistory)
-                .Where(x => x.JobId.ToString().ToLower() == id.ToLower())
-                .AsNoTracking()
-                .Select(x=> new CompleteTheJobViewModel() { 
-                    JobId = x.JobId.ToString(),
-                    JobName = x.JobName,
-                    Description = x.JobDescription,
-                    Details = string.Empty,
-                    DueDate = x.DueDate.ToString(PMSRequiredDateFormat),
-                    ResponsiblePosition = x.ResponsiblePosition,
-                    Equipment = x.Equipment.Name,
-                    EquipmentId = x.EquipmentId.ToString()
-                })
-                .FirstOrDefaultAsync();
 
-            if (model == null)
-            {
-                return View(new CompleteTheJobViewModel());
-            }
-
+            var model = await joborderService.GetCompleteJobModelAsync(id);
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> CloseJob(CompleteTheJobViewModel model)
         {
-            var jobToClose = await context
-                .JobOrders
-                .Where(x => !x.IsDeleted)
-                .Where(x => x.JobId.ToString().ToLower() == model.JobId.ToLower())
-                .FirstOrDefaultAsync();
-            string defaultDescreiption = jobToClose.JobDescription;
-            jobToClose.JobDescription = model.Details;
-            jobToClose.LastDoneDate = DateTime.UtcNow;
-            jobToClose.CompletedBy = User.FindFirstValue(ClaimTypes.Name);
-            jobToClose.IsHistory = true;
-            //await context.SaveChangesAsync();
-
-            var newJob = new JobOrder()
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            if (userName == null)
             {
-                JobId = Guid.NewGuid(),
-                JobName = jobToClose.JobName,
-                JobDescription = defaultDescreiption,
-                DueDate = jobToClose.LastDoneDate.AddDays(jobToClose.Interval),
-                LastDoneDate = DateTime.UtcNow, 
-                Interval = jobToClose.Interval,
-                Type = jobToClose.Type,
-                ResponsiblePosition = jobToClose.ResponsiblePosition,
-                CreatorId = jobToClose.CreatorId,
-                EquipmentId = jobToClose.EquipmentId,
-                MaintenanceId = jobToClose.MaintenanceId,
-                IsHistory = false,
-                IsDeleted = false
-            };
-            await context.JobOrders.AddAsync(newJob);
-            await context.SaveChangesAsync();
+                return RedirectToAction("NotFound", "Crushes");
+            }
+            bool result = await joborderService.CloseThisJob(model, userName);
+
+            if (!result) 
+            {
+                return RedirectToAction("NotCreated", "Crushes");
+            }
 
             return RedirectToAction(nameof(SelectHistory));
         }
@@ -373,56 +142,15 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> SparesUsedPartial(string id)
         {
-            var job = context.JobOrders.Find(Guid.Parse(id));
-
-            var sparesList = await context
-                .Spareparts
-                .Where(x => !x.IsDeleted)
-                .Where(x => x.EquipmentId == job.EquipmentId)
-                .AsNoTracking()
-                .Select(x=> new InventoryItemViewModel() {
-                    Name = x.SparepartName,
-                    Id = x.SparepartId.ToString(),
-                    Available = x.ROB,
-                    Units = x.Units,    
-                    Used = 0
-                })
-                .ToListAsync();
-            var model = new PartialViewModel()
-            {
-                JobId = job.JobId.ToString(),
-                EquipmentId = job.EquipmentId.ToString(),
-                InventoryList = sparesList  
-            };
-
-            var spares = new List<InventoryItemViewModel>(); 
+            var model = await joborderService.GetSparesPartialModelAsync(id); 
             return PartialView("_SparesUsedPartial", model);
         }
 
         [HttpGet]
         public async Task<IActionResult> ConsumablesUsedPartial(string id)
         {
-            var job = context.JobOrders.Find(Guid.Parse(id));
-
-            var consumables = await context
-                .ConsumablesEquipments
-                .Where(x => x.EquipmentId == job.EquipmentId)
-                .AsNoTracking()
-                .Select(x=> new InventoryItemViewModel() {
-                    Name = x.Consumable.Name,
-                    Id = x.ConsumableId.ToString(),
-                    Available = x.Consumable.ROB,
-                    Units = x.Consumable.Units,
-                    Used = 0
-                })
-                .ToListAsync();
-            
-            var model = new PartialViewModel() {
-                JobId = job.JobId.ToString(),
-                EquipmentId = job.EquipmentId.ToString(),
-                InventoryList = consumables
-            };
-              
+           
+            var model = await joborderService.GetConsumablesPartialModelAsync(id);  
             return PartialView("_ConsumablesUsedPartial", model);
         }
 
