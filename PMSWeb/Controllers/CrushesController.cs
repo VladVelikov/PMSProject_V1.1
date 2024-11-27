@@ -49,5 +49,13 @@ namespace PMSWeb.Controllers
             ViewBag.Message = NotCreatedMessage;
             return View();
         }
+
+        public IActionResult NotUpdated(string caller)
+        {
+            ViewBag.Controller = "Home";
+            ViewBag.Message = NotUpdatedMessage;
+            return View();
+        }
+
     }
 }

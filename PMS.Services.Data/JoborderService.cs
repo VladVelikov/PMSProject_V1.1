@@ -5,7 +5,6 @@ using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.CommonVM;
 using PMSWeb.ViewModels.InventoryVM;
 using PMSWeb.ViewModels.JobOrderVM;
-using System.Security.Claims;
 using static PMS.Common.EntityValidationConstants;
 
 namespace PMS.Services.Data
@@ -15,8 +14,11 @@ namespace PMS.Services.Data
                                  IRepository<SpecificMaintenance, Guid> specMaintRepo,
                                  IRepository<Equipment, Guid> equipmentRepo,
                                  IRepository<RoutineMaintenanceEquipment, Guid[]> routMaintEqRepo,
-                                 IRepository<Sparepart, Guid> sparesRepo, 
-                                 IRepository<ConsumableEquipment, Guid[]> consumEquipRepo) : IJoborderService
+                                 IRepository<Sparepart, Guid> sparesRepo,
+                                 IRepository<Consumable, Guid> consumableRepo,
+                                 IRepository<ConsumableEquipment, Guid[]> consumEquipRepo,
+                                 IRepository<Manual, Guid> manualsRepo) 
+                               : IJoborderService
     {
         public async Task<List<JobOrderDisplayViewModel>> GetListOfAllJobsAsync()
         {
@@ -403,39 +405,146 @@ namespace PMS.Services.Data
             return model;   
         }
 
-
-
-
-
-
-
-
-
-
-
-
-        public Task<bool> ConfirmConsumablesAreUsedAsync(PartialViewModel model)
+        public async Task<bool> ConfirmSparesAreUsedAsync(PartialViewModel model)
         {
-            throw new NotImplementedException();
-        }
+            var mySpares = await sparesRepo
+                .GetAllAsQueryable()
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.EquipmentId.ToString().ToLower() == model.EquipmentId.ToLower())
+                .ToListAsync();
+            if(mySpares == null) return false;
 
-        public Task<bool> ConfirmSparesAreUsedAsync(PartialViewModel model)
-        {
-            throw new NotImplementedException();
+            foreach (var item in model.InventoryList)
+            {
+                if (item.Id != null)
+                {
+                    var spare = mySpares.FirstOrDefault(x => x.SparepartId.ToString().ToLower() == item.Id.ToLower());
+                    if (spare != null)
+                    {
+                        if (item.Used < 0)
+                        {
+                            //do nothing
+                            //spare.ROB -= item.Used;  // for testing only 
+                        }
+                        else if (item.Used > spare.ROB)
+                        {
+                            spare.ROB = 0;
+                            await sparesRepo.UpdateAsync(spare);
+                        }
+                        else
+                        {
+                            spare.ROB -= item.Used;
+                            await sparesRepo.UpdateAsync(spare);
+                        }
+                    }
+                    
+                }
+                
+            }
+            return true;    
         }
-
        
-
-        public Task<OpenManualViewModel> GetOpenManualViewModelAsync(string jobid, string manualid)
+        public async Task<bool> ConfirmConsumablesAreUsedAsync(PartialViewModel model)
         {
-            throw new NotImplementedException();
+            var myConsumables = await consumEquipRepo
+               .GetAllAsQueryable()
+               .Where(x => x.EquipmentId.ToString().ToLower() == model.EquipmentId.ToLower())
+               .Select(x => x.Consumable)
+               .ToListAsync();
+            if (myConsumables == null) return false;    
+
+            foreach (var item in model.InventoryList)
+            {
+                if (item.Id != null) 
+                {
+                    var consumable = await consumableRepo.GetByIdAsync(Guid.Parse(item.Id));
+                    if (consumable != null)
+                    {
+                        if (item.Used < 0)
+                        {
+                            //do nothing
+                            //spare.ROB -= item.Used;  // for testing only 
+                        }
+                        else if (item.Used > consumable.ROB)
+                        {
+                            consumable.ROB = 0;
+                            await consumableRepo.UpdateAsync(consumable);
+                            
+                        }
+                        else
+                        {
+                            consumable.ROB -= item.Used;
+                            await consumableRepo.UpdateAsync(consumable);
+                        }
+                    }
+                    
+                }   
+                
+            }
+            return true;
         }
 
-        public Task<SelectManualViewModel> GetSelectManualViewModelAsync(string id)
+        public async Task<SelectManualViewModel> GetSelectManualViewModelAsync(string id)
         {
-            throw new NotImplementedException();
+            var job = await jobOrdersRepo
+                .GetAllAsQueryable()
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.JobId.ToString().ToLower() == id.ToLower())
+                .Include(x => x.Equipment)
+                .FirstOrDefaultAsync();
+            if (job == null)
+            {
+                return new SelectManualViewModel() { EquipmentName = "No Manuals Found" };
+            }
+
+            var model = new SelectManualViewModel()
+            {
+                EquipmentName = job.Equipment.Name,
+                JobId = job.JobId.ToString()
+            };
+            var modelManuals = await manualsRepo
+                .GetAllAsQueryable()
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.EquipmentId.ToString().ToLower()
+                              == job.EquipmentId.ToString().ToLower())
+                .Include(x => x.Maker)
+                .Include(x => x.Equipment)
+                .AsNoTracking()
+                .ToListAsync();
+            if (modelManuals.Any())
+            {
+                model.Manuals = modelManuals;
+            }
+            else
+            {
+                model.EquipmentName = "No Manuals Found";
+                model.Manuals = new List<Manual> { };
+            }
+            return model;   
         }
 
+        public async Task<OpenManualViewModel> GetOpenManualViewModelAsync(string jobid, string manualid)
+        {
+            var model = await manualsRepo
+                .GetAllAsQueryable()
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.ManualId.ToString().ToLower() == manualid.ToLower())
+                .AsNoTracking()
+                .Select(x => new OpenManualViewModel()
+                {
+                    JobId = jobid,
+                    URL = x.ContentURL,
+                    Name = x.ManualName,
+                    MakerName = x.Maker.MakerName,
+                    EquipmentName = x.Equipment.Name
+                })
+                .FirstOrDefaultAsync();
+            if (model == null) 
+            {
+                return new OpenManualViewModel() { Name = "Sorry! We dont have proper manuals yet!"};
+            }   
+            return model;
+        }
         
     }
 }

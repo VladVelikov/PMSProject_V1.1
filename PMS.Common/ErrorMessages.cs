@@ -8,5 +8,6 @@
         public const string NotEditedMessage = "Edit operation not completed! Possible wrong Id or data missing!";
         public const string NotCreatedMessage = "Record Was Not Created!";
         public const string NotFoundMessage = "Requred data or object was not found!";
+        public const string NotUpdatedMessage = "Due to missing or wrong data the record was not updated!";
     }
 }

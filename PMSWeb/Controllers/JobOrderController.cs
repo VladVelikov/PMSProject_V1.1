@@ -1,19 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PMS.Data;
-using PMS.Data.Models;
 using PMS.Services.Data.Interfaces;
-using PMSWeb.ViewModels.CommonVM;
-using PMSWeb.ViewModels.InventoryVM;
 using PMSWeb.ViewModels.JobOrderVM;
 using System.Security.Claims;
-using static PMS.Common.EntityValidationConstants;
 
 namespace PMSWeb.Controllers
 {
     [Authorize]
-    public class JobOrderController(PMSDbContext context, IJoborderService joborderService) : Controller
+    public class JobOrderController(IJoborderService joborderService) : BasicController
     {
         [HttpGet]
         public async Task<IActionResult> Select()
@@ -157,123 +151,38 @@ namespace PMSWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmSparesUsed(PartialViewModel model)
         {
-            var mySpares = await context
-                .Spareparts
-                .Where(x => !x.IsDeleted)
-                .Where(x => x.EquipmentId.ToString().ToLower() == model.EquipmentId.ToLower())
-                .ToListAsync();
-
-            foreach (var item in model.InventoryList)
+            bool result = await joborderService.ConfirmSparesAreUsedAsync(model);
+            if (!result)
             {
-                var spare = mySpares.FirstOrDefault(x => x.SparepartId.ToString().ToLower() == item.Id.ToLower());
-                if (item.Used < 0)
-                {
-                    //do nothing
-                    //spare.ROB -= item.Used;  // for testing only 
-                }
-                else if (item.Used > spare.ROB)
-                {
-                    spare.ROB = 0;
-                }
-                else 
-                {
-                    spare.ROB -= item.Used; 
-                }
-            }    
-            await context.SaveChangesAsync();
+                return RedirectToAction("NotUpdated", "Crushes");
+            }
             return RedirectToAction("CompleteJob", new { id = model.JobId });
         }
 
         [HttpPost]
         public async Task<IActionResult> ConfirmConsumablesUsed(PartialViewModel model)
         {
-            var myConsumables = await context
-                .ConsumablesEquipments
-                .Where(x => x.EquipmentId.ToString().ToLower() == model.EquipmentId.ToLower())
-                .Select(x=>x.Consumable)
-                .ToListAsync();
-
-            foreach (var item in model.InventoryList)
+            bool result = await joborderService.ConfirmConsumablesAreUsedAsync(model);
+            if (!result)
             {
-                var spare = myConsumables.FirstOrDefault(x => x.ConsumableId.ToString().ToLower() == item.Id.ToLower());
-                if (item.Used < 0)
-                {
-                    //do nothing
-                    //spare.ROB -= item.Used;  // for testing only 
-                }
-                else if (item.Used > spare.ROB)
-                {
-                    spare.ROB = 0;
-                }
-                else
-                {
-                    spare.ROB -= item.Used;
-                }
+                return RedirectToAction("NotUpdated", "Crushes");
             }
-            await context.SaveChangesAsync();
             return RedirectToAction("CompleteJob", new { id = model.JobId });
         }
 
         [HttpGet]
         public async Task<IActionResult> Manuals(string id)
         {
-            var job = await context
-                .JobOrders
-                .Where(x=>!x.IsDeleted)
-                .Where(x=>x.JobId.ToString().ToLower() == id.ToLower())
-                .Include(x=>x.Equipment)
-                .FirstOrDefaultAsync();
-            
-            var model = new SelectManualViewModel()
-            {
-                EquipmentName = job.Equipment.Name,
-                JobId = job.JobId.ToString()
-            };
-            var modelManuals = await context
-                .Manuals
-                .Where(x => !x.IsDeleted)
-                .Where(x => x.EquipmentId.ToString().ToLower() 
-                              == job.EquipmentId.ToString().ToLower())
-                .Include(x=>x.Maker)
-                .Include(x=>x.Equipment)
-                .AsNoTracking()
-                .ToListAsync();
-            if (modelManuals.Any())
-            {
-                model.Manuals = modelManuals;
-            }
-            else 
-            {
-                model.EquipmentName = "No Manuals Found";
-                model.Manuals = new List<Manual> { };
-            }
+            var model = await joborderService.GetSelectManualViewModelAsync(id);  
             return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> OpenManual(string jobid, string manualid)
         {
-            var model = await context
-                .Manuals
-                .Where(x => !x.IsDeleted)
-                .Where(x => x.ManualId.ToString().ToLower() == manualid.ToLower())
-                .AsNoTracking()
-                .Select(x=> new OpenManualViewModel() {
-                    JobId = jobid,
-                    URL = x.ContentURL,
-                    Name = x.ManualName,
-                    MakerName = x.Maker.MakerName,
-                    EquipmentName = x.Equipment.Name
-                })
-                .FirstOrDefaultAsync();
-
+            var model = await joborderService.GetOpenManualViewModelAsync(jobid, manualid);   
             return View(model);
         }
 
-
-        public string? GetUserId()
-        {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier)!.ToString();
-        }
     }
 }
