@@ -18,7 +18,7 @@
         <label>@Model.EquipmentName</label>
 
         <div class="form-group">
-            <label asp-for="MaintenanceId" class="control-label col-md-2">Please select maintenances for @Model.EquipmentName</label>
+            <label asp-for="MaintenanceId" class="control-label col-md-12">Please select maintenances for @Model.EquipmentName</label>
             <div class="col-md-10">
                 <select asp-for="MaintenanceId" asp-items=@(new SelectList(Model.Maintenances,"Id", "Name")) class="form-control">
                     <option value="">Select @Model.TypeId Maintenance</option>
@@ -27,15 +27,22 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" style="margin-top: 1em;">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Select" class="btn btn-primary" />
             </div>
         </div>
-        
+
     </div>  <!-- Class-form-horizontal ends here -->
 
 </form>
+
+@if (Model.Maintenances.Count() == 0)
+{
+   <h3 style="color: lightcoral; margin-top: 2em;"> There are no Routine Maintenances associated with this equipment.</h3>
+   <h3 style="color: lightcoral;" > Please create some maintenances and add them to this equipment first.</h3>
+    <a asp-controller="RM" asp-action="Create" class="btn btn-success">Create Maintenance</a>
+}
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -7,6 +7,8 @@
 
 <h2>Due Job</h2>
 
+
+
 <table class="table table-striped">
     <thead>
         <tr>
@@ -40,6 +42,12 @@
         }
     </tbody>
 </table>
+
+@if (!Model.Any())
+{
+    <h3 style="color: springgreen;">Currently, There Are No Jobs to Show Here!</h3>
+}
+
 
 <style>
     .table {

@@ -50,7 +50,7 @@ namespace PMSWeb.Controllers
             if (string.IsNullOrEmpty(dateTime)) return false;
 
             DateTime correctDate;
-            bool result = DateTime.TryParseExact(dateTime, PMSRequiredDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out correctDate);
+            bool result = DateTime.TryParse(dateTime, out correctDate);
             if (result)
             {
                 return true;

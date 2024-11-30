@@ -14,7 +14,7 @@
             </tr>
         </thead>
         <tbody>
-           
+
 
             @for (int i = 0; i < Model.InventoryList.Count; i++)
             {
@@ -44,4 +44,9 @@
     <input type="hidden" asp-for="JobId"/>
     <button type="submit" class="btn btn-info">Confirm</button>
 </form>
+
+@if (Model.InventoryList.Count() == 0)
+{
+    <h3>No Consumables for this Equipment!</h3>
+}
 

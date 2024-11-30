@@ -10,7 +10,8 @@ namespace PMSWeb.ViewModels.JobOrderVM
 
         public List<PairGuidViewModel> EquipmentList { get; set; } = new List<PairGuidViewModel>();
 
-        public string TypeId { get; set; }
+        [Required]
+        public string TypeId { get; set; } = null!;
 
         public List<PairViewModel> TypeList { get; set; } = new List<PairViewModel>() {
             new (){ Name = "Routine", Id = "Routine"},

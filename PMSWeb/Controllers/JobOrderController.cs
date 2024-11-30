@@ -13,6 +13,10 @@ namespace PMSWeb.Controllers
         public async Task<IActionResult> Select()
         {
             var modelList = await joborderService.GetListOfAllJobsAsync();
+            if (modelList == null)
+            {
+                return RedirectToAction("EmptyList", "Crushes");
+            }
             return View(modelList);
         }
         
@@ -20,6 +24,10 @@ namespace PMSWeb.Controllers
         public async Task<IActionResult> SelectDueJobs()
         {
             var dueJobsList = await joborderService.GetListOfDueJobsAsync();
+            if (dueJobsList == null)
+            {
+                return RedirectToAction("EmptyList", "Crushes");
+            }
             return View(dueJobsList);
         }
         
@@ -27,49 +35,115 @@ namespace PMSWeb.Controllers
         public async Task<IActionResult> SelectHistory()
         {
             var historyJobsList = await joborderService.GetListOfHistoryJobsAsync();
+            if (historyJobsList == null)
+            {
+                return RedirectToAction("EmptyList", "Crushes");
+            }
             return View(historyJobsList);
         }
         
         [HttpGet]
         public async Task<IActionResult> ShowHistory(string id)
         {
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
             var model = await joborderService.GetHistoryDetailsAsync(id);
+            if (string.IsNullOrEmpty(model.JobId))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
         
         [HttpGet]
         public async Task<IActionResult> Create(JobOrderAddMaintenanceViewModel inputModel)
         {
+            if (inputModel.TypeId != "Routine" && inputModel.TypeId != "Specific")
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            if (!IsValidGuid(inputModel.EquipmentId.ToString()) || 
+                !IsValidGuid(inputModel.MaintenanceId.ToString()) ||
+                string.IsNullOrWhiteSpace(inputModel.EquipmentName))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
             var model = await joborderService.GetCreateJobModelAsync(inputModel);
+            if (model == null || !IsValidGuid(model.EquipmentId.ToString())
+                || string.IsNullOrWhiteSpace(model.EquipmentName))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(JobOrderCreateViewModel model)
         {
-            bool result = await joborderService.CreateJobOrderAsync(model, GetUserId());   
+            if (GetUserId == null)
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            if (string.IsNullOrEmpty(model.JobName) ||
+                !IsValidDate(model.DueDate.ToString()) ||
+                !IsValidDate(model.LastDoneDate.ToString()) ||
+                !IsValidDouble(model.Interval.ToString()) ||
+                string.IsNullOrEmpty(model.Type) ||
+                string.IsNullOrWhiteSpace(model.ResponsiblePosition) ||
+                !IsValidGuid(model.EquipmentId.ToString()) ||
+                !IsValidGuid(model.SpecificMaintenanceId.ToString())
+                )
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            bool result = await joborderService.CreateJobOrderAsync(model, GetUserId()!);
+            if (!result)
+            {
+                return RedirectToAction("NotCreated", "Crushes");
+            }
             return RedirectToAction(nameof(Select));
         }
 
         [HttpGet]
         public async Task<IActionResult> AddMaintenanceRM()
         {
-            var stringId = TempData["EquipmentId"].ToString();
-            var maintenanceType = TempData["MaintenanceType"].ToString();
+            var stringId = (TempData["EquipmentId"] ?? string.Empty).ToString();
+            var maintenanceType = (TempData["MaintenanceType"] ?? string.Empty).ToString();
+            if (stringId == null || maintenanceType == null || !IsValidGuid(stringId))
+            {
+                return RedirectToAction(nameof(AddEquipment));
+            }
             Guid equipmentId = Guid.Parse(stringId);
-
             var model = await joborderService.GetAddRoutineMaintenanceViewModelAsync(equipmentId, maintenanceType);
+            if (model == null || string.IsNullOrWhiteSpace(model.EquipmentId.ToString()))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> AddMaintenanceSM()
         {
-            var stringId = TempData["EquipmentId"].ToString();
-            var maintenanceType = TempData["MaintenanceType"].ToString();
+            var stringId = (TempData["EquipmentId"] ?? string.Empty).ToString();
+            var maintenanceType = (TempData["MaintenanceType"] ?? string.Empty).ToString();
+            if (stringId == null || maintenanceType == null || !IsValidGuid(stringId))
+            {
+                return RedirectToAction(nameof(AddEquipment));
+            }
             Guid equipmentId = Guid.Parse(stringId);
 
             var model = await joborderService.GetAddSpecificMaintenanceViewModelAsync(equipmentId, maintenanceType);
+            if (model == null || string.IsNullOrWhiteSpace(model.EquipmentId.ToString()))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
 
@@ -83,6 +157,18 @@ namespace PMSWeb.Controllers
         [HttpPost]
         public IActionResult AddEquipment(JobOrderAddEquipmentViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("ModelNotValid", "Crushes");
+            }
+            if (!IsValidGuid(model.EquipmentId.ToString()))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            if (model.TypeId != "Routine" && model.TypeId != "Specific")
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
             TempData["EquipmentId"] = model.EquipmentId;
             TempData["MaintenanceType"] = model.TypeId;
             if (model.TypeId == "Routine")
@@ -95,6 +181,10 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
+            if (IsValidGuid(id.ToString()))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
             bool result = await joborderService.DeleteJobOrderAsync(id);
             if (!result)
             {
@@ -106,18 +196,25 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> CompleteJob(string id)
         {
-            if (id == null)
+            if (!IsValidGuid(id))
             {
-                return RedirectToAction("ModelNotValid","Crushes");
+                return RedirectToAction("WrongData","Crushes");
             }
-
             var model = await joborderService.GetCompleteJobModelAsync(id);
+            if (model == null || string.IsNullOrWhiteSpace(model.JobId))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> CloseJob(CompleteTheJobViewModel model)
         {
+            if (string.IsNullOrWhiteSpace(model.Details))
+            {
+                return RedirectToAction("CompleteJob", new { id = model.JobId });
+            }
             var userName = User.FindFirstValue(ClaimTypes.Name);
             if (userName == null)
             {
@@ -136,21 +233,48 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> SparesUsedPartial(string id)
         {
-            var model = await joborderService.GetSparesPartialModelAsync(id); 
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            var model = await joborderService.GetSparesPartialModelAsync(id);
+            if (model == null || string.IsNullOrWhiteSpace(model.JobId))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
+            
             return PartialView("_SparesUsedPartial", model);
         }
 
         [HttpGet]
         public async Task<IActionResult> ConsumablesUsedPartial(string id)
         {
-           
-            var model = await joborderService.GetConsumablesPartialModelAsync(id);  
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            var model = await joborderService.GetConsumablesPartialModelAsync(id);
+            if (model == null || string.IsNullOrWhiteSpace(model.JobId))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return PartialView("_ConsumablesUsedPartial", model);
         }
 
         [HttpPost]
         public async Task<IActionResult> ConfirmSparesUsed(PartialViewModel model)
         {
+            if (!IsValidGuid(model.JobId) || !IsValidGuid(model.EquipmentId))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            foreach (var item in model.InventoryList)
+            {
+                if (item == null || item.Id == null || !IsValidGuid(item.Id))
+                {
+                    return RedirectToAction("WrongData", "Crushes");
+                }
+            }
             bool result = await joborderService.ConfirmSparesAreUsedAsync(model);
             if (!result)
             {
@@ -162,6 +286,17 @@ namespace PMSWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmConsumablesUsed(PartialViewModel model)
         {
+            if (!IsValidGuid(model.JobId) || !IsValidGuid(model.EquipmentId))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            foreach (var item in model.InventoryList)
+            {
+                if (item == null || item.Id == null || !IsValidGuid(item.Id))
+                {
+                    return RedirectToAction("WrongData", "Crushes");
+                }
+            }
             bool result = await joborderService.ConfirmConsumablesAreUsedAsync(model);
             if (!result)
             {
@@ -173,14 +308,30 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Manuals(string id)
         {
-            var model = await joborderService.GetSelectManualViewModelAsync(id);  
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            var model = await joborderService.GetSelectManualViewModelAsync(id); 
+            if (model == null)
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> OpenManual(string jobid, string manualid)
         {
-            var model = await joborderService.GetOpenManualViewModelAsync(jobid, manualid);   
+            if (!IsValidGuid(jobid) || !IsValidGuid(manualid))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            var model = await joborderService.GetOpenManualViewModelAsync(jobid, manualid);
+            if (model == null)
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
 

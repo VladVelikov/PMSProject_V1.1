@@ -38,6 +38,7 @@ namespace PMS.Services.Data
                     ResponsiblePosition = x.ResponsiblePosition
                 })
                 .ToListAsync();
+            
             return modelList;
         }
 
@@ -60,6 +61,7 @@ namespace PMS.Services.Data
                     ResponsiblePosition = x.ResponsiblePosition
                 })
                 .ToListAsync();
+            
             return dueJobsList;
         }
 
@@ -82,6 +84,7 @@ namespace PMS.Services.Data
                    ResponsiblePosition = x.ResponsiblePosition
                })
                .ToListAsync();
+           
             return historyJobsList;
         }
 
@@ -106,7 +109,10 @@ namespace PMS.Services.Data
                    Desription = x.JobDescription
                })
                .FirstOrDefaultAsync();
-            
+            if (model == null)
+            {
+                return new JobHistoryDetailsViewModel();
+            }
             return model;
         }
 
@@ -157,7 +163,10 @@ namespace PMS.Services.Data
                     })
                     .FirstOrDefaultAsync();
             }
-
+            if (model == null) 
+            {
+                return new JobOrderCreateViewModel();   
+            }
             return model;
         }
 
@@ -176,7 +185,14 @@ namespace PMS.Services.Data
                 EquipmentId = model.EquipmentId,
                 MaintenanceId = model.SpecificMaintenanceId
             };
-            await jobOrdersRepo.AddAsync(jobOrder);
+            try
+            {
+                await jobOrdersRepo.AddAsync(jobOrder);
+            }
+            catch
+            {
+                return false;   
+            }
             return true;
         }
         
@@ -205,6 +221,10 @@ namespace PMS.Services.Data
                     Id = x.RoutineMaintenanceId
                 })
                 .ToListAsync();
+            if (model == null)
+            {
+                return new JobOrderAddMaintenanceViewModel();
+            }
             model.Maintenances = routineMaintenances;
             return model;
         }
@@ -234,9 +254,12 @@ namespace PMS.Services.Data
                     Id = x.SpecMaintId
                 })
                 .ToListAsync();
+            if (model == null)
+            {
+                return new JobOrderAddMaintenanceViewModel();
+            }
             model.Maintenances = specificManintenances;
             return model;
-
         }
 
         public async Task<JobOrderAddEquipmentViewModel> GetAddEquipmentModelAsync()
@@ -254,6 +277,8 @@ namespace PMS.Services.Data
                 })
                 .ToListAsync();
             model.EquipmentList = equipments;
+            if (equipments == null)
+                model.EquipmentList = new List<PairGuidViewModel>();    
             return model;
         }
 
@@ -267,8 +292,16 @@ namespace PMS.Services.Data
             }
             else
             {
-                jobToDelete.IsDeleted = true;
-                await jobOrdersRepo.UpdateAsync(jobToDelete);
+                try
+                {
+                    jobToDelete.IsDeleted = true;
+                    await jobOrdersRepo.UpdateAsync(jobToDelete);
+                }
+                catch 
+                {
+                    return false;
+                }
+                
                 return true;
             }
         }
@@ -309,35 +342,42 @@ namespace PMS.Services.Data
                 .FirstOrDefaultAsync();
             if (jobToClose == null) 
             { 
-                return false; 
+                return false;
             }
 
-            string defaultDescription = jobToClose.JobDescription;
-            jobToClose.JobDescription = model.Details;
-            jobToClose.LastDoneDate = DateTime.UtcNow;
-            jobToClose.CompletedBy = userName;
-            jobToClose.IsHistory = true;
-
-            await jobOrdersRepo.UpdateAsync(jobToClose);
-            //await context.SaveChangesAsync();
-
-            var newJob = new JobOrder()
+            try
             {
-                JobId = Guid.NewGuid(),
-                JobName = jobToClose.JobName,
-                JobDescription = defaultDescription,
-                DueDate = jobToClose.LastDoneDate.AddDays(jobToClose.Interval),
-                LastDoneDate = DateTime.UtcNow,
-                Interval = jobToClose.Interval,
-                Type = jobToClose.Type,
-                ResponsiblePosition = jobToClose.ResponsiblePosition,
-                CreatorId = jobToClose.CreatorId,
-                EquipmentId = jobToClose.EquipmentId,
-                MaintenanceId = jobToClose.MaintenanceId,
-                IsHistory = false,
-                IsDeleted = false
-            };
-            await jobOrdersRepo.AddAsync(newJob);
+                string defaultDescription = jobToClose.JobDescription;
+                jobToClose.JobDescription = model.Details;
+                jobToClose.LastDoneDate = DateTime.UtcNow;
+                jobToClose.CompletedBy = userName;
+                jobToClose.IsHistory = true;
+
+                await jobOrdersRepo.UpdateAsync(jobToClose);
+
+                var newJob = new JobOrder()
+                {
+                    JobId = Guid.NewGuid(),
+                    JobName = jobToClose.JobName,
+                    JobDescription = defaultDescription,
+                    DueDate = jobToClose.LastDoneDate.AddDays(jobToClose.Interval),
+                    LastDoneDate = DateTime.UtcNow,
+                    Interval = jobToClose.Interval,
+                    Type = jobToClose.Type,
+                    ResponsiblePosition = jobToClose.ResponsiblePosition,
+                    CreatorId = jobToClose.CreatorId,
+                    EquipmentId = jobToClose.EquipmentId,
+                    MaintenanceId = jobToClose.MaintenanceId,
+                    IsHistory = false,
+                    IsDeleted = false
+                };
+                await jobOrdersRepo.AddAsync(newJob);
+            }
+            catch
+            {
+                return false ;
+            }
+
             return true;
         }
 

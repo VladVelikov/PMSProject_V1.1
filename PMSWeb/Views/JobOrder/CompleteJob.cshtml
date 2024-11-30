@@ -30,8 +30,8 @@
 
                 <form asp-action="CloseJob" method="post">
                     <div class="form-group">
-                        <label asp-for="Details" class="control-label">Please enter short description of what you did.</label>
-                        <textarea asp-for="Details" class="form-control"></textarea>
+                        <label asp-for="Details" class="control-label" style="color: darkmagenta; font-weight: bold;">Please enter short description of what you did.</label>
+                        <textarea asp-for="Details" class="form-control" placeholder="THIS FIELD IS REQUIRED!!!"></textarea>
                         <span asp-validation-for="Details" class="text-danger"></span>
                     </div>
                     <div style="margin-top: 1em;">

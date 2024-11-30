@@ -35,6 +35,12 @@
     </tbody>
 </table>
 
+@if (!Model.Any())
+{
+    <h3 style="color: springgreen;">Currently, There Are No Jobs to Show Here!</h3>
+}
+
+
 <style>
     .table {
         width: 100%;
