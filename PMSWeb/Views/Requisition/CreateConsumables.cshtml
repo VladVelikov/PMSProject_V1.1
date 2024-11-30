@@ -88,3 +88,7 @@
         </div>
     </form>
 </div>
+@if (Model.RequisitionItems.Count() == 0)
+{
+    <h3 style="color: lightcoral;">There are no consumables created yet, only created consumables can be included in the requisition!</h3>
+}

@@ -171,7 +171,14 @@ namespace PMS.Services.Data
             }
             requisition.TotalCost = totalCost;
             requisition.requisitionItems = requisitionItems;
-            await requisitionRepo.AddAsync(requisition);
+            try
+            {
+                await requisitionRepo.AddAsync(requisition);
+            }
+            catch
+            {
+                return false;
+            }
             return true;
         }
         
@@ -195,7 +202,7 @@ namespace PMS.Services.Data
                .FirstOrDefaultAsync();
             if (model == null)
             {
-                new RequisitionDetailsViewModel();
+               return new RequisitionDetailsViewModel();
             }
             var reqItems = await reqItemsRepo
                 .GetAllAsQueryable()
@@ -242,8 +249,15 @@ namespace PMS.Services.Data
                  .FirstOrDefaultAsync();
             if (reqToDel != null)
             {
-                reqToDel.IsDeleted = true;
-                await requisitionRepo.UpdateAsync(reqToDel);
+                try
+                {
+                    reqToDel.IsDeleted = true;
+                    await requisitionRepo.UpdateAsync(reqToDel);
+                }
+                catch 
+                {
+                    return false;
+                }
                 return true;
             }
             return false;
@@ -258,23 +272,19 @@ namespace PMS.Services.Data
                 .Where(x => x.RequisitionId.ToString().ToLower() == id.ToLower())
                 .Include(x => x.requisitionItems)
                 .FirstOrDefaultAsync();
-
             if (reqToApprove == null || reqToApprove.IsApproved)
             {
                 return "NullOrApproved";
             }
-
             var budget = await budgetRepo
                 .GetAllAsQueryable()
                 .OrderByDescending(x => x.LastChangeDate)
                 .FirstOrDefaultAsync();
 
-            if (budget.Ballance < reqToApprove.TotalCost)
+            if (budget == null || budget.Ballance < reqToApprove.TotalCost)
             {
                 return "LowBallance";
             }
-
-
             var reqItemsList = reqToApprove.requisitionItems;
 
             budget.Ballance -= reqToApprove.TotalCost;      // to find a better way 
@@ -301,7 +311,15 @@ namespace PMS.Services.Data
                         }
                     }
                 }
-                await consumablesRepo.UpdateRange(consumables);
+                try
+                {
+                    await consumablesRepo.UpdateRange(consumables);
+                }
+                catch 
+                {
+                    return "Error";
+                }
+                
                 return "Consumables";
             }
             else
@@ -323,10 +341,16 @@ namespace PMS.Services.Data
                         }
                     }
                 }
-                await sparesRepo.UpdateRange(spareparts);
+                try
+                {
+                    await sparesRepo.UpdateRange(spareparts);
+                }
+                catch
+                {
+                    return "Error";
+                }
                 return "Spares";
             }
-            
         }
     }
 }

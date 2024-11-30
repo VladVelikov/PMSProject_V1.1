@@ -88,3 +88,7 @@
         </div>
     </form>
 </div>
+@if (Model.RequisitionItems.Count() == 0)
+{
+    <h3 style="color: lightcoral;">There are no spareparts created yet, only created spareparts can be included in the requisition!</h3>
+}

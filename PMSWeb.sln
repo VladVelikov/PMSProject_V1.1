@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SERVICES", "SERVICES", "{B6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMS.Services.Data", "PMS.Services.Data\PMS.Services.Data.csproj", "{41033576-3983-428F-8985-5E2666B958C8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMS.Services.Mapping", "PMS.Services.Mapping\PMS.Services.Mapping.csproj", "{70D6DFDD-FD03-44A4-B84A-EE46FD211849}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMS.Services.FilesHandling", "PMS.Services.Mapping\PMS.Services.FilesHandling.csproj", "{70D6DFDD-FD03-44A4-B84A-EE46FD211849}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "zUNIT_TESTING", "zUNIT_TESTING", "{8050B3EC-2B1D-4E35-A193-296EDD008440}"
 EndProject
