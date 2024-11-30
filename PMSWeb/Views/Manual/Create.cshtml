@@ -8,7 +8,7 @@
 <h2>Create New Manual</h2>
 
 <form asp-action="Create" method="post">
-   <div style="margin: 2em auto">
+    <div style="margin: 2em auto">
         <div class="form-group">
             <label asp-for="ContentURL" class="control-label">Specify Content URL:  or  Upload File (*.pdf)</label>
             <input asp-for="ContentURL" class="form-control" />
@@ -33,6 +33,12 @@
         <span asp-validation-for="MakerId" class="text-danger"></span>
     </div>
 
+    @if (Model.Makers.Count() == 0)
+    {
+        <h3 style="color:lightcoral; margin-top:1em;">There are no Makers Created Yet!</h3>
+        <h3 style="color:lightcoral; margin-bottom:1em;">Please create some Makers first.</h3>
+    }
+
     <div class="form-group">
         <label asp-for="EquipmentId" class="control-label">Equipment</label>
         <select asp-for="EquipmentId" class="form-control" asp-items="@(new SelectList(Model.Equipments, "Id", "Name"))">
@@ -40,6 +46,12 @@
         </select>
         <span asp-validation-for="EquipmentId" class="text-danger"></span>
     </div>
+
+    @if (Model.Equipments.Count() == 0)
+    {
+        <h3 style="color:lightcoral; margin-top:1em;">There are no Equipments Created Yet!</h3>
+        <h3 style="color:lightcoral; margin-bottom:1em;">Please create some Equipments first.</h3>
+    }
 
     <div class="form-group mt-3">
         <button type="submit" class="btn btn-primary">Create</button>

@@ -13,26 +13,30 @@ namespace PMS.Services.Data
                                 IRepository<Equipment, Guid> equipmentsRepo) 
                              :IManualService
     {
-        public async Task<bool> ConfirmDeleteAsync(ManualDeleteViewModel model)
+
+        public async Task<IEnumerable<ManualDisplayViewModel>> GetListOfViewModelsAsync()
         {
-            if (model == null || model.ManualId == null)
-            { 
-                return false;
-            }
-                var deleteModel = await manualsRepo
-                    .GetAllAsQueryable()
-                    .Where(x => !x.IsDeleted)
-                    .Where(x => x.ManualId.ToString().ToLower() == model.ManualId.ToLower())
-                    .FirstOrDefaultAsync();
-                if (deleteModel == null)
+            var manuals = await manualsRepo
+                .GetAllAsQueryable()
+                .Where(x => !x.IsDeleted)
+                .OrderByDescending(x => x.EditedOn)
+                .Include(x => x.Maker)
+                .Include(x => x.Equipment)
+                .AsNoTracking()
+                .Select(x => new ManualDisplayViewModel()
                 {
-                    return false;
-                }
-                deleteModel.IsDeleted = true;
-                await manualsRepo.UpdateAsync(deleteModel);
-            
-            return true;
-            
+                    ManualId = x.ManualId.ToString(),
+                    ManualName = x.ManualName,
+                    Maker = x.Maker.MakerName,
+                    Equipment = x.Equipment!.Name ?? string.Empty
+                })
+                .ToListAsync();
+
+            if (!manuals.Any())
+            {
+                return new List<ManualDisplayViewModel>();
+            }
+            return manuals;
         }
 
         public async Task<bool> CreateManualAsync(ManualCreateViewModel model, string userId)
@@ -48,7 +52,14 @@ namespace PMS.Services.Data
                 IsDeleted = false,
                 ContentURL = model.ContentURL
             };
-            await manualsRepo.AddAsync(manual);
+            try
+            {
+                await manualsRepo.AddAsync(manual);
+            }
+            catch
+            {
+                return false;
+            }
             return true;
         }
 
@@ -129,29 +140,31 @@ namespace PMS.Services.Data
             return model;
         }
 
-        public async Task<IEnumerable<ManualDisplayViewModel>> GetListOfViewModelsAsync()
+        public async Task<bool> ConfirmDeleteAsync(ManualDeleteViewModel model)
         {
-            var manuals = await manualsRepo
-                .GetAllAsQueryable()    
-                .Where(x => !x.IsDeleted)
-                .OrderByDescending(x=>x.EditedOn)
-                .Include(x => x.Maker)
-                .Include(x => x.Equipment)
-                .AsNoTracking()
-                .Select(x => new ManualDisplayViewModel()
-                {
-                    ManualId = x.ManualId.ToString(),
-                    ManualName = x.ManualName,
-                    Maker = x.Maker.MakerName,
-                    Equipment = x.Equipment!.Name ?? string.Empty
-                })
-                .ToListAsync();
-
-            if (!manuals.Any())
+            if (model == null || model.ManualId == null)
             {
-                return new List<ManualDisplayViewModel>();
+                return false;
             }
-            return manuals;
+            var deleteModel = await manualsRepo
+                .GetAllAsQueryable()
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.ManualId.ToString().ToLower() == model.ManualId.ToLower())
+                .FirstOrDefaultAsync();
+            if (deleteModel == null)
+            {
+                return false;
+            }
+            try
+            {
+                deleteModel.IsDeleted = true;
+                await manualsRepo.UpdateAsync(deleteModel);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

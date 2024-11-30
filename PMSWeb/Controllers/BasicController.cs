@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using static PMS.Common.EntityValidationConstants;
 
 namespace PMSWeb.Controllers
@@ -69,6 +70,47 @@ namespace PMSWeb.Controllers
                 return true;
             }
             return false;
+        }
+
+        public static bool IsSafeUrl(string url)   // method to examin possible bridges through URL fields
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                return false;
+            }
+            try
+            {
+                var uri = new Uri(url, UriKind.RelativeOrAbsolute);
+                if (uri.IsAbsoluteUri)
+                {
+                    if (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
+                    {
+                        return false;
+                    }
+                }
+
+                var unsafePatterns = new[]
+                {
+                    @"^javascript:", // JavaScript 
+                    @"^data:",       // Data 
+                    @"<script>",     // Tag for script
+                    @"[\s<>{}]"      // Some dangerous signs
+                };
+
+                foreach (var pattern in unsafePatterns)
+                {
+                    if (Regex.IsMatch(url, pattern, RegexOptions.IgnoreCase))
+                    {
+                        return false;
+                    }
+                }
+                return true; 
+            }
+            catch
+            {
+                // If Uri Parse Failed => the URL is not ok.
+                return false;
+            }
         }
 
     }
