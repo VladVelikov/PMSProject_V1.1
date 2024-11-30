@@ -26,6 +26,7 @@ namespace PMS.Data.Repository
         public async Task<bool> AddRangeAsync(T[] items)
         {
             await dbSet.AddRangeAsync(items);
+            await context.SaveChangesAsync();
             return true;
         }       
 

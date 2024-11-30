@@ -5,7 +5,7 @@ using PMSWeb.ViewModels.CityVM;
 namespace PMSWeb.Controllers
 {
 
-    public class CityController(ICityService cityService) : Controller
+    public class CityController(ICityService cityService) : BasicController
     {
         [HttpGet]
         public async Task<IActionResult> Select()
@@ -24,7 +24,7 @@ namespace PMSWeb.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("NotCreated", "Crushes");
+                return RedirectToAction("ModelNotValid", "Crushes");
             }
 
             bool isCreated = await cityService.CreateCityAsync(model);
@@ -39,7 +39,15 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("NotDeleted", "Crushes");
+            }
             var model = await cityService.GetDeleteCityModelAsync(id);
+            if (string.IsNullOrEmpty(model.CityId))
+            {
+                return RedirectToAction("NotDeleted", "Crushes");
+            }
             return View(model);
         }
 

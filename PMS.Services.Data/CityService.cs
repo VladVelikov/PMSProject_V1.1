@@ -14,7 +14,7 @@ namespace PMS.Services.Data
         {
             if (model == null || model.Name == null) return false; 
             
-            City city = new City()
+            City city = new()
             {
                 Name = model.Name,
                 CreatedOn = DateTime.Now,

@@ -9,5 +9,6 @@
         public const string NotCreatedMessage = "Record Was Not Created!";
         public const string NotFoundMessage = "Requred data or object was not found!";
         public const string NotUpdatedMessage = "Due to missing or wrong data the record was not updated!";
+        public const string EmptyListMessage = "There are no records in the database to display. At least one record should be created first.";
     }
 }

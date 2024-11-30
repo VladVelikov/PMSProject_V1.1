@@ -2,27 +2,24 @@
 using Microsoft.AspNetCore.Mvc;
 using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.Consumable;
-using System.Security.Claims;
 
 namespace PMSWeb.Controllers
 {
     [Authorize]
-    public class ConsumableController(IConsumableService consumableService) : Controller
+    public class ConsumableController(IConsumableService consumableService) : BasicController
     {
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-        
         public async Task<IActionResult> Select()
         {
             var models = await consumableService.GetListOfViewModelsAsync();
+            if (models.Count() == 0)
+            {
+                return RedirectToAction("EmptyList", "Crushes");
+            }
             return View(models);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             var model = new ConsumableCreateViewModel();
             return View(model);
@@ -37,13 +34,17 @@ namespace PMSWeb.Controllers
             }
             if (GetUserId() == null)
             {
-                return View(model);
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            if (!IsValidDecimal(model.Price.ToString()))
+            {
+                return RedirectToAction("WrongData", "Crushes");
             }
            
             bool result = await consumableService.CreateConsumableAsync(model, GetUserId()!);
             if (!result)
             {
-                return View(model);
+                return RedirectToAction("NotCreated", "Crushes");
             }
             return RedirectToAction(nameof(Select));
         }
@@ -51,7 +52,15 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             ConsumableEditViewModel model = await consumableService.GetItemForEditAsync(id);
+            if (model == null || string.IsNullOrEmpty(model.ConsumableId))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
 
@@ -64,13 +73,20 @@ namespace PMSWeb.Controllers
             }
             if (GetUserId() == null)
             {
-                return View(model);
+                return RedirectToAction("WrongData", "Crushes");
             }
-           
+            if (model.ConsumableId == null || 
+                !IsValidGuid(model.ConsumableId) || 
+                !IsValidDecimal(model.Price.ToString()) ||
+                !IsValidDouble(model.ROB.ToString()))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+
             bool isEdited = await consumableService.SaveItemToEditAsync(model, GetUserId()!);
             if (!isEdited)
             {
-                return View(model);
+                return RedirectToAction("NotEdited", "Crushes");
             }
             return RedirectToAction(nameof(Select));
         }
@@ -78,32 +94,46 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
             var model = await consumableService.GetDetailsAsync(id);
+            if (string.IsNullOrEmpty(model.ConsumableId))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
             ConsumableDeleteViewModel model = await consumableService.GetItemToDeleteAsync(id);
+            if (string.IsNullOrEmpty(model.ConsumableId))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(ConsumableDeleteViewModel model)
         {
+            if (!IsValidGuid(model.ConsumableId))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             bool result = await consumableService.ConfirmDeleteAsync(model);
             if (!result)
             {
-                return View(model);
+                return RedirectToAction("NotDeleted", "Crushes");
             }
             return RedirectToAction(nameof(Select));
         }
-
-        private string? GetUserId()
-        {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier);
-        }
-
     }
 }

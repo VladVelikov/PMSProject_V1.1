@@ -3,7 +3,6 @@ using PMS.Data.Models;
 using PMS.Data.Repository.Interfaces;
 using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.Consumable;
-using System.Security.Claims;
 
 namespace PMS.Services.Data
 {
@@ -123,7 +122,14 @@ namespace PMS.Services.Data
             consToEdit.IsDeleted = false;
             consToEdit.EditedOn = DateTime.Now;
 
-            await consumables.UpdateAsync(consToEdit);
+            try
+            {
+                await consumables.UpdateAsync(consToEdit);
+            }
+            catch 
+            {
+                return false;
+            }
 
             return true;
         }
@@ -137,15 +143,21 @@ namespace PMS.Services.Data
                 .FirstOrDefaultAsync();
             if (consToDelete != null)
             {
-                consToDelete.IsDeleted = true;
-                await consumables.UpdateAsync(consToDelete);
+                try
+                {
+                    consToDelete.IsDeleted = true;
+                    await consumables.UpdateAsync(consToDelete);
+                }
+                catch
+                {
+                    return false;
+                }
                 return true;
             }
             else
             {
                 return false;
             }
-           
         }
 
         public async Task<ConsumableDeleteViewModel> GetItemToDeleteAsync(string id)

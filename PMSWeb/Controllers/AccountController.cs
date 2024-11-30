@@ -32,7 +32,10 @@ namespace PMSWeb.Controllers
             }
 
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-
+            if (email == null)
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             /// Check if user already exists
             var user = await userManager.FindByEmailAsync(email);
             if (user == null)
@@ -75,6 +78,14 @@ namespace PMSWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> CompleteRegistration(ExternalRegistrationViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            if (model.UserName == null)
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
             var existingUser = await userManager.FindByNameAsync(model.UserName);
             if (existingUser != null)
             {

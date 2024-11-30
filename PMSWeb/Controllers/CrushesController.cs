@@ -57,5 +57,12 @@ namespace PMSWeb.Controllers
             return View();
         }
 
+        public IActionResult EmptyList(string caller)
+        {
+            ViewBag.Controller = "Home";
+            ViewBag.Message = EmptyListMessage;
+            return View();
+        }
+
     }
 }
