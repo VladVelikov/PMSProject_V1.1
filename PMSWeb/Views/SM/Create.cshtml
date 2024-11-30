@@ -30,6 +30,12 @@
         <span asp-validation-for="EquipmentId" class="text-danger"></span>
     </div>
 
+    @if (Model.Equipments.Count == 0)
+    {
+        <h3 style="color: lightcoral;">There are no equipments created yet.</h3>
+        <h3 style="color: lightcoral;">Please create equipment first.</h3>
+    }
+
     <div class="form-group">
         <label asp-for="LastCompletedDate" class="control-label"></label>
         <input asp-for="LastCompletedDate" class="form-control" type="date" />

@@ -66,7 +66,14 @@ namespace PMS.Services.Data
                 EditedOn = DateTime.Now,
                 IsDeleted = false
             };
-            await specMaintRepo.AddAsync(sm);
+            try
+            {
+                await specMaintRepo.AddAsync(sm);
+            }
+            catch
+            {
+                return false;
+            }
             return true;
         }
 
@@ -111,7 +118,14 @@ namespace PMS.Services.Data
                 sm.ResponsiblePosition = model.ResponsiblePosition;
                 sm.Interval = model.Interval;
                 sm.EditedOn = DateTime.Now;
+            try
+            {
                 await specMaintRepo.UpdateAsync(sm);
+                                }
+            catch
+            {
+                return false;
+            }
             return true;
         }
 
@@ -153,9 +167,17 @@ namespace PMS.Services.Data
             {
                 return false;
             }
+            try
+            {
                 // Execute soft delete
                 delModel.IsDeleted = true;
                 await specMaintRepo.UpdateAsync(delModel);
+            }
+            catch 
+            {
+                return false;
+            }
+                
             return true;
         }
 
