@@ -8,38 +8,46 @@
 <hr />
 <a asp-action="Create" class="btn btn-primary mb-3">Create New Spare Part</a>
 
-<div>
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr style="border: 0.5em  solid white;">
-                <th>Name</th>
-                <th>Units</th>
-                <th>Description</th>
-                <th>Equipment</th>
-                <th>Price</th>
-                <th>Remaining Stock (ROB)</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var equipment in Model)
-            {
-                <tr style="border: 0.5em solid white;">
-                    <td>@equipment.Name</td>
-                    <td>@equipment.Units</td>
-                    <td style="word-wrap:anywhere;">
-                          @equipment.Description
-                    </td>
-                    <td>@equipment.Equipment</td>
-                    <td>@equipment.Price</td>
-                    <td>@equipment.ROB</td>
-                    <td style="display:flex; flex-direction:column; gap:0.2em;">
-                        <a asp-action="Edit" asp-route-id="@equipment.SparepartId" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="Details" asp-route-id="@equipment.SparepartId" class="btn btn-sm btn-info">Details</a>
-                        <a asp-action="Delete" asp-route-id="@equipment.SparepartId" class="btn btn-sm btn-danger">Delete</a>
-                    </td>
+@if (Model.Count() > 0)
+{
+    <div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr style="border: 0.5em  solid white;">
+                    <th>Name</th>
+                    <th>Units</th>
+                    <th>Description</th>
+                    <th>Equipment</th>
+                    <th>Price</th>
+                    <th>Remaining Stock (ROB)</th>
+                    <th>Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var equipment in Model)
+                {
+                    <tr style="border: 0.5em solid white;">
+                        <td>@equipment.Name</td>
+                        <td>@equipment.Units</td>
+                        <td style="word-wrap:anywhere;">
+                            @equipment.Description
+                        </td>
+                        <td>@equipment.Equipment</td>
+                        <td>@equipment.Price</td>
+                        <td>@equipment.ROB</td>
+                        <td style="display:flex; flex-direction:column; gap:0.2em;">
+                            <a asp-action="Edit" asp-route-id="@equipment.SparepartId" class="btn btn-sm btn-warning">Edit</a>
+                            <a asp-action="Details" asp-route-id="@equipment.SparepartId" class="btn btn-sm btn-info">Details</a>
+                            <a asp-action="Delete" asp-route-id="@equipment.SparepartId" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <h3 style="color:lightcoral;">There are no spares to show.</h3>
+    <h3 style="color:lightcoral;">Please create some spare parts.</h3>
+}

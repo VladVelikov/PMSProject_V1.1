@@ -31,6 +31,10 @@ namespace PMS.Services.Data
                    ROB = x.ROB.ToString(),
                })
               .ToListAsync();
+            if (models == null)
+            {
+                return new List<SparepartDisplayViewModel>();   
+            }
             return models;
         }
 
@@ -70,7 +74,15 @@ namespace PMS.Services.Data
                 CreatorId = userId,
                 IsDeleted = false
             };
-            await sparesRepo.AddAsync(spare);
+            try
+            {
+                await sparesRepo.AddAsync(spare);
+            }
+            catch
+            {
+                return false;
+            }
+            
             return true;
         }
 
@@ -121,7 +133,14 @@ namespace PMS.Services.Data
                 editModel.ROB = model.ROB;
                 editModel.ImageURL = model.ImageUrl;
                 editModel.EditedOn = DateTime.UtcNow;
-            await sparesRepo.UpdateAsync(editModel);
+            try
+            {
+                await sparesRepo.UpdateAsync(editModel);
+            }
+            catch
+            {
+                return false;
+            }
             return true;
         }
 

@@ -51,6 +51,13 @@
         </select>
         <span asp-validation-for="EquipmentId" class="text-danger"></span>
     </div>
+
+    @if (Model.Equipments.Count() == 0)
+    {
+        <h3 style="color:lightcoral;">There are no Equipments yet.</h3>
+        <h3 style="color:lightcoral;">Please create Equipments first.</h3>
+    }
+
     <div style="margin-top: 0.5em;">
         <button type="submit" class="btn btn-primary">Create</button>
         <a asp-action="Select" class="btn btn-secondary">Cancel</a>
