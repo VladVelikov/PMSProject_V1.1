@@ -4,8 +4,8 @@ namespace PMS.Common
 {
     public class Position
     {
-        public string Key { get; set; }
-        public string DisplayValue { get; set; }
+        public string? Key { get; set; }
+        public string? DisplayValue { get; set; }
         
         public static List<Position> GetPositions()
         {

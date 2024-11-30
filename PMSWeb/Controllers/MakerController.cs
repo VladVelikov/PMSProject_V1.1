@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PMS.Data;
 using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.Maker;
-using System.Security.Claims;
 
 namespace PMSWeb.Controllers
 {
     [Authorize]
-    public class MakerController(IMakerService makerService) : Controller
+    public class MakerController(IMakerService makerService) : BasicController
     {
         public async Task<IActionResult> Select()
         {
@@ -25,21 +23,53 @@ namespace PMSWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(MakerCreateViewModel model)
         {
-            bool isCreated = await makerService.CreateMakerAsync(model, GetUserId());
+            if (!ModelState.IsValid || string.IsNullOrWhiteSpace(model.MakerName))
+            {
+                return View(model);
+            }
+            if (GetUserId() == null || !IsValidGuid(GetUserId()!))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            bool isCreated = await makerService.CreateMakerAsync(model, GetUserId()!);
+            if (!isCreated)
+            {
+                return RedirectToAction("NotCreated", "Crushes");
+            }
             return RedirectToAction(nameof(Select));
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
             var model = await makerService.GetItemForEditAsync(id);
+            if (model == null || string.IsNullOrWhiteSpace(model.MakerName))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(MakerEditViewModel model)
         {
-            bool isEdited = await makerService.SaveItemToEditAsync(model, GetUserId());
+            if (!ModelState.IsValid || string.IsNullOrWhiteSpace(model.MakerName))
+            {
+                return View(model);
+            }
+            if (GetUserId() == null || !IsValidGuid(GetUserId()!))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            bool isEdited = await makerService.SaveItemToEditAsync(model, GetUserId()!);
+            if (!isEdited)
+            {
+                return RedirectToAction("NotEdited", "Crushes");
+            }
             return RedirectToAction(nameof(Select));
         }
 
@@ -52,23 +82,36 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
             var model = await makerService.GetItemToDeleteAsync(id);
+            if (model == null || string.IsNullOrWhiteSpace(model.MakerId) || !IsValidGuid(model.MakerId))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(MakerDeleteViewModel model)
         {
-            bool isDeleted = await makerService.ConfirmDeleteAsync(model);    
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            if (model == null || model.MakerId == null || !IsValidGuid(model.MakerId))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            bool isDeleted = await makerService.ConfirmDeleteAsync(model);
+            if (!isDeleted)
+            {
+                return RedirectToAction("NotDeleted", "Crushes");
+            }
             return RedirectToAction(nameof(Select));
         }    
-
-        public string? GetUserId()
-        {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier);
-        }
-
-       
     }
 }
 

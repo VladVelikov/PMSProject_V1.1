@@ -30,7 +30,14 @@ namespace PMS.Services.Data
                 EditedOn = DateTime.Now,
                 IsDeleted = false
             };
-            await makersRepo.AddAsync(maker);
+            try
+            {
+                await makersRepo.AddAsync(maker);
+            }
+            catch
+            {
+                return false;
+            }
             return true;
         }
         
@@ -50,6 +57,10 @@ namespace PMS.Services.Data
                    Phone = x.Phone
                })
                .ToListAsync();
+            if (makers == null)
+            {
+                return new List<MakerDisplayViewModel>();   
+            }
             return makers;
         }
 
@@ -135,8 +146,14 @@ namespace PMS.Services.Data
             editModel.Email = model.Email;
             editModel.Phone = model.Phone;
             editModel.EditedOn = DateTime.Now;
-
-            await makersRepo.UpdateAsync(editModel);
+            try
+            {
+                await makersRepo.UpdateAsync(editModel);
+            }
+            catch
+            {
+                return false;
+            }
             return true;
         }
 
@@ -155,6 +172,10 @@ namespace PMS.Services.Data
                 })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
+            if (model == null)
+            {
+                return new MakerDeleteViewModel();
+            }
             return model;
         }
         
@@ -173,9 +194,16 @@ namespace PMS.Services.Data
             {
                 return false;
             }
-
-            makerToDel.IsDeleted = true;
-            await makersRepo.UpdateAsync(makerToDel);
+            try
+            {
+                makerToDel.IsDeleted = true;
+                await makersRepo.UpdateAsync(makerToDel);
+            }
+            catch 
+            { 
+                return false;
+            }
+            
             return true;
         }
     }
