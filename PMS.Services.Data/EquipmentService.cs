@@ -34,10 +34,16 @@ namespace PMS.Services.Data
             {
                 return false;
             }
-            
-            deleteRecord.IsDeleted = true;
-            await equipments.UpdateAsync(deleteRecord);
-            
+            try
+            {
+                deleteRecord.IsDeleted = true;
+                await equipments.UpdateAsync(deleteRecord);
+            }
+            catch
+            {
+                return false;
+            }
+
             return true;
         }
 
@@ -211,8 +217,6 @@ namespace PMS.Services.Data
             return model;
         }
 
-
-
         public async Task<EquipmentEditViewModel> GetItemForEditAsync(string id)
         {
             var model = await equipments
@@ -314,10 +318,6 @@ namespace PMS.Services.Data
             return model;
         }
 
-
-
-
-
         public async Task<EquipmentDeleteViewModel> GetItemToDeleteAsync(string id)
         {
             var model = await equipments
@@ -365,7 +365,6 @@ namespace PMS.Services.Data
             return eqList;
         }
 
-
         public async Task<bool> SaveItemToEditAsync(EquipmentEditViewModel model, string userId,
             List<Guid> RoutineMaintenances,
             List<Guid> Consumables,
@@ -387,34 +386,69 @@ namespace PMS.Services.Data
             eq.Description = model.Description;
             eq.MakerId = model.MakerId;
             eq.EditedOn = DateTime.Now;
-            await equipments.UpdateAsync(eq);
-
+            try
+            {
+                await equipments.UpdateAsync(eq);
+            }
+            catch
+            {
+                return false;
+            }
             var consEquipments = await consumableEquipmentRepo
                 .GetAllAsQueryable()
                 .Where(x => x.EquipmentId.ToString().ToLower() == model.EquipmentId.ToLower())
                 .ToListAsync();
 
+
+            var consumableEquipmentsToRemove = new List<ConsumableEquipment>(); 
             foreach (var item in consEquipments)
             {
                 if (!Consumables.Contains(item.ConsumableId))
                 {
-                    await consumableEquipmentRepo.RemoveItemAsync(item);
+                    consumableEquipmentsToRemove.Add(item); 
                 }
             }
+            if (consumableEquipmentsToRemove.Count > 0)
+            {
+                try
+                {
+                    await consumableEquipmentRepo.RemoveRangeAsync(consumableEquipmentsToRemove);
+                }
+                catch
+                {
+                    return false;
+                }
+                
+            }
+
 
             var routMaintEquipments = await routineMaintenanceEquipmentRepo
                 .GetAllAsQueryable()
                 .Where(x => x.EquipmentId.ToString().ToLower() == model.EquipmentId.ToLower())
                 .ToListAsync();
 
+            var routineMaintenanceEquipmentsToRemove = new List<RoutineMaintenanceEquipment>(); 
             foreach (var item in routMaintEquipments)
             {
                 if (!RoutineMaintenances.Contains(item.RoutineMaintenanceId))
                 {
-                    await routineMaintenanceEquipmentRepo.RemoveItemAsync(item);
+                    routineMaintenanceEquipmentsToRemove.Add(item); 
+                }
+            }
+            if (routineMaintenanceEquipmentsToRemove.Count > 0)
+            {
+                try
+                {
+                    await routineMaintenanceEquipmentRepo.RemoveRangeAsync(routineMaintenanceEquipmentsToRemove);
+                }
+                catch
+                {
+                    return false;
                 }
             }
 
+
+            var routineMaintenancesEquipmentsToAdd = new List<RoutineMaintenanceEquipment>(); 
             foreach (var maintenanceId in AvailableRoutineMaintenances)
             {
                 bool alreadyAdded = await routineMaintenanceEquipmentRepo.GetAllAsQueryable()
@@ -427,10 +461,22 @@ namespace PMS.Services.Data
                         RoutineMaintenanceId = maintenanceId,
                         EquipmentId = Guid.Parse(model.EquipmentId)
                     };
-                    await routineMaintenanceEquipmentRepo.AddAsync(rme);
+                    routineMaintenancesEquipmentsToAdd.Add(rme);    
+                }
+            }
+            if (routineMaintenancesEquipmentsToAdd.Count > 0)
+            {
+                try
+                {
+                    await routineMaintenanceEquipmentRepo.AddRangeAsync(routineMaintenancesEquipmentsToAdd);
+                }
+                catch
+                {
+                    return false;
                 }
             }
 
+            var consumablesEquipmentsToAdd = new List<ConsumableEquipment>();
             foreach (var consumableId in AvailableConsumables)
             {
                 bool alreadyAdded = await consumableEquipmentRepo.GetAllAsQueryable()
@@ -443,10 +489,20 @@ namespace PMS.Services.Data
                         ConsumableId = consumableId,
                         EquipmentId = Guid.Parse(model.EquipmentId)
                     };
-                    await consumableEquipmentRepo.AddAsync(consumableEquipment);
+                    consumablesEquipmentsToAdd.Add(consumableEquipment);
                 }
             }
-
+            if (consumablesEquipmentsToAdd.Count > 0)
+            {
+                try
+                {
+                    await consumableEquipmentRepo.AddRangeAsync(consumablesEquipmentsToAdd);
+                }
+                catch
+                {
+                    return false;
+                }
+            }
             return true;    
         }
     }

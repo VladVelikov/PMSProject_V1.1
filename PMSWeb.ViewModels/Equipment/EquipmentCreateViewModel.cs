@@ -1,9 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PMS.Data.Models;
-using PMS.Data.Models.Identity;
-using PMSWeb.ViewModels.CommonVM;
+﻿using PMSWeb.ViewModels.CommonVM;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using static PMS.Common.EntityValidationConstants.EquipmentConstants;
 
 namespace PMSWeb.ViewModels.Equipment
@@ -22,7 +18,7 @@ namespace PMSWeb.ViewModels.Equipment
         [MinLength(EquipmentDescriptionMinLength)]
         public string Description { get; set; } = null!;
 
-        [Required]
+        [Required(ErrorMessage ="Maker field is required. *If the list is empty, please Create at least one maker first!")]
         public Guid MakerId { get; set; }
 
         public List<PairGuidViewModel> RoutineMaintenances { get; set; } = new List<PairGuidViewModel>();

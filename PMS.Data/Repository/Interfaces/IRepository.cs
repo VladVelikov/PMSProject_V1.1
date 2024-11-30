@@ -12,7 +12,7 @@
 
         Task<bool> AddAsync(T item);
 
-        Task<bool> AddRangeAsync(T[] items);
+        Task<bool> AddRangeAsync(IEnumerable<T> items);
 
         Task<bool> UpdateAsync(T item);
 
@@ -21,6 +21,8 @@
         Task<bool> DeleteByCompositeIdAsync(params I[] id);
 
         Task<bool> RemoveItemAsync(T item);
+
+        Task<bool> RemoveRangeAsync(IEnumerable<T> items);
 
         Task<bool> UpdateRange(IEnumerable<T> itemsList);
         

@@ -1,35 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PMS.Data;
-using PMS.Data.Models;
 using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.CountryVM;
-using static PMS.Common.EntityValidationConstants;
 
 namespace PMSWeb.Controllers
 {
-    public class CountryController(PMSDbContext context, ICountryService countryService) : Controller
+    public class CountryController(ICountryService countryService) : BasicController
     {
         [HttpGet]
         public async Task<IActionResult> Select()
         {
-            //var modelList = await context
-            //    .Countries
-            //    .AsNoTracking()
-            //    .OrderByDescending(x => x.CreatedOn)
-            //    .Select(x => new CountryDisplayViewModel()
-            //    {
-            //        Name = x.Name,
-            //        CreatedOn = x.CreatedOn.ToString(PMSRequiredDateFormat),
-            //        CountryId = x.CountryId.ToString()
-            //    })
-            //    .ToListAsync();
             var modelList = await countryService.GetListOfCountriesAsync();
+            if (modelList.Count() == 0)
+            {
+                return RedirectToAction("EmptyList", "Crushes");
+            }
             return View(modelList);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View(new CountryCreateViewModel());
         }
@@ -37,14 +26,14 @@ namespace PMSWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CountryCreateViewModel model)
         {
-            //Country country = new Country()
-            //{
-            //    Name = model.Name,
-            //    CreatedOn = DateTime.Now,
-            //    EditedOn = DateTime.Now
-            //};
-            //await context.Countries.AddAsync(country);
-            //await context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+            {
+                return View(model); 
+            }
+            if (string.IsNullOrEmpty(model.Name))
+            {
+                return View(model);
+            }
             bool isCreated = await countryService.CreateCountryAsync(model);
             return RedirectToAction(nameof(Select));
         }
@@ -52,43 +41,32 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
-            //var model = await context
-            //    .Countries
-            //    .AsNoTracking()
-            //    .Where(x => x.CountryId.ToString().ToLower() == id.ToLower())
-            //    .Select(x => new CountryDeleteViewModel()
-            //    {
-            //        CountryId = x.CountryId.ToString(),
-            //        Name = x.Name,
-            //        CreatedOn = x.CreatedOn.ToString(PMSRequiredDateTimeFormat)
-            //    })
-            //    .FirstOrDefaultAsync();
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
 
             var model = await countryService.GetDeleteCountryModelAsync(id);
+            if (model == null || string.IsNullOrEmpty(model.CountryId))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(CountryDeleteViewModel model)
         {
-            //if (!ModelState.IsValid || model == null || model.CountryId == null)
-            //{
-            //    return RedirectToAction(nameof(Select));
-            //}
-            //var modelDel = await context
-            //    .Countries
-            //    .Where(x => x.CountryId.ToString().ToLower() == model.CountryId.ToLower())
-            //    .FirstOrDefaultAsync();
-
-            //if (modelDel != null)
-            //{
-            //    context.Countries.Remove(modelDel);
-            //    await context.SaveChangesAsync();
-            //}
+            if (!ModelState.IsValid || model == null || model.CountryId == null)
+            {
+                return RedirectToAction(nameof(Select));
+            }
             bool isDeleted = await countryService.DeleteCountryModelAsync(model);
+            if (!isDeleted)
+            {
+                return RedirectToAction("NotDeleted", "Crushes");
+            }
             return RedirectToAction(nameof(Select));
         }
-
-
     }
 }

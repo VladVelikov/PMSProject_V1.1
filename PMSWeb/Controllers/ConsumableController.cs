@@ -124,6 +124,10 @@ namespace PMSWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(ConsumableDeleteViewModel model)
         {
+            if (!ModelState.IsValid)
+            { 
+                return View(model);
+            }
             if (!IsValidGuid(model.ConsumableId))
             {
                 return RedirectToAction("NotFound", "Crushes");

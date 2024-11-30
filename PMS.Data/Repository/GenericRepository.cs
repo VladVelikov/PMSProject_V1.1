@@ -23,7 +23,7 @@ namespace PMS.Data.Repository
             return true;
         }
 
-        public async Task<bool> AddRangeAsync(T[] items)
+        public async Task<bool> AddRangeAsync(IEnumerable<T> items)
         {
             await dbSet.AddRangeAsync(items);
             await context.SaveChangesAsync();
@@ -72,6 +72,14 @@ namespace PMS.Data.Repository
             await context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> RemoveRangeAsync(IEnumerable<T> items)
+        {
+            dbSet.RemoveRange(items);
+            await context.SaveChangesAsync();
+            return true;
+        }
+
 
         public async Task<bool> UpdateAsync(T item)
         {

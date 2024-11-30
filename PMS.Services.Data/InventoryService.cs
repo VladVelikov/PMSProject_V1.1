@@ -31,6 +31,7 @@ namespace PMS.Services.Data
                     EditedOn = x.EditedOn
                 })
                 .ToListAsync();
+            if (sparesList != null && sparesList.Count > 0)
             model.Spares = sparesList;
 
             return model;
@@ -71,7 +72,7 @@ namespace PMS.Services.Data
                 .ToListAsync();
             foreach (var item in model.Spares)
             {
-                var spare = mySpares.FirstOrDefault(x => x.SparepartId.ToString().ToLower() == item.Id.ToLower());
+                var spare = mySpares.FirstOrDefault(x => x.SparepartId.ToString().ToLower() == item.Id!.ToLower());
                 if (item.Used < 0)  // in this case real stock
                 {
                     //do nothing
@@ -79,6 +80,7 @@ namespace PMS.Services.Data
                 }
                 else
                 {
+                    if (spare != null)  
                     spare.ROB = item.Used;  // item.RealStock
                 }
             }

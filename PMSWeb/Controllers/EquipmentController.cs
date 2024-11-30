@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.Equipment;
-using System.Security.Claims;
 
 namespace PMSWeb.Controllers
 {
@@ -17,15 +16,21 @@ namespace PMSWeb.Controllers
         public async Task<IActionResult> Select()
         {
             var eqList = await equipmentService.GetListOfViewModelsAsync();   
+            if (eqList.Count() == 0)
+            {
+                return RedirectToAction("EmptyList", "Crushes");
+            }
             return View(eqList);
         }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            
-            var model = await equipmentService.GetCreateModelAsync(); 
-
+            var model = await equipmentService.GetCreateModelAsync();
+            if (model == null)
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
 
@@ -37,6 +42,12 @@ namespace PMSWeb.Controllers
                 return View(model);
             }
             if (GetUserId() == null)
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            if (!IsValidGuid(model.MakerId.ToString()) ||
+                string.IsNullOrEmpty(model.Name) ||
+                string.IsNullOrEmpty(model.Description))
             {
                 return RedirectToAction("WrongData", "Crushes");
             }
@@ -52,10 +63,17 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
             var model = await equipmentService.GetItemForEditAsync(id);
+            if (string.IsNullOrEmpty(model.EquipmentId))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Edit(EquipmentEditViewModel model,
@@ -64,39 +82,74 @@ namespace PMSWeb.Controllers
             List<Guid> AvailableRoutineMaintenances,
             List<Guid> AvailableConsumables)
         {
-           
-            bool isEdited = await equipmentService.SaveItemToEditAsync(model, GetUserId(), 
+            if (!ModelState.IsValid)
+            {
+                return View(model); 
+            }
+            if (!IsValidGuid(model.MakerId.ToString()) ||
+                GetUserId() == null ||
+                string.IsNullOrEmpty(model.Name) ||
+                string.IsNullOrEmpty(model.Description))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            bool isEdited = await equipmentService.SaveItemToEditAsync(model, GetUserId()!, 
                 RoutineMaintenances, Consumables,AvailableRoutineMaintenances, AvailableConsumables);
-
-
+            if (!isEdited)
+            {
+                return RedirectToAction("NotEdited", "Crushes");
+            }
             return RedirectToAction(nameof(Select));
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
             var model = await equipmentService.GetDetailsAsync(id);
+            if (model == null || string.IsNullOrWhiteSpace(model.EquipmentId))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
             var model = await equipmentService.GetItemToDeleteAsync(id);
+            if (model == null || string.IsNullOrWhiteSpace(model.EquipmentId))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(EquipmentDeleteViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            if (model == null || model.EquipmentId == null)
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+
             bool isDeleted = await equipmentService.ConfirmDeleteAsync(model);
+            if (!isDeleted)
+            {
+                return RedirectToAction("NotDeleted", "Crushes");    
+            }
             return RedirectToAction(nameof(Select)); 
         }
-
-        //private string? GetUserId()
-        //{
-        //    return User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //}
     }
-
 }

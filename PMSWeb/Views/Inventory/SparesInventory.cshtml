@@ -32,7 +32,9 @@
                         </td>
                         <td>@Model.Spares[i].Units</td>
                         <td>
+                            <label asp-for="Spares[@i].Used" hidden></label>
                             <input type="number" step="0.01" name="Spares[@i].Used" value="@Model.Spares[i].Used" class="form-control" />
+                            <span asp-validation-for="Spares[@i].Used" class="text-danger"></span>
                         </td>
                         <td>@Model.Spares[i].EditedOn.ToString("yyyy-MM-dd HH:mm")</td>
                         <td>
