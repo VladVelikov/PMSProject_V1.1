@@ -1,26 +1,27 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PMS.Data;
-using PMS.Data.Models;
 using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.RM;
-using System.Security.Claims;
 using static PMS.Common.EntityValidationConstants;
 
 namespace PMSWeb.Controllers
 {
     [Authorize]
-    public class RMController(IRMService rmService) : Controller
+    public class RMController(IRMService rmService) : BasicController
     {
         public async Task<IActionResult> Select()
         {
             var rmList = await rmService.GetListOfViewModelsAsync();
+            if (rmList == null)
+            {
+                return RedirectToAction("EmptyList", "Crushes");
+            }
             return View(rmList);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View(new RMCreateViewModel());
         }
@@ -28,9 +29,9 @@ namespace PMSWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(RMCreateViewModel model)
         {
-            if (GetUserId == null)
+            if (GetUserId() == null || !IsValidGuid(GetUserId()!))
             {
-                return RedirectToAction(nameof(Select));
+                return RedirectToAction("WrongData", "Crushes");
             }
 
             if (!PMSPositions.Contains(model.ResponsiblePosition))
@@ -43,23 +44,42 @@ namespace PMSWeb.Controllers
             {
                 return View(model);
             }
-            bool isCreated = await rmService.CreateMakerAsync(model, GetUserId()!);
+
+            if (string.IsNullOrEmpty(model.ResponsiblePosition) ||
+                string.IsNullOrWhiteSpace(model.Name) ||
+                !IsValidInteger(model.Interval.ToString()))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            bool isCreated = await rmService.CreateRMAsync(model, GetUserId()!);
+            if (!isCreated)
+            {
+                return RedirectToAction("NotCreated", "Crushes");
+            }
             return RedirectToAction(nameof(Select));
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
             var model = await rmService.GetItemForEditAsync(id);
+            if (model == null || string.IsNullOrWhiteSpace(model.RMId))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(RMEditViewModel model)
         {
-            if (GetUserId == null)
+            if (GetUserId() == null || !IsValidGuid(GetUserId()!))
             {
-                return RedirectToAction(nameof(Select));
+                return RedirectToAction("WrongData", "Crushes");
             }
 
             if (!PMSPositions.Contains(model.ResponsiblePosition))
@@ -67,20 +87,35 @@ namespace PMSWeb.Controllers
                 ModelState.AddModelError("ResponsiblePosition", $"The Responsible positions supported are: {string.Join(", ", PMSPositions)}");
                 return View(model);
             }
-
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-
-            bool isEdited = await rmService.SaveItemToEditAsync(model, GetUserId());
+            if (string.IsNullOrWhiteSpace(model.Name) ||
+               !IsValidInteger(model.Interval.ToString()))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
+            bool isEdited = await rmService.SaveItemToEditAsync(model, GetUserId()!);
+            if (!isEdited)
+            {
+                return RedirectToAction("NotEdited", "Crushes");
+            }
             return RedirectToAction(nameof(Select));
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
             var model = await rmService.GetItemToDeleteAsync(id);
+            if (model == null || string.IsNullOrWhiteSpace(model.RmId))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
 
@@ -90,24 +125,29 @@ namespace PMSWeb.Controllers
             if (model==null || !ModelState.IsValid || model.RmId == null)
             {
                 //Don't delete
+                return RedirectToAction("NotFound", "Crushes");
+            }
+            bool isDeleted = await rmService.ConfirmDeleteAsync(model);
+            if (!isDeleted)
+            {
                 return RedirectToAction("NotDeleted", "Crushes");
             }
-            
-            bool isDeleted = await rmService.ConfirmDeleteAsync(model);
             return RedirectToAction(nameof(Select));
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
+            if (!IsValidGuid(id))
+            {
+                return RedirectToAction("WrongData", "Crushes");
+            }
             var model = await rmService.GetDetailsAsync(id);  
+            if (model == null || string.IsNullOrWhiteSpace(model.RoutMaintId))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
             return View(model);
         }
-
-        public string? GetUserId()
-        {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier);
-        }
-
     }
 }

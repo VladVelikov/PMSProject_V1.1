@@ -168,7 +168,9 @@ namespace PMS.Services.Data
 
             List<string> routineMaintenances = await routineMaintenanceEquipmentRepo
                 .GetAllAsQueryable()
+                .Include(x=>x.RoutineMaintenance)
                 .Where(x => x.EquipmentId.ToString().ToLower() == id.ToLower())
+                .Where(x=>x.RoutineMaintenance.IsDeleted == false)
                 .Select(x => x.RoutineMaintenance.Name)
                 .ToListAsync();
 
@@ -195,7 +197,9 @@ namespace PMS.Services.Data
 
             List<string> consumables = await consumableEquipmentRepo
                 .GetAllAsQueryable()
+                .Include(x=>x.Consumable)
                 .Where(x => x.EquipmentId.ToString().ToLower() == id.ToLower())
+                .Where(x=>x.Consumable.IsDeleted == false)
                 .Select(x => x.Consumable.Name)
                 .ToListAsync();
 
@@ -250,7 +254,9 @@ namespace PMS.Services.Data
 
             var consumables = await consumableEquipmentRepo
                 .GetAllAsQueryable()
+                .Include(x=>x.Consumable)
                 .Where(x => x.EquipmentId.ToString().ToLower() == id.ToLower())
+                .Where(x=>x.Consumable.IsDeleted == false)
                 .AsNoTracking()
                 .Select(x => new PairGuidViewModel()
                 {
@@ -261,7 +267,9 @@ namespace PMS.Services.Data
 
             var routineMaintenances = await routineMaintenanceEquipmentRepo
                 .GetAllAsQueryable()
+                .Include(x=>x.RoutineMaintenance)
                 .Where(x => x.EquipmentId.ToString().ToLower() == id.ToLower())
+                .Where(x=>x.RoutineMaintenance.IsDeleted == false)
                 .AsNoTracking()
                 .Select(x => new PairGuidViewModel()
                 {

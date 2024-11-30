@@ -8,26 +8,30 @@ using static PMS.Common.EntityValidationConstants;
 namespace PMS.Services.Data
 {
     public class RMService(IRepository<RoutineMaintenance, Guid> rmsRepo, 
-                           IRepository<RoutineMaintenanceEquipment, Guid[]> routineMaintenanceEquipmentsRepo) : IRMService
+                           IRepository<RoutineMaintenanceEquipment, Guid[]> routineMaintenanceEquipmentsRepo) 
+                         : IRMService
     {
-        public async Task<bool> ConfirmDeleteAsync(RMDeleteViewModel model)
+        public async Task<IEnumerable<RMDisplayViewModel>> GetListOfViewModelsAsync()
         {
-            var delModel = await rmsRepo
+            var rmss = await rmsRepo
                 .GetAllAsQueryable()
                 .Where(x => !x.IsDeleted)
-                .Where(x => x.RoutMaintId.ToString().ToLower() == model.RmId.ToLower())
-                .FirstOrDefaultAsync();
-            if (delModel == null)
-            { 
-                return false;
-            }
-                // Execute soft delete
-                delModel.IsDeleted = true;
-                await rmsRepo.UpdateAsync(delModel);
-                return true;
+                .OrderByDescending(x => x.EditedOn)
+                .AsNoTracking()
+                .Select(x => new RMDisplayViewModel()
+                {
+                    RoutMaintId = x.RoutMaintId.ToString(),
+                    Name = x.Name,
+                    Description = x.Description,
+                    LastCompletedDate = x.LastCompletedDate.ToString(PMSRequiredDateFormat),
+                    Interval = x.Interval.ToString(),
+                    ResponsiblePosition = x.ResponsiblePosition.ToString()
+                })
+                .ToListAsync();
+            return rmss;
         }
 
-        public async Task<bool> CreateMakerAsync(RMCreateViewModel model, string userId)
+        public async Task<bool> CreateRMAsync(RMCreateViewModel model, string userId)
         {
             RoutineMaintenance rm = new()
             {
@@ -41,7 +45,14 @@ namespace PMS.Services.Data
                 EditedOn = DateTime.Now,
                 IsDeleted = false
             };
-            await rmsRepo.AddAsync(rm);
+            try
+            {
+                await rmsRepo.AddAsync(rm);
+            }
+            catch
+            {
+                return false;
+            }
             return true;
         }
 
@@ -107,6 +118,35 @@ namespace PMS.Services.Data
             return model;
         }
 
+        public async Task<bool> SaveItemToEditAsync(RMEditViewModel model, string userId)
+        {
+            var rm = await rmsRepo
+               .GetAllAsQueryable()
+               .Where(x => !x.IsDeleted)
+               .Where(x => x.RoutMaintId.ToString().ToLower() == model.RMId.ToLower())
+               .FirstOrDefaultAsync();
+            if (rm == null)
+            {
+                // Don't edit the record
+                return false;
+            }
+            // Edit the RM record
+            rm.Name = model.Name;
+            rm.Description = model.Description;
+            rm.ResponsiblePosition = model.ResponsiblePosition;
+            rm.Interval = model.Interval;
+            rm.EditedOn = DateTime.UtcNow;
+            try
+            {
+                await rmsRepo.UpdateAsync(rm);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
         public async Task<RMDeleteViewModel> GetItemToDeleteAsync(string id)
         {
             var model = await rmsRepo
@@ -129,45 +169,31 @@ namespace PMS.Services.Data
             return model;
         }
 
-        public async Task<IEnumerable<RMDisplayViewModel>> GetListOfViewModelsAsync()
+        public async Task<bool> ConfirmDeleteAsync(RMDeleteViewModel model)
         {
-            var rmss = await rmsRepo
-                .GetAllAsQueryable()    
-                .Where(x => !x.IsDeleted)
-                .OrderByDescending(x => x.EditedOn)
-                .AsNoTracking()
-                .Select(x => new RMDisplayViewModel()
-                {
-                    RoutMaintId = x.RoutMaintId.ToString(),
-                    Name = x.Name,
-                    Description = x.Description,
-                    LastCompletedDate = x.LastCompletedDate.ToString(PMSRequiredDateFormat),
-                    Interval = x.Interval.ToString(),
-                    ResponsiblePosition = x.ResponsiblePosition.ToString()
-                })
-                .ToListAsync();
-            return rmss;
-        }
-
-        public async Task<bool> SaveItemToEditAsync(RMEditViewModel model, string userId)
-        {
-            var rm = await rmsRepo
-               .GetAllAsQueryable()
-               .Where(x => !x.IsDeleted)
-               .Where(x => x.RoutMaintId.ToString().ToLower() == model.RMId.ToLower())
-               .FirstOrDefaultAsync();
-            if (rm == null)
+            if (model == null || model.RmId == null)
             {
-                // Don't edit the record
                 return false;
             }
-            // Edit the RM record
-                rm.Name = model.Name;
-                rm.Description = model.Description;
-                rm.ResponsiblePosition = model.ResponsiblePosition;
-                rm.Interval = model.Interval;
-                rm.EditedOn = DateTime.Now;
-                await rmsRepo.UpdateAsync(rm);
+            var delModel = await rmsRepo
+                .GetAllAsQueryable()
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.RoutMaintId.ToString().ToLower() == model.RmId.ToLower())
+                .FirstOrDefaultAsync();
+            if (delModel == null)
+            {
+                return false;
+            }
+            // Execute soft delete
+            try
+            {
+                delModel.IsDeleted = true;
+                await rmsRepo.UpdateAsync(delModel);
+            }
+            catch
+            {
+                return false;
+            }
             return true;
         }
     }

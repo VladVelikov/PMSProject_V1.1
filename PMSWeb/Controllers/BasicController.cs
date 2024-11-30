@@ -46,6 +46,17 @@ namespace PMSWeb.Controllers
             return false;
         }
 
+        protected bool IsValidInteger(string number)
+        {
+            if (string.IsNullOrEmpty(number)) return false;
+
+            if (int.TryParse(number, out var numberDouble))
+            {
+                return true;
+            }
+            return false;
+        }
+
         protected bool IsValidDate(string dateTime)
         {
             if (string.IsNullOrEmpty(dateTime)) return false;

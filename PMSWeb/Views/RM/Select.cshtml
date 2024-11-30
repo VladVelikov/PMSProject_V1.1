@@ -7,35 +7,45 @@
 
 <h2>Routine Maintenance List</h2>
 
-<table class="table table-bordered table-striped">
-    <a asp-action="Create" class="btn btn-success">Add New Routine Maintenance</a>
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Last Completed Date</th>
-            <th>Interval (days)</th>
-            <th>Responsible Position</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@if (Model.Count() > 0)
+{
+    <table class="table table-bordered table-striped">
+        <a asp-action="Create" class="btn btn-success">Add New Routine Maintenance</a>
+        <thead>
             <tr>
-                <td>@item.Name</td>
-                <td>@item.Description</td>
-                <td>@item.LastCompletedDate</td>
-                <td>@item.Interval</td>
-                <td>@item.ResponsiblePosition</td>
-                <td style="display:flex; flex-direction:column; gap:0.2em;">
-                    <a asp-action="Edit" asp-route-id="@item.RoutMaintId" class="btn btn-warning btn-sm">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.RoutMaintId" class="btn btn-info btn-sm">Details</a>
-                    <a asp-action="Delete" asp-route-id="@item.RoutMaintId" class="btn btn-danger btn-sm">Delete</a>
-                </td>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Last Completed Date</th>
+                <th>Interval (days)</th>
+                <th>Responsible Position</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>@item.LastCompletedDate</td>
+                    <td>@item.Interval</td>
+                    <td>@item.ResponsiblePosition</td>
+                    <td style="display:flex; flex-direction:column; gap:0.2em;">
+                        <a asp-action="Edit" asp-route-id="@item.RoutMaintId" class="btn btn-warning btn-sm">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.RoutMaintId" class="btn btn-info btn-sm">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.RoutMaintId" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h3 style="color:lightcoral;">There are no Routine Maintenances Created Yet.</h3>
+    <h3 style="color:lightcoral;">Please create some.</h3>
+    <a asp-action="Create" class="btn btn-success">Add New Routine Maintenance</a>
+}
+
 
 

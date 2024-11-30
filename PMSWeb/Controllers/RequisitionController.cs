@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PMS.Data.Models;
 using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.RequisitionVM;
 

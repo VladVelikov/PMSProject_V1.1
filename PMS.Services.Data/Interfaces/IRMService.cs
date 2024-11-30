@@ -7,7 +7,7 @@ namespace PMS.Services.Data.Interfaces
         Task<IEnumerable<RMDisplayViewModel>> GetListOfViewModelsAsync();
 
 
-        Task<bool> CreateMakerAsync(RMCreateViewModel model, string userId);
+        Task<bool> CreateRMAsync(RMCreateViewModel model, string userId);
 
 
         Task<RMDetailsViewModel> GetDetailsAsync(string id);

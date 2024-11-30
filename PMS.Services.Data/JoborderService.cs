@@ -24,8 +24,10 @@ namespace PMS.Services.Data
         {
             var modelList = await jobOrdersRepo
                 .GetAllAsQueryable()
+                .Include(x => x.Equipment)
                 .Where(x => !x.IsDeleted)
                 .Where(x => !x.IsHistory)
+                .Where(x => x.Equipment.IsDeleted == false)
                 .AsNoTracking()
                 .Select(x => new JobOrderDisplayViewModel()
                 {
@@ -46,8 +48,10 @@ namespace PMS.Services.Data
         {
             var dueJobsList = await jobOrdersRepo
                 .GetAllAsQueryable()
+                .Include(x=>x.Equipment)
                 .Where(x => !x.IsDeleted)
                 .Where(x => !x.IsHistory)
+                .Where(x => x.Equipment.IsDeleted == false)
                 .Where(x => x.DueDate < DateTime.UtcNow)
                 .AsNoTracking()
                 .Select(x => new JobOrderDisplayViewModel()
@@ -213,7 +217,9 @@ namespace PMS.Services.Data
 
             var routineMaintenances = await routMaintEqRepo
                 .GetAllAsQueryable()
+                .Include(x=>x.RoutineMaintenance)
                 .Where(x => x.EquipmentId == equipmentId)
+                .Where(x => x.RoutineMaintenance.IsDeleted == false)
                 .AsNoTracking()
                 .Select(x => new PairGuidViewModel()
                 {
@@ -233,6 +239,7 @@ namespace PMS.Services.Data
         {
             var model = await equipmentRepo
                 .GetAllAsQueryable()
+                .Include(x=>x.SpecificMaintenances)
                 .Where(x => !x.IsDeleted)
                 .Where(x => x.EquipmentId == equipmentId)
                 .AsNoTracking()
