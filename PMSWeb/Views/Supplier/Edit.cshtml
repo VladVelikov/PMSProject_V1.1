@@ -38,12 +38,21 @@
         <select asp-for="CityId" class="form-control" asp-items="@(new SelectList(Model.Cities,"Id", "Name"))"></select>
         <span asp-validation-for="CityId" class="text-danger"></span>
     </div>
+    @if (Model.Cities.Count() == 0)
+    {
+        <h5 style="color:lightcoral;">No Cities available.</h5>
+    }
 
     <div class="form-group">
         <label asp-for="CountryId" class="control-label"></label>
         <select asp-for="CountryId" class="form-control" asp-items="@(new SelectList(Model.Countries,"Id", "Name"))"></select>
         <span asp-validation-for="CountryId" class="text-danger"></span>
     </div>
+    @if (Model.Countries.Count() == 0)
+    {
+        <h5 style="color:lightcoral;">No Countries available.</h5>
+    }
+
 
     <div style="display: flex; gap: 2em; margin-top: 2em; margin-bottom: 2em;">
         <!-- SparepartsSuppliers (Checkbox List) -->
@@ -59,6 +68,7 @@
                 }
             </div>
         </div>
+       
 
         <!-- ConsumablesSuppliers (Checkbox List) -->
         <div class="form-group">
@@ -85,6 +95,10 @@
                     </div>
                 }
             </div>
+        @if (Model.AvailableSpareparts.Count() == 0)
+        {
+            <h5 style="color:lightcoral;">No spareparts available.</h5>
+        }
         </div>
 
         <!-- Available ConsumablesSuppliers (Checkbox List) -->
@@ -99,11 +113,12 @@
                     </div>
                 }
             </div>
+        @if (Model.AvailableConsumables.Count() == 0)
+        {
+            <h5 style="color:lightcoral;">No consumables available.</h5>
+        }
         </div>
     </div>
-
-
-
 
     <button type="submit" class="btn btn-primary">Save Changes</button>
     <a asp-action="Select" class="btn btn-secondary">Cancel</a>

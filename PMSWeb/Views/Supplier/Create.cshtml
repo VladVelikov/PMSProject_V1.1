@@ -37,17 +37,32 @@
         <select asp-for="CityId" class="form-control" asp-items="@(new SelectList(Model.Cities,"Id", "Name"))"></select>
         <span asp-validation-for="CityId" class="text-danger"></span>
     </div>
+    @if (Model.Cities.Count() == 0)
+    {
+        <h5 style="color:lightcoral;">No Cities available.</h5>
+        <h5 style="color:lightcoral;">Please create Cities.</h5>
+    }
 
     <div class="form-group">
         <label asp-for="CountryId" class="control-label">Please Select Country</label>
         <select asp-for="CountryId" class="form-control" asp-items="@(new SelectList(Model.Countries,"Id", "Name"))"></select>
         <span asp-validation-for="CountryId" class="text-danger"></span>
     </div>
+    @if (Model.Countries.Count() == 0)
+    {
+        <h5 style="color:lightcoral;">No Countries available.</h5>
+        <h5 style="color:lightcoral;">Please create Countries.</h5>
+    }
 
     <div style="display: flex; gap: 2em; margin-top: 2em; margin-bottom: 2em;">
         <!-- SparepartsSupplier (Checkbox List) -->
         <div class="form-group">
             <label class="control-label">Spare Parts</label>
+            @if (Model.Spareparts.Count() == 0)
+            {
+                <h5 style="color:lightcoral;">No spareparts available.</h5>
+                <h5 style="color:lightcoral;">Please create spareparts.</h5>
+            }
             <div>
                 @foreach (var part in Model.Spareparts)
                 {
@@ -62,6 +77,11 @@
         <!-- ConsumablesSupplier(Checkbox List) -->
         <div class="form-group">
             <label class="control-label">Consumables</label>
+            @if (Model.Consumables.Count() == 0)
+            {
+                <h5 style="color:lightcoral;">No consumables available.</h5>
+                <h5 style="color:lightcoral;">Please create consumables.</h5>
+            }
             <div>
                 @foreach (var consumable in Model.Consumables)
                 {

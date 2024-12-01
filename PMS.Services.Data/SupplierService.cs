@@ -35,6 +35,10 @@ namespace PMS.Services.Data
                     SupplierId = x.SupplierId.ToString()
                 })
                 .ToListAsync();
+            if (modelList == null)
+            {
+                return new LinkedList<SupplierDisplayViewModel>();
+            }
             return modelList;
         }
 
@@ -102,13 +106,22 @@ namespace PMS.Services.Data
                 EditedOn = DateTime.UtcNow,
                 IsDleted = false
             };
-            await suppliersRepo.AddAsync(supplier);
+            try
+            {
+                await suppliersRepo.AddAsync(supplier);
+            }
+            catch
+            {
+                return false;   
+            }
 
+            var sparepartsSuppliersToAdd = new List<SparepartSupplier>();
             foreach (var sparepartId in Spareparts)
             {
-                bool alreadyAdded = await sparePartsSuppliersRepo.GetAllAsQueryable()
+                bool alreadyAdded = await sparePartsSuppliersRepo
+                     .GetAllAsQueryable()
                      .AnyAsync(x => x.SparepartId == sparepartId &&
-                                  x.SupplierId == supplier.SupplierId);
+                                    x.SupplierId  == supplier.SupplierId);
                 if (!alreadyAdded)
                 {
                     SparepartSupplier sparesup = new()
@@ -116,15 +129,30 @@ namespace PMS.Services.Data
                         SparepartId = sparepartId,
                         SupplierId = supplier.SupplierId
                     };
-                    await sparePartsSuppliersRepo.AddAsync(sparesup);
+                    sparepartsSuppliersToAdd.Add(sparesup);
+                    //await sparePartsSuppliersRepo.AddAsync(sparesup);
                 }
             }
+            if (sparepartsSuppliersToAdd.Count() > 0)
+            {
+                try
+                {
+                    await sparePartsSuppliersRepo.AddRangeAsync(sparepartsSuppliersToAdd);
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+           
 
+            var consumablesSuppliersToAdd = new List<ConsumableSupplier>();
             foreach (var consumableId in Consumables)
             {
-                bool alreadyAdded = await consumablesSuppliersRepo.GetAllAsQueryable()
+                bool alreadyAdded = await consumablesSuppliersRepo
+                    .GetAllAsQueryable()
                     .AnyAsync(x => x.ConsumableId == consumableId &&
-                                 x.SupplierId == supplier.SupplierId);
+                                   x.SupplierId == supplier.SupplierId);
                 if (!alreadyAdded)
                 {
                     ConsumableSupplier consSup = new()
@@ -132,10 +160,22 @@ namespace PMS.Services.Data
                         ConsumableId = consumableId,
                         SupplierId = supplier.SupplierId
                     };
-                    await consumablesSuppliersRepo.AddAsync(consSup);
+                    consumablesSuppliersToAdd.Add(consSup); 
+                    //await consumablesSuppliersRepo.AddAsync(consSup);
                 }
             }
-
+            if (consumablesSuppliersToAdd.Count > 0)
+            {
+                try
+                {
+                    await consumablesSuppliersRepo.AddRangeAsync(consumablesSuppliersToAdd);
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            
             return true;
         }
 
@@ -282,14 +322,27 @@ namespace PMS.Services.Data
                 .Where(x => x.SupplierId.ToString().ToLower() == model.SupplierId.ToLower())
                 .ToListAsync();
 
+            var sparepartsSuppliersToRemove = new List<SparepartSupplier>();
             foreach (var item in sparesSuppliers)   /// remove unselected spares
             {
                 if (!Spareparts.Contains(item.SparepartId))
                 {
-                    await sparePartsSuppliersRepo.RemoveItemAsync(item);
+                    sparepartsSuppliersToRemove.Add(item);
+                }
+            }
+            if (sparepartsSuppliersToRemove.Count() > 0)
+            {
+                try
+                {
+                    await sparePartsSuppliersRepo.RemoveRangeAsync(sparepartsSuppliersToRemove);
+                }
+                catch
+                {
+                    return false;
                 }
             }
 
+            var sparepartsSuppliersToAdd = new List<SparepartSupplier>();   
             foreach (var spareId in AvailableSpareparts)
             {
                 bool alreadyAdded = await sparePartsSuppliersRepo.GetAllAsQueryable()
@@ -302,7 +355,18 @@ namespace PMS.Services.Data
                         SparepartId = spareId,
                         SupplierId = Guid.Parse(model.SupplierId)
                     };
-                    await sparePartsSuppliersRepo.AddAsync(spareSup);
+                    sparepartsSuppliersToAdd.Add(spareSup);
+                }
+            }
+            if (sparepartsSuppliersToAdd.Count() > 0)
+            {
+                try
+                {
+                    await sparePartsSuppliersRepo.AddRangeAsync(sparepartsSuppliersToAdd);
+                }
+                catch
+                {
+                    return false;
                 }
             }
 
@@ -312,14 +376,27 @@ namespace PMS.Services.Data
                 .Where(x => x.SupplierId.ToString().ToLower() == model.SupplierId.ToLower())
                 .ToListAsync();
 
+            var consumablesSuppliersToRemove = new List<ConsumableSupplier>();
             foreach (var item in consumSuppliers)   /// remove unselected spares
             {
                 if (!Consumables.Contains(item.ConsumableId))
                 {
-                    await consumablesSuppliersRepo.RemoveItemAsync(item);
+                    consumablesSuppliersToRemove.Add(item);
+                }
+            }
+            if (consumablesSuppliersToRemove.Count() > 0)
+            {
+                try
+                {
+                    await consumablesSuppliersRepo.RemoveRangeAsync(consumablesSuppliersToRemove);
+                }
+                catch
+                {
+                    return false;
                 }
             }
 
+            var consumablesSuppliersToAdd = new List<ConsumableSupplier>();
             foreach (var consumId in AvailableConsumables)
             {
                 bool alreadyAdded = await consumablesSuppliersRepo.GetAllAsQueryable()
@@ -332,10 +409,20 @@ namespace PMS.Services.Data
                         ConsumableId = consumId,
                         SupplierId = Guid.Parse(model.SupplierId)
                     };
-                    await consumablesSuppliersRepo.AddAsync(consSup);
+                    consumablesSuppliersToAdd.Add(consSup); 
                 }
             }
-
+            if (consumablesSuppliersToAdd.Count() > 0)
+            {
+                try
+                {
+                    await consumablesSuppliersRepo.AddRangeAsync(consumablesSuppliersToAdd);
+                }
+                catch
+                {
+                    return false;
+                }
+            }
             return true;
         }
 
@@ -415,8 +502,16 @@ namespace PMS.Services.Data
             {
                 return false;
             }
+            try
+            {
                 modelDelete.IsDleted = true;
                 await suppliersRepo.UpdateAsync(modelDelete);
+            }
+            catch
+            {
+                return false;
+            }
+           
             return true;
         }
 
