@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Error404";
+}
+
+<style>
+    .error-container {
+        display: flex; /* Center content horizontally */
+        justify-content: center;
+        align-items: center; /* Center content vertically */
+        height: 80vh; /* Full viewport height */
+        background-color: #f9f9f9; /* Light background for contrast */
+    }
+
+        .error-container img {
+            max-width: 80%; /* Responsive image scaling */
+            max-height: 80%;
+            transition: box-shadow 0.3s ease; /* Smooth shadow effect */
+            border-radius: 8px; /* Optional: rounded corners */
+        }
+
+            .error-container:hover {
+                box-shadow: 0 0 1em 3em blue inset;
+                transition: 1s ease-in-out;
+            }
+
+</style>
+
+
+<div class="error-container">
+    <img src="~/Images/Errors/Error404.jpg" alt="Error 404 Image" />
+</div>

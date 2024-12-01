@@ -38,6 +38,7 @@ namespace PMSWeb.Controllers
 
         public IActionResult CreatorPage()
         {
+            return StatusCode(500);
             return View();
         }
 
@@ -52,18 +53,21 @@ namespace PMSWeb.Controllers
             return RedirectToAction(nameof(CreatorPage));
         }
 
-
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        public IActionResult StatusPageHandler(int code)
+        {
+            if(code == 404)
+               return View("View404");
 
-        //public string? GetUserId()
-        //{
-        //    return User.FindFirstValue(ClaimTypes.NameIdentifier)!.ToString();
-        //}
+            if (code == 500)
+                return View("View500");
+            return View();
+        }
+
     }
 }

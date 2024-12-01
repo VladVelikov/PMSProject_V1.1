@@ -31,18 +31,18 @@ namespace PMSWeb
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();  // To be removed for production environment 
+                app.UseStatusCodePagesWithReExecute("/Home/StatusPageHandler", "?code={0}"); // Error handling 404 and 500 as requested. Can be moved to production env. when needed. 
+                app.UseDeveloperExceptionPage();  // Only included for development environment. 
                 app.UseMigrationsEndPoint();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // app.UseStatusCodePagesWithReExecute(); TO DO
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
-            /// change the sheme to HTTPS for any incoming, thus avoid redirection in the next middleware app.UseHttpsRedirection()
+            /// change the sheme to HTTPS for any incoming, thus avoid redirection in the next middleware app.UseHttpsRedirection()    
             //app.Use(async (context, next) =>
             //{
             //    context.Request.Scheme = "https";    
