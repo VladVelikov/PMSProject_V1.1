@@ -26,12 +26,22 @@ namespace PMSWeb.Controllers
                 .CountAsync();
             ViewBag.CompletedRequisitions = completedReq;
 
+            decimal currentBallance;
             var budget = await context
                 .Budget
                 .OrderByDescending(x => x.LastChangeDate)
-                .Select(x=>x.Ballance)
-                .FirstAsync();
-            ViewBag.Budget = budget;
+                .FirstOrDefaultAsync();
+            if (budget == null)
+            {
+                currentBallance = 0;
+            }
+            else
+            {
+                currentBallance = budget.Ballance;
+            }
+
+
+            ViewBag.Budget = currentBallance;
 
             return View();
         }

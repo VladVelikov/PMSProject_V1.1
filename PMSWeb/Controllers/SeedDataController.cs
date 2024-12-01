@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PMS.Data;
+using PMS.Data.Models;
 using PMS.Data.Seeders;
 using System.Security.Claims;
 
@@ -133,11 +134,21 @@ namespace PMSWeb.Controllers
                     }
                 }    // Seeds Specific Maintenances
                 await context.SaveChangesAsync();
-            }
 
+                if (!await context.Budget.AnyAsync())
+                {
+                    Budget budget = new()
+                    {
+                        Id = 0,
+                        LastChangeDate = DateTime.UtcNow,
+                        Ballance = 500000
+                    };
+                        await context.Budget.AddAsync(budget);
+                }    // Seeds Budget 500 000
+                await context.SaveChangesAsync();
+            }
             return View();
         }
-
         public string? GetUserId()
         {
             return User.FindFirstValue(ClaimTypes.NameIdentifier)!.ToString();
