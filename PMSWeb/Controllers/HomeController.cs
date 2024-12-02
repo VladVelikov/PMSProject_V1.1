@@ -48,7 +48,6 @@ namespace PMSWeb.Controllers
 
         public IActionResult CreatorPage()
         {
-            return StatusCode(500);
             return View();
         }
 

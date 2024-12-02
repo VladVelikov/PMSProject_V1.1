@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PMS.Data.Models;
 using PMS.Data.Repository.Interfaces;
 using PMS.Services.Data.Interfaces;

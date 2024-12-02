@@ -166,11 +166,12 @@ namespace PMS.Services.Data
                 return new EquipmentDetailsViewModel();
             }
 
+
             List<string> routineMaintenances = await routineMaintenanceEquipmentRepo
                 .GetAllAsQueryable()
-                .Include(x=>x.RoutineMaintenance)
+                .Include(x => x.RoutineMaintenance)
                 .Where(x => x.EquipmentId.ToString().ToLower() == id.ToLower())
-                .Where(x=>x.RoutineMaintenance.IsDeleted == false)
+                .Where(x => x.RoutineMaintenance.IsDeleted == false)
                 .Select(x => x.RoutineMaintenance.Name)
                 .ToListAsync();
 
