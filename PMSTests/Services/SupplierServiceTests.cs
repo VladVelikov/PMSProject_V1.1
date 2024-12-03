@@ -1,4 +1,5 @@
 ﻿using MockQueryable;
+using MockQueryable.Moq;
 using Moq;
 using PMS.Data.Models;
 using PMS.Data.Models.Identity;
@@ -309,6 +310,110 @@ namespace PMSTests.Services
             Assert.AreEqual(1, result.Spareparts.Count);
             Assert.AreEqual(sparepartName, result.Spareparts.First());
         }
+
+        [Test]
+        public async Task GetItemForEditAsync_ShouldReturnEmptyModel_WhenItemDoesNotExist()
+        {
+            // Arrange
+            _suppliersRepoMock.Setup(repo => repo.GetAllAsQueryable())
+                .Returns(new List<Supplier>().AsQueryable().BuildMock());
+
+            var invalidId = Guid.NewGuid().ToString();
+
+            // Act
+            var result = await _service.GetItemForEditAsync(invalidId);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(string.Empty, result.Name);
+            Assert.AreEqual(string.Empty, result.Address);
+            Assert.AreEqual(string.Empty, result.Email);
+            Assert.AreEqual(string.Empty, result.PhoneNumber);
+        }
+
+        [Test]
+        public async Task ConfirmDeleteAsync_ShouldReturnFalse_WhenRepositoryThrowsException()
+        {
+            // Arrange
+            var supplierId = Guid.NewGuid();
+            var suppliers = new List<Supplier>
+    {
+        new Supplier
+        {
+            SupplierId = supplierId,
+            IsDleted = false
+        }
+    }.AsQueryable().BuildMock();
+
+            _suppliersRepoMock.Setup(repo => repo.GetAllAsQueryable()).Returns(suppliers);
+            _suppliersRepoMock.Setup(repo => repo.UpdateAsync(It.IsAny<Supplier>()))
+                .ThrowsAsync(new Exception("Database error"));
+
+            var model = new SupplierDeleteViewModel { SupplierId = supplierId.ToString() };
+
+            // Act
+            var result = await _service.ConfirmDeleteAsync(model);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+
+        [Test]
+        public async Task SaveItemToEditAsync_ShouldReturnFalse_WhenItemDoesNotExist()
+        {
+            // Arrange
+            _suppliersRepoMock.Setup(repo => repo.GetAllAsQueryable())
+                .Returns(new List<Supplier>().AsQueryable().BuildMock());
+
+            var model = new SupplierEditViewModel
+            {
+                SupplierId = Guid.NewGuid().ToString(),
+                Name = "Updated Supplier",
+                Address = "Updated Address",
+                Email = "updated@example.com",
+                PhoneNumber = "987654321",
+                CityId = Guid.NewGuid().ToString(),
+                CountryId = Guid.NewGuid().ToString()
+            };
+
+            // Act
+            var result = await _service.SaveItemToEditAsync(model, "user123", new List<Guid>(), new List<Guid>(), new List<Guid>(), new List<Guid>());
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+
+        [Test]
+        public async Task GetItemToDeleteAsync_ShouldReturnModel_WhenItemExists()
+        {
+            // Arrange
+            var supplierId = Guid.NewGuid();
+            var suppliers = new List<Supplier>
+    {
+        new Supplier
+        {
+            SupplierId = supplierId,
+            Name = "Supplier 1",
+            Address = "Address 1",
+            CreatedOn = DateTime.UtcNow,
+            IsDleted = false
+        }
+    }.AsQueryable().BuildMock();
+
+            _suppliersRepoMock.Setup(repo => repo.GetAllAsQueryable()).Returns(suppliers);
+
+            // Act
+            var result = await _service.GetItemToDeleteAsync(supplierId.ToString());
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Supplier 1", result.Name);
+            Assert.AreEqual("Address 1", result.Address);
+        }
+
+
 
     }
 }

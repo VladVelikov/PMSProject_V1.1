@@ -242,25 +242,32 @@ namespace PMS.Services.Data
         
         public async Task<bool> DeleteRequisitionAsync(string id)
         {
-            var reqToDel = await requisitionRepo
+            try
+            {
+                var reqToDel = await requisitionRepo
                  .GetAllAsQueryable()
                  .Where(x => !x.IsDeleted)
                  .Where(x => x.RequisitionId.ToString().ToLower() == id.ToLower())
                  .FirstOrDefaultAsync();
-            if (reqToDel != null)
-            {
-                try
+                if (reqToDel != null)
                 {
-                    reqToDel.IsDeleted = true;
-                    await requisitionRepo.UpdateAsync(reqToDel);
+                    try
+                    {
+                        reqToDel.IsDeleted = true;
+                        await requisitionRepo.UpdateAsync(reqToDel);
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                    return true;
                 }
-                catch 
-                {
-                    return false;
-                }
-                return true;
+                return false;
             }
-            return false;
+            catch
+            {
+                return false;
+            }
         }
 
         public async Task<string> ApproveRequisition(string id)

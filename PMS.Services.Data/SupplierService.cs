@@ -199,7 +199,15 @@ namespace PMS.Services.Data
                 .FirstOrDefaultAsync();
             if (model == null)
             {
-                return new SupplierEditViewModel();
+                return new SupplierEditViewModel() {
+                    SupplierId = string.Empty,
+                    Name = string.Empty,
+                    Address = string.Empty,
+                    Email = string.Empty,
+                    PhoneNumber = string.Empty,
+                    CityId = string.Empty,
+                    CountryId = string.Empty
+                };
             }
 
             var countries = await countriesRepo

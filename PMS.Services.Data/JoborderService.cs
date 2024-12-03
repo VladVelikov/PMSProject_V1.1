@@ -40,6 +40,10 @@ namespace PMS.Services.Data
                     ResponsiblePosition = x.ResponsiblePosition
                 })
                 .ToListAsync();
+            if (modelList == null)
+            {
+                return new List<JobOrderDisplayViewModel>();
+            }
             
             return modelList;
         }
@@ -65,6 +69,10 @@ namespace PMS.Services.Data
                     ResponsiblePosition = x.ResponsiblePosition
                 })
                 .ToListAsync();
+            if (dueJobsList == null)
+            {
+                return new List<JobOrderDisplayViewModel>();
+            }
             
             return dueJobsList;
         }
@@ -88,36 +96,66 @@ namespace PMS.Services.Data
                    ResponsiblePosition = x.ResponsiblePosition
                })
                .ToListAsync();
-           
+            if (historyJobsList == null)
+            {
+                return new List<JobOrderHistoryViewModel>();
+            }
             return historyJobsList;
         }
 
         public async Task<JobHistoryDetailsViewModel> GetHistoryDetailsAsync(string id)
         {
-            var model = await jobOrdersRepo
-               .GetAllAsQueryable()
-               .Where(x => !x.IsDeleted)
-               .Where(x => x.IsHistory)
-               .Where(x => x.JobId.ToString().ToLower() == id.ToLower())
-               .Include(x => x.Equipment)
-               .AsNoTracking()
-               .Select(x => new JobHistoryDetailsViewModel()
-               {
-                   JobId = x.JobId.ToString(),
-                   JobName = x.JobName,
-                   CompletedBy = x.CompletedBy ?? string.Empty,
-                   LastDoneDate = x.LastDoneDate.ToString(PMSRequiredDateFormat),
-                   Type = x.Type,
-                   ResponsiblePosition = x.ResponsiblePosition,
-                   MaintainedEquipment = x.Equipment.Name,
-                   Desription = x.JobDescription
-               })
-               .FirstOrDefaultAsync();
-            if (model == null)
+            try
             {
-                return new JobHistoryDetailsViewModel();
+                var model = await jobOrdersRepo
+                 .GetAllAsQueryable()
+                 .Where(x => !x.IsDeleted)
+                 .Where(x => x.IsHistory)
+                 .Where(x => x.JobId.ToString().ToLower() == id.ToLower())
+                 .Include(x => x.Equipment)
+                 .AsNoTracking()
+                 .Select(x => new JobHistoryDetailsViewModel()
+                 {
+                     JobId = x.JobId.ToString(),
+                     JobName = x.JobName,
+                     CompletedBy = x.CompletedBy ?? string.Empty,
+                     LastDoneDate = x.LastDoneDate.ToString(PMSRequiredDateFormat),
+                     Type = x.Type,
+                     ResponsiblePosition = x.ResponsiblePosition,
+                     MaintainedEquipment = x.Equipment.Name,
+                     Desription = x.JobDescription
+                 })
+                 .FirstOrDefaultAsync();
+                if (model == null)
+                {
+                    return new JobHistoryDetailsViewModel()
+                    {
+                        JobId = string.Empty,
+                        JobName = string.Empty,
+                        CompletedBy = string.Empty,
+                        LastDoneDate = string.Empty,
+                        Type = string.Empty,
+                        ResponsiblePosition = string.Empty,
+                        MaintainedEquipment = string.Empty,
+                        Desription = string.Empty
+                    };
+                }
+                return model;
             }
-            return model;
+            catch
+            {
+                return new JobHistoryDetailsViewModel()
+                {
+                    JobId = string.Empty,
+                    JobName = string.Empty,
+                    CompletedBy = string.Empty,
+                    LastDoneDate = string.Empty,
+                    Type = string.Empty,
+                    ResponsiblePosition = string.Empty,
+                    MaintainedEquipment = string.Empty,
+                    Desription = string.Empty
+                };
+            }
         }
 
         public async Task<JobOrderCreateViewModel> GetCreateJobModelAsync(JobOrderAddMaintenanceViewModel inputModel)
@@ -214,6 +252,16 @@ namespace PMS.Services.Data
                    TypeId = maintenanceType
                })
                .FirstOrDefaultAsync();
+            if (model == null)
+            {
+                return new JobOrderAddMaintenanceViewModel
+                {
+                    EquipmentId = equipmentId,
+                    EquipmentName = string.Empty,
+                    TypeId = maintenanceType,
+                    Maintenances = new List<PairGuidViewModel>()
+                };
+            }
 
             var routineMaintenances = await routMaintEqRepo
                 .GetAllAsQueryable()
@@ -291,25 +339,32 @@ namespace PMS.Services.Data
 
         public async Task<bool> DeleteJobOrderAsync(string id)
         {
-            var jobToDelete = await jobOrdersRepo
+            try
+            {
+                var jobToDelete = await jobOrdersRepo
                 .GetByIdAsync(Guid.Parse(id));
-            if (jobToDelete == null)
-            {
-                return false;
-            }
-            else
-            {
-                try
-                {
-                    jobToDelete.IsDeleted = true;
-                    await jobOrdersRepo.UpdateAsync(jobToDelete);
-                }
-                catch 
+                if (jobToDelete == null)
                 {
                     return false;
                 }
+                else
+                {
+                    try
+                    {
+                        jobToDelete.IsDeleted = true;
+                        await jobOrdersRepo.UpdateAsync(jobToDelete);
+                    }
+                    catch 
+                    {
+                        return false;
+                    }
                 
-                return true;
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
             }
         }
 
@@ -335,7 +390,16 @@ namespace PMS.Services.Data
 
             if (model == null)
             {
-                return new CompleteTheJobViewModel();
+                return new CompleteTheJobViewModel() {
+                    JobId = string.Empty,
+                    JobName = string.Empty,
+                    Description = string.Empty,
+                    Details = string.Empty,
+                    DueDate = string.Empty,
+                    ResponsiblePosition = string.Empty,
+                    Equipment = string.Empty,
+                    EquipmentId = string.Empty
+                };
             }
             return model;
         }
