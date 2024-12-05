@@ -6,12 +6,16 @@
 }
 
 <h2>Create New Manual</h2>
+@if (string.IsNullOrWhiteSpace(Model.ContentURL))
+{
+    <h3 style="color: lightcoral; margin-top: 1em;">Please upload the file first and then fill up the other fields!</h3>
+}
 
 <form asp-action="Create" method="post">
     <div style="margin: 2em auto">
         <div class="form-group">
             <label asp-for="ContentURL" class="control-label">Specify Content URL:  or  Upload File (*.pdf)</label>
-            <input asp-for="ContentURL" class="form-control" />
+            <input asp-for="ContentURL" class="form-control" readonly />
             <span asp-validation-for="ContentURL" class="text-danger"></span>
         </div>
         <div class="form-group mt-3">

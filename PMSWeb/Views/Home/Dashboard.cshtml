@@ -29,7 +29,7 @@
             </div>
         </div>
     </div>
-   
+
     <div>
         <div class="dropdown">
             <button>Inventory</button>
@@ -92,13 +92,15 @@
 
 
 <style>
-    html, body{
+    html, body {
         background-color: darkgrey;
     }
+
     .dropdown {
         display: inline-block;
         margin: 0 auto;
     }
+
         .dropdown button {
             background-color: grey;
             padding: 0.5em;
@@ -108,6 +110,7 @@
             font-weight: 600;
             opacity: 100%;
         }
+
         .dropdown a {
             display: block;
             color: black;
@@ -117,36 +120,39 @@
             margin-top: 0.5em;
             border: 2px solid white;
             border-radius: 0.5em;
-            
         }
+
         .dropdown .content {
             display: none;
             position: absolute;
         }
-        .dropdown:hover .content{
+
+        .dropdown:hover .content {
             display: flex;
             flex-direction: column;
             z-index: 1;
             background-color: transparent;
-            width:15em;
+            width: 15em;
             text-align: center;
         }
+
         .dropdown:hover button {
             background-color: lightgray;
             transition: 0.5s ease-in;
         }
-        
+
         .dropdown a:hover {
             border: 1px solid black;
         }
-aside {
-    padding: 2em;
-    background-color: lightgray;
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-    gap: 2em;
-}
+
+    aside {
+        padding: 2em;
+        background-color: lightgray;
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        gap: 2em;
+    }
 
 </style>
 

@@ -10,7 +10,7 @@ namespace PMSWeb.Controllers
     {
         public async Task<IActionResult> Select()
         {
-           var smList = await smService.GetListOfViewModelsAsync();
+            var smList = await smService.GetListOfViewModelsAsync();
             if (smList == null)
             {
                 return RedirectToAction("EmptyList", "Crushes");
@@ -39,12 +39,14 @@ namespace PMSWeb.Controllers
 
             if (!PMSPositions.Contains(model.ResponsiblePosition))
             {
+                model.Equipments = (await smService.GetItemForCreateAsync()).Equipments;
                 ModelState.AddModelError("ResponsiblePosition", $"The Responsible positions supported are: {string.Join(", ", PMSPositions)}");
                 return View(model);
             }
 
             if (!ModelState.IsValid)
             {
+                model.Equipments = (await smService.GetItemForCreateAsync()).Equipments;
                 return View(model);
             }
             if (string.IsNullOrEmpty(model.ResponsiblePosition) ||
@@ -127,7 +129,7 @@ namespace PMSWeb.Controllers
             if (model == null || !ModelState.IsValid || model.SmId == null)
             {
                 //Don't delete
-                return RedirectToAction("ModelNotFound","Crushes");
+                return RedirectToAction("ModelNotFound", "Crushes");
             }
             bool isDeleted = await smService.ConfirmDeleteAsync(model);
             if (!isDeleted)

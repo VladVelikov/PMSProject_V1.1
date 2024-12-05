@@ -3,23 +3,26 @@
 
 @{
     ViewData["Title"] = "Manual Details";
+    string base64Content = ViewBag.FileContent as string;
+    string contentType = ViewBag.ContentType as string;
+    string fileName = ViewBag.FileName as string;
 }
 
 <div style="display:flex; gap: 2em;">
     <div>
-    <h2>Manual Details</h2>
+        <h2>Manual Details</h2>
         <table class="table table-bordered">
-   
+
             <tr>
                 <th>Name</th>
                 <td>@Model.Name</td>
             </tr>
-    
+
             <tr>
                 <th>Maker Name</th>
                 <td>@Model.MakerName</td>
             </tr>
-   
+
             <tr>
                 <th>Equipment Name</th>
                 <td>@Model.EquipmentName</td>
@@ -30,11 +33,27 @@
             <a asp-action="Select" class="btn btn-secondary">Back to List</a>
         </div>
     </div>
-    <div>
+    @* <div>
         @{
-            string pdfUrl = Model.URL!;
+            string pdfUrl = Model.URL;
         }
         <embed src="@pdfUrl" type="application/pdf" width="800" height="800" />
-    </div>
+    </div> *@
+    @if (contentType.StartsWith("image/"))
+    {
+        <img src="data:@contentType;base64,@base64Content" alt="Image preview" />
+    }
+    else if (contentType == "application/pdf")
+    {
+        <iframe src="data:@contentType;base64,@base64Content" width="100%" height="600px"></iframe>
+    }
+    else if (contentType == "text/plain")
+    {
+        <pre>@System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(base64Content))</pre>
+    }
+    else
+    {
+        <p>Unsupported file type: @contentType</p>
+    }
 </div>
 

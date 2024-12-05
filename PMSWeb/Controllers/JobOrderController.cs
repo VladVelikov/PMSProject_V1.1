@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Google.Cloud.Storage.V1;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.JobOrderVM;
@@ -19,7 +20,7 @@ namespace PMSWeb.Controllers
             }
             return View(modelList);
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> SelectDueJobs()
         {
@@ -30,7 +31,7 @@ namespace PMSWeb.Controllers
             }
             return View(dueJobsList);
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> SelectHistory()
         {
@@ -41,7 +42,7 @@ namespace PMSWeb.Controllers
             }
             return View(historyJobsList);
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> ShowHistory(string id)
         {
@@ -56,7 +57,7 @@ namespace PMSWeb.Controllers
             }
             return View(model);
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> Create(JobOrderAddMaintenanceViewModel inputModel)
         {
@@ -64,7 +65,7 @@ namespace PMSWeb.Controllers
             {
                 return RedirectToAction("WrongData", "Crushes");
             }
-            if (!IsValidGuid(inputModel.EquipmentId.ToString()) || 
+            if (!IsValidGuid(inputModel.EquipmentId.ToString()) ||
                 !IsValidGuid(inputModel.MaintenanceId.ToString()) ||
                 string.IsNullOrWhiteSpace(inputModel.EquipmentName))
             {
@@ -172,7 +173,7 @@ namespace PMSWeb.Controllers
             TempData["EquipmentId"] = model.EquipmentId;
             TempData["MaintenanceType"] = model.TypeId;
             if (model.TypeId == "Routine")
-            { 
+            {
                 return RedirectToAction(nameof(AddMaintenanceRM));
             }
             return RedirectToAction(nameof(AddMaintenanceSM));
@@ -198,7 +199,7 @@ namespace PMSWeb.Controllers
         {
             if (!IsValidGuid(id))
             {
-                return RedirectToAction("WrongData","Crushes");
+                return RedirectToAction("WrongData", "Crushes");
             }
             var model = await joborderService.GetCompleteJobModelAsync(id);
             if (model == null || string.IsNullOrWhiteSpace(model.JobId))
@@ -222,7 +223,7 @@ namespace PMSWeb.Controllers
             }
             bool result = await joborderService.CloseThisJob(model, userName);
 
-            if (!result) 
+            if (!result)
             {
                 return RedirectToAction("NotCreated", "Crushes");
             }
@@ -242,7 +243,7 @@ namespace PMSWeb.Controllers
             {
                 return RedirectToAction("NotFound", "Crushes");
             }
-            
+
             return PartialView("_SparesUsedPartial", model);
         }
 
@@ -312,7 +313,7 @@ namespace PMSWeb.Controllers
             {
                 return RedirectToAction("WrongData", "Crushes");
             }
-            var model = await joborderService.GetSelectManualViewModelAsync(id); 
+            var model = await joborderService.GetSelectManualViewModelAsync(id);
             if (model == null)
             {
                 return RedirectToAction("NotFound", "Crushes");
@@ -321,7 +322,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> OpenManual(string jobid, string manualid)
+        public async Task<IActionResult> OpenManual(string jobid, string manualid)   // this method to be recreated as MicroService later
         {
             if (!IsValidGuid(jobid) || !IsValidGuid(manualid))
             {
@@ -332,8 +333,53 @@ namespace PMSWeb.Controllers
             {
                 return RedirectToAction("NotFound", "Crushes");
             }
-            return View(model);
-        }
+            try
+            {
+                var storageClient = StorageClient.Create();
+                string _bucketName = "pmsweb_my_bucketstorage";
+                using (var memoryStream = new MemoryStream())
+                {
+                    await storageClient.DownloadObjectAsync(
+                        bucket: _bucketName,
+                        objectName: model.URL,
+                        destination: memoryStream
+                    );
+                    memoryStream.Position = 0;
 
+                    string base64Content = Convert.ToBase64String(memoryStream.ToArray());
+                    string contentType = GetContentType(model.URL ?? "MissingFile.pdf");
+
+                    model.FileContent = base64Content;
+                    model.ContentType = contentType;
+                    ViewBag.FileName = model.URL;
+
+                    return View(model);
+                }
+            }
+            catch (Google.GoogleApiException ex) when (ex.Error.Code == 404)
+            {
+                return NotFound($"File '{model.URL}' not found in storage.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+
+            //return View(model);
+        }
+        private string GetContentType(string fileName)
+        {
+            var extension = Path.GetExtension(fileName).ToLowerInvariant();
+            return extension switch
+            {
+                ".pdf" => "application/pdf",
+                ".jpg" => "image/jpeg",
+                ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                ".gif" => "image/gif",
+                ".txt" => "text/plain",
+                _ => "application/octet-stream"
+            };
+        }
     }
 }

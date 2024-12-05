@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PMS.Data;
@@ -19,18 +20,37 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static async Task<IApplicationBuilder> CreateRolesAsync(this IApplicationBuilder app)
         {
-               using IServiceScope scope = app.ApplicationServices.CreateScope(); 
-               RoleManager<IdentityRole> roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-               var roles = PMSPositions;
-                foreach (var role in roles)
+            using IServiceScope scope = app.ApplicationServices.CreateScope();
+            RoleManager<IdentityRole> roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roles = PMSPositions;
+            foreach (var role in roles)
+            {
+                if (!await roleManager.RoleExistsAsync(role))
                 {
-                    if (!await roleManager.RoleExistsAsync(role))
-                    {
-                        await roleManager.CreateAsync(new IdentityRole(role));
-                    }
+                    await roleManager.CreateAsync(new IdentityRole(role));
                 }
+            }
 
-            return app; 
+            return app;
         }
+
+        public static IApplicationBuilder UseGoogleCloudCredentials(this IApplicationBuilder app)
+        {
+            var env = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
+
+            string credentialsPath = Path.Combine(env.ContentRootPath, "wwwroot", "light-processor-442809-u0-fb37c458f7e3.json");
+
+            if (!File.Exists(credentialsPath))
+            {
+                throw new FileNotFoundException("Google Cloud credentials file not found.", credentialsPath);
+            }
+
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credentialsPath);
+
+            Console.WriteLine($"Google Cloud credentials set from: {credentialsPath}");
+
+            return app;
+        }
+
     }
 }

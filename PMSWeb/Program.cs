@@ -21,11 +21,11 @@ namespace PMSWeb
             builder.Services.RegisterRepositories();
 
             //Adding business related services - see extensions
-            builder.Services.RegisterMyServices();   
+            builder.Services.RegisterMyServices();
 
             //Adding controllers and views for ASP.Net - not customized
             builder.Services.AddControllersWithViews();
-            
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -49,6 +49,7 @@ namespace PMSWeb
 
             //    await next();
             //});
+            app.UseGoogleCloudCredentials();
 
             app.UseHttpsRedirection();  // if this on receives HTTP he will redirect to HTTPS !!!
             app.UseStaticFiles();       // app can work with static files .json .img etc

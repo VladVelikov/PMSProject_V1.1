@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Google.Cloud.Storage.V1;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PMS.Data;
 using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.Manual;
 
 namespace PMSWeb.Controllers
 {
     [Authorize]
-    public class ManualController(IManualService manualService) : BasicController
+    public class ManualController(PMSDbContext context, IManualService manualService) : BasicController
     {
-        /// <summary>
-        /// TO DO Rewrite this controller with applied ~FTP or ~Cloud storage.
-        /// </summary>
-        /// <returns></returns>
+        private readonly string _bucketName = "pmsweb_my_bucketstorage";
 
         [HttpGet]
         public async Task<IActionResult> Select()
@@ -27,16 +27,10 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Create(string URL)
         {
-            if (!string.IsNullOrWhiteSpace(URL))
-            {
-                if (!IsSafeUrl(URL))
-                {
-                    return RedirectToAction("WrongData", "Crushes");
-                }
-            }
+
             var model = await manualService.GetCreateViewModelAsync(URL);
 
-            return View(model);  
+            return View(model);
         }
 
         [HttpPost]
@@ -46,7 +40,7 @@ namespace PMSWeb.Controllers
             {
                 return View(model);
             }
-            
+
             if (string.IsNullOrWhiteSpace(model.ManualName) ||
                 !IsValidGuid(model.MakerId) ||
                 !IsValidGuid(model.EquipmentId))
@@ -54,17 +48,9 @@ namespace PMSWeb.Controllers
                 return RedirectToAction("WrongData", "Crushes");
             }
 
-            if (!string.IsNullOrWhiteSpace(model.ContentURL))  // in this software we'll accept empty URL field as well.
-            {
-                if (!IsSafeUrl(model.ContentURL))
-                {
-                    return RedirectToAction("WrongData", "Crushes");
-                }
-            }
-            
             if (string.IsNullOrEmpty(GetUserId()) || !IsValidGuid(GetUserId()!))
             {
-                return RedirectToAction("WrongData", "Crushes");  
+                return RedirectToAction("WrongData", "Crushes");
             }
             bool isCreated = await manualService.CreateManualAsync(model, GetUserId()!);
 
@@ -72,61 +58,66 @@ namespace PMSWeb.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(string id)
-        {
-            if (!IsValidGuid(id))
-            {
-                return RedirectToAction("WrongData", "Crushes");
-            }
-            var model = await manualService.GetDetailsAsync(id);
-            if (model == null || string.IsNullOrWhiteSpace(model.Name))
-            {
-                return RedirectToAction("NotFound", "Crushes");
-            }
-            return View(model);
-        }
-
-        [HttpGet]
         public IActionResult Upload()
         {
             return View();
         }
-       
+
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile myFile)
         {
+            var manualsAlreadyUploadedFiles = await context
+                .Manuals
+                .AsNoTracking()
+                .Where(x => !x.IsDeleted)
+                .Select(x => x.ContentURL)
+                .ToListAsync();
+
             if (myFile == null || myFile.Length <= 0)
             {
-                ModelState.AddModelError("myFile", "Please upload a valid file.");
-                return RedirectToAction(nameof(Upload));
+                ViewBag.Error = "Please upload a valid file.";
+                return View();
             }
             const long MaxFileSize = 5 * 1024 * 1024; // 5 MB Limit applied
             if (myFile.Length > MaxFileSize)
             {
-                ModelState.AddModelError("myFile", "File size cannot exceed 5 MB.");
-                return RedirectToAction(nameof(Upload));
+                ViewBag.Error = "File size cannot exceed 5 MB.";
+                return View();
             }
 
             var allowedExtensions = new[] { ".pdf" }; // Add allowed extensions
             var fileExtension = Path.GetExtension(myFile.FileName);
             if (!allowedExtensions.Contains(fileExtension.ToLower()))
             {
-                ModelState.AddModelError("myFile", "Unsupported file type. Please upload a *.PDF.");
-                return RedirectToAction(nameof(Upload));
+                ViewBag.Error = "Unsupported file type. Please upload a *.PDF.";
+                return View();
+            }
+
+            if (manualsAlreadyUploadedFiles.Contains(myFile.FileName))
+            {
+                ViewBag.Error = "File with this name already exist. Please do minor change in file name and upload again.";
+                return View();
             }
 
             try
             {
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UploadedFiles", myFile.FileName);
-                Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+                var storageClient = StorageClient.Create();
 
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                using (var memoryStream = new MemoryStream())
                 {
-                    await myFile.CopyToAsync(stream);
-                }
+                    await myFile.CopyToAsync(memoryStream);
+                    memoryStream.Position = 0;
 
-                string shortPath = $"\\UploadedFiles\\{myFile.FileName}";
-                return RedirectToAction("Create", new { URL = shortPath });
+                    var objectName = myFile.FileName;
+
+                    var uploadResult = await storageClient.UploadObjectAsync(
+                        bucket: _bucketName,
+                        objectName: objectName,
+                        contentType: myFile.ContentType,
+                        source: memoryStream
+                    );
+                    return RedirectToAction("Create", new { URL = uploadResult.Name });
+                }
             }
             catch
             {
@@ -134,6 +125,71 @@ namespace PMSWeb.Controllers
                 return RedirectToAction(nameof(Upload));
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            var model = await manualService.GetDetailsAsync(id);
+            if (model == null || string.IsNullOrWhiteSpace(model.Name))
+            {
+                return RedirectToAction("NotFound", "Crushes");
+            }
+            string fileName = model.URL ?? "FileMissing.pdf";
+            try
+            {
+                // Initialize Google Cloud Storage client
+                var storageClient = StorageClient.Create();
+
+                // MemoryStream to hold the downloaded file
+                using (var memoryStream = new MemoryStream())
+                {
+                    // Download the file from the bucket into the memory stream
+                    await storageClient.DownloadObjectAsync(
+                        bucket: _bucketName,
+                        objectName: fileName,
+                        destination: memoryStream
+                    );
+
+                    // Reset the stream position to the beginning
+                    memoryStream.Position = 0;
+
+                    // Get file content as base64 string (for inline rendering in view)
+                    string base64Content = Convert.ToBase64String(memoryStream.ToArray());
+                    string contentType = GetContentType(fileName);
+
+                    // Pass the base64 content and content type to the view
+                    ViewBag.FileContent = base64Content;
+                    ViewBag.ContentType = contentType;
+                    ViewBag.FileName = fileName;
+
+                    return View(model);
+                }
+            }
+            catch (Google.GoogleApiException ex) when (ex.Error.Code == 404)
+            {
+                return NotFound($"File '{fileName}' not found in our storage.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        private string GetContentType(string fileName)
+        {
+            var extension = Path.GetExtension(fileName).ToLowerInvariant();
+            return extension switch
+            {
+                ".pdf" => "application/pdf",
+                ".jpg" => "image/jpeg",
+                ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                ".gif" => "image/gif",
+                ".txt" => "text/plain",
+                _ => "application/octet-stream"
+            };
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> Delete(string id)

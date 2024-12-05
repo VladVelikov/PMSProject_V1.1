@@ -17,5 +17,9 @@ namespace PMSWeb.ViewModels.JobOrderVM
         public string? MakerName { get; set; }
 
         public string? EquipmentName { get; set; }
+
+        public string? FileContent { get; set; }
+
+        public string? ContentType { get; set; }
     }
 }

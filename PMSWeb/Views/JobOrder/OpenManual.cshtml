@@ -3,6 +3,9 @@
 
 @{
     ViewData["Title"] = "Manual Details";
+    string base64Content = Model.FileContent as string ?? string.Empty;
+    string contentType = Model.ContentType as string ?? string.Empty;
+    string fileName = Model.URL as string ?? string.Empty;
 }
 
 <div style="display:flex; gap: 2em;">
@@ -30,10 +33,27 @@
             <a asp-controller="JobOrder" asp-action="CompleteJob" asp-route-id="@Model.JobId" class="btn btn-secondary">CLOSE</a>
         </div>
     </div>
+
     <div>
-        @{
-            string pdfUrl = Model.URL!;
+        <h1>Showing File: @fileName</h1>
+
+        @if (contentType.StartsWith("image/"))
+        {
+            <img src="data:@contentType;base64,@base64Content" alt="Image preview" />
         }
-        <embed src="@pdfUrl" type="application/pdf" width="800" height="800" />
+        else if (contentType == "application/pdf")
+        {
+            <iframe src="data:@contentType;base64,@base64Content" width="100%" height="600px"></iframe>
+        }
+        else if (contentType == "text/plain")
+        {
+            <pre>@System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(base64Content))</pre>
+        }
+        else
+        {
+            <p>Unsupported file type: @contentType</p>
+        }
     </div>
+
+
 </div>

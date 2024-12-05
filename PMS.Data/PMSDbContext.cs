@@ -14,6 +14,7 @@ namespace PMS.Data
             : base(options)
         {
         }
+        public PMSDbContext() { }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
