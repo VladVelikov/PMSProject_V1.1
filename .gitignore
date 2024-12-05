@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/PMSWeb/wwwroot/light-processor-442809-u0-fb37c458f7e3.json
