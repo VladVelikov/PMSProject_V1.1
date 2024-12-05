@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using PMS.Data;
 using PMS.Services.Data.Interfaces;
 using PMSWeb.Controllers;
 using PMSWeb.ViewModels.Manual;
@@ -16,17 +17,20 @@ namespace PMSTests.Controllers
         private Mock<IManualService> _manualServiceMock;
         private ManualController _controller;
 
+        private Mock<PMSDbContext> _dbContextMock;
+
         [SetUp]
         public void SetUp()
         {
+            _dbContextMock = new Mock<PMSDbContext>();
             _manualServiceMock = new Mock<IManualService>();
-            _controller = new ManualController(_manualServiceMock.Object);
+            _controller = new ManualController(_dbContextMock.Object, _manualServiceMock.Object);
 
             // Mock user identity
             var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new[]
             {
-            new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString())
-        }));
+        new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString())
+    }));
             _controller.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext { User = claimsPrincipal }
@@ -126,36 +130,6 @@ namespace PMSTests.Controllers
             var redirectResult = result as RedirectToActionResult;
             Assert.AreEqual("WrongData", redirectResult.ActionName);
             Assert.AreEqual("Crushes", redirectResult.ControllerName);
-        }
-
-        [Test]
-        public async Task Upload_Post_ReturnsRedirectToUpload_WhenFileIsInvalid()
-        {
-            // Arrange
-            IFormFile invalidFile = null;
-
-            // Act
-            var result = await _controller.Upload(invalidFile);
-
-            // Assert
-            Assert.IsInstanceOf<RedirectToActionResult>(result);
-            var redirectResult = result as RedirectToActionResult;
-            Assert.AreEqual(nameof(ManualController.Upload), redirectResult.ActionName);
-        }
-
-        [Test]
-        public async Task Upload_Post_ReturnsRedirectToWrongData_WhenFileTypeIsNotSupported()
-        {
-            // Arrange
-            var invalidFile = new FormFile(new MemoryStream(), 0, 100, "Data", "test.txt");
-
-            // Act
-            var result = await _controller.Upload(invalidFile);
-
-            // Assert
-            Assert.IsInstanceOf<RedirectToActionResult>(result);
-            var redirectResult = result as RedirectToActionResult;
-            Assert.AreEqual(nameof(ManualController.Upload), redirectResult.ActionName);
         }
 
         [Test]

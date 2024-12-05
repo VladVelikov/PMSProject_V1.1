@@ -367,6 +367,7 @@ namespace PMSWeb.Controllers
 
             //return View(model);
         }
+        
         private string GetContentType(string fileName)
         {
             var extension = Path.GetExtension(fileName).ToLowerInvariant();

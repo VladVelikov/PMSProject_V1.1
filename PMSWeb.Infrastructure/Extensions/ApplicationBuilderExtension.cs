@@ -38,7 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var env = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
 
-            string credentialsPath = Path.Combine(env.ContentRootPath, "wwwroot", "light-processor-442809-u0-fb37c458f7e3.json");
+            string credentialsPath = Path.Combine(env.ContentRootPath, "wwwroot", "light-processor-442809-u0-1b64b7eda3d4.json");
 
             if (!File.Exists(credentialsPath))
             {
