@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PMS.Data.Models;
 using System;
 using System.Collections;
@@ -28,8 +29,8 @@ namespace PMS.Data.Seeders
                         Price = 1.25m,
                         ROB = 1000.0,
                         IsDeleted = false,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow
                     },
                     new ()
                     {
@@ -38,8 +39,8 @@ namespace PMS.Data.Seeders
                         Units = "Liters",
                         Description = "Engine oil for machines",
                         CreatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         Price = 15.50m,
                         ROB = 500.0,
                         IsDeleted = false
@@ -47,12 +48,12 @@ namespace PMS.Data.Seeders
                     new ()
                     {
                         ConsumableId = Guid.NewGuid(),
-                        Name = "Cement",
-                        Units = "Bags",
-                        Description = "Construction cement",
+                        Name = "Grease",
+                        Units = "Kg",
+                        Description = "Grease for greaseng elements",
                         CreatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         Price = 7.75m,
                         ROB = 200.0,
                         IsDeleted = false
@@ -60,25 +61,25 @@ namespace PMS.Data.Seeders
                     new ()
                     {
                         ConsumableId = Guid.NewGuid(),
-                        Name = "Steel",
-                        Units = "Kilograms",
-                        Description = "Reinforcement steel bars",
+                        Name = "Rubber sheet",
+                        Units = "Pcs",
+                        Description = "Rubber sheet for gaskets",
                         CreatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
-                        Price = 0.95m,
-                        ROB = 1500.0,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
+                        Price = 20.95m,
+                        ROB = 20.0,
                         IsDeleted = false
                     },
                     new ()
                     {
                         ConsumableId = Guid.NewGuid(),
-                        Name = "Water",
+                        Name = "DestilateWater",
                         Units = "Liters",
-                        Description = "Portable water for construction use",
+                        Description = "Portable water for special use",
                         CreatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         Price = 0.10m,
                         ROB = 10000.0,
                         IsDeleted = false
@@ -86,12 +87,12 @@ namespace PMS.Data.Seeders
                     new ()
                     {
                         ConsumableId = Guid.NewGuid(),
-                        Name = "Concrete",
-                        Units = "Cubic Meters",
-                        Description = "Ready mix concrete",
+                        Name = "Glue",
+                        Units = "Litres",
+                        Description = "Glue fast drying for securing threads",
                         CreatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         Price = 80.00m,
                         ROB = 100.0,
                         IsDeleted = false
@@ -99,25 +100,25 @@ namespace PMS.Data.Seeders
                     new ()
                     {
                         ConsumableId = Guid.NewGuid(),
-                        Name = "Gravel",
-                        Units = "Tons",
-                        Description = "Gravel for road construction",
+                        Name = "Nuts",
+                        Units = "Kg",
+                        Description = "Nuts, variety of sizes",
                         CreatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         Price = 10.00m,
-                        ROB = 600.0,
+                        ROB = 300.0,
                         IsDeleted = false
                     },
                     new ()
                     {
                         ConsumableId = Guid.NewGuid(),
-                        Name = "Sand",
-                        Units = "Cubic Meters",
-                        Description = "Fine sand for concrete",
+                        Name = "Bolts Stainless",
+                        Units = "Kg",
+                        Description = "Bolts stainless general use",
                         CreatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         Price = 7.50m,
                         ROB = 450.0,
                         IsDeleted = false
@@ -125,14 +126,14 @@ namespace PMS.Data.Seeders
                     new ()
                     {
                         ConsumableId = Guid.NewGuid(),
-                        Name = "Bitumen",
-                        Units = "Barrels",
-                        Description = "Bitumen for asphalt works",
+                        Name = "Rags White Sterilized",
+                        Units = "Bags",
+                        Description = "Cleaning material for common use",
                         CreatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
-                        Price = 120.00m,
-                        ROB = 50.0,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
+                        Price = 50.00m,
+                        ROB = 20.0,
                         IsDeleted = false
                     },
                     new ()
@@ -142,8 +143,8 @@ namespace PMS.Data.Seeders
                         Units = "Liters",
                         Description = "Exterior paint for finishing",
                         CreatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         Price = 25.00m,
                         ROB = 300.0,
                         IsDeleted = false
@@ -166,8 +167,8 @@ namespace PMS.Data.Seeders
                     Email = "contact@johndeere.com",
                     Phone = "+1-800-1234567",
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDeleted = false
                 },
                 new Maker
@@ -178,8 +179,8 @@ namespace PMS.Data.Seeders
                     Email = "info@caterpillar.com",
                     Phone = "+1-800-7654321",
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDeleted = false
                 },
                 new Maker
@@ -190,8 +191,8 @@ namespace PMS.Data.Seeders
                     Email = "support@komatsu.com",
                     Phone = "+1-800-9876543",
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDeleted = false
                 },
                 new Maker
@@ -202,8 +203,8 @@ namespace PMS.Data.Seeders
                     Email = "contact@hitachi.com",
                     Phone = "+1-800-8765432",
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDeleted = false
                 },
                 new Maker
@@ -214,8 +215,8 @@ namespace PMS.Data.Seeders
                     Email = "info@volvo.com",
                     Phone = "+1-800-6543210",
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDeleted = false
                 },
                 new Maker
@@ -226,8 +227,8 @@ namespace PMS.Data.Seeders
                     Email = "contact@liebherr.com",
                     Phone = "+1-800-5432109",
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDeleted = false
                 },
                 new Maker
@@ -238,8 +239,8 @@ namespace PMS.Data.Seeders
                     Email = "support@jcb.com",
                     Phone = "+1-800-4321098",
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDeleted = false
                 },
                 new Maker
@@ -250,8 +251,8 @@ namespace PMS.Data.Seeders
                     Email = "help@bobcat.com",
                     Phone = "+1-800-3210987",
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDeleted = false
                 },
                 new Maker
@@ -262,8 +263,8 @@ namespace PMS.Data.Seeders
                     Email = "contact@kubota.com",
                     Phone = "+1-800-2109876",
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDeleted = false
                 },
                 new Maker
@@ -274,8 +275,8 @@ namespace PMS.Data.Seeders
                     Email = "info@terex.com",
                     Phone = "+1-800-1098765",
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDeleted = false
                 }
             };
@@ -287,26 +288,26 @@ namespace PMS.Data.Seeders
         public List<City> GetCities()
         {
             List<City> Cities = new List<City>() {
-                new City(){ CityId = Guid.NewGuid(), CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,Name = "Sofia"},
-                new City(){ CityId = Guid.NewGuid(), CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,Name = "Varna"},
-                new City(){ CityId = Guid.NewGuid(), CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,Name = "Pusan"},
-                new City(){ CityId = Guid.NewGuid(), CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,Name = "Shanghai"},
-                new City(){ CityId = Guid.NewGuid(), CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,Name = "Boston"},
-                new City(){ CityId = Guid.NewGuid(),CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now, Name = "Paris"},
-                new City(){ CityId = Guid.NewGuid(), CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,Name = "Mestre"},
-                new City(){ CityId = Guid.NewGuid(), CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,Name = "Genova"},
-                new City(){ CityId = Guid.NewGuid(),CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now, Name = "Hamburg"},
-                new City(){ CityId = Guid.NewGuid(),CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now, Name = "Vienna"}
+                new City(){ CityId = Guid.NewGuid(), CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,Name = "Sofia"},
+                new City(){ CityId = Guid.NewGuid(), CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,Name = "Varna"},
+                new City(){ CityId = Guid.NewGuid(), CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,Name = "Pusan"},
+                new City(){ CityId = Guid.NewGuid(), CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,Name = "Shanghai"},
+                new City(){ CityId = Guid.NewGuid(), CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,Name = "Boston"},
+                new City(){ CityId = Guid.NewGuid(),CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow, Name = "Paris"},
+                new City(){ CityId = Guid.NewGuid(), CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,Name = "Mestre"},
+                new City(){ CityId = Guid.NewGuid(), CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,Name = "Genova"},
+                new City(){ CityId = Guid.NewGuid(),CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow, Name = "Hamburg"},
+                new City(){ CityId = Guid.NewGuid(),CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow, Name = "Vienna"}
             };
 
             return Cities;
@@ -316,26 +317,26 @@ namespace PMS.Data.Seeders
         public List<Country> GetCountries()
         {
             List<Country> Countries = new List<Country>() {
-                new Country(){ CountryId = Guid.NewGuid(),CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,Name = "Bulgaria"},
-                new Country(){ CountryId = Guid.NewGuid(), CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,Name = "China"},
-                new Country(){ CountryId = Guid.NewGuid(), CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,Name = "Britain"},
-                new Country(){ CountryId = Guid.NewGuid(), CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,Name = "Germany"},
-                new Country(){ CountryId = Guid.NewGuid(),CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now, Name = "S.Korea"},
-                new Country(){ CountryId = Guid.NewGuid(),CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now, Name = "Singapore"},
-                new Country(){ CountryId = Guid.NewGuid(), CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,Name = "Poland"},
-                new Country(){ CountryId = Guid.NewGuid(), CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,Name = "France"},
-                new Country(){ CountryId = Guid.NewGuid(), CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,Name = "Italy"},
-                new Country(){ CountryId = Guid.NewGuid(), CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,Name = "Spain"},
+                new Country(){ CountryId = Guid.NewGuid(),CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,Name = "Bulgaria"},
+                new Country(){ CountryId = Guid.NewGuid(), CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,Name = "China"},
+                new Country(){ CountryId = Guid.NewGuid(), CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,Name = "Britain"},
+                new Country(){ CountryId = Guid.NewGuid(), CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,Name = "Germany"},
+                new Country(){ CountryId = Guid.NewGuid(),CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow, Name = "S.Korea"},
+                new Country(){ CountryId = Guid.NewGuid(),CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow, Name = "Singapore"},
+                new Country(){ CountryId = Guid.NewGuid(), CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,Name = "Poland"},
+                new Country(){ CountryId = Guid.NewGuid(), CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,Name = "France"},
+                new Country(){ CountryId = Guid.NewGuid(), CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,Name = "Italy"},
+                new Country(){ CountryId = Guid.NewGuid(), CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,Name = "Spain"},
             };
 
             return Countries;   
@@ -354,8 +355,8 @@ namespace PMS.Data.Seeders
                     CityId = Guid.Parse(cityIds[0]), 
                     CountryId = Guid.Parse(countryIds[0]), 
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDleted = false
                 },
                 new Supplier
@@ -368,8 +369,8 @@ namespace PMS.Data.Seeders
                     CityId = Guid.Parse(cityIds[1]),
                     CountryId = Guid.Parse(countryIds[1]),
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDleted = false
                 },
                 new Supplier
@@ -382,8 +383,8 @@ namespace PMS.Data.Seeders
                    CityId = Guid.Parse(cityIds[2]),
                     CountryId = Guid.Parse(countryIds[2]),
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDleted = false
                 },
                 new Supplier
@@ -396,8 +397,8 @@ namespace PMS.Data.Seeders
                   CityId = Guid.Parse(cityIds[3]),
                     CountryId = Guid.Parse(countryIds[3]),
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDleted = false
                 },
                 new Supplier
@@ -410,8 +411,8 @@ namespace PMS.Data.Seeders
                     CityId = Guid.Parse(cityIds[4]),
                     CountryId = Guid.Parse(countryIds[4]),
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDleted = false
                 },
                 new Supplier
@@ -424,8 +425,8 @@ namespace PMS.Data.Seeders
                    CityId = Guid.Parse(cityIds[5]),
                     CountryId = Guid.Parse(countryIds[5]),
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDleted = false
                 },
                 new Supplier
@@ -438,8 +439,8 @@ namespace PMS.Data.Seeders
                    CityId = Guid.Parse(cityIds[6]),
                     CountryId = Guid.Parse(countryIds[6]),
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDleted = false
                 },
                 new Supplier
@@ -452,8 +453,8 @@ namespace PMS.Data.Seeders
                    CityId = Guid.Parse(cityIds[7]),
                     CountryId = Guid.Parse(countryIds[7]),
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDleted = false
                 },
                 new Supplier
@@ -466,8 +467,8 @@ namespace PMS.Data.Seeders
                    CityId = Guid.Parse(cityIds[8]),
                     CountryId = Guid.Parse(countryIds[8]),
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDleted = false
                 },
                 new Supplier
@@ -480,8 +481,8 @@ namespace PMS.Data.Seeders
                     CityId = Guid.Parse(cityIds[9]),
                     CountryId = Guid.Parse(countryIds[9]),
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     IsDleted = false
                 }
             };
@@ -499,8 +500,8 @@ namespace PMS.Data.Seeders
                     Name = "Hydraulic Press",
                     Description = "A machine for applying hydraulic pressure to form or shape materials.",
                     CreatorId = adminId,
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     MakerId = Guid.Parse(makersIds[0]),
                     IsDeleted = false
                 },
@@ -509,8 +510,8 @@ namespace PMS.Data.Seeders
                     EquipmentId = Guid.NewGuid(),
                     Name = "CNC Lathe",
                     Description = "A high-precision lathe used for machining metal and other materials.",
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     CreatorId = adminId,
                     MakerId = Guid.Parse(makersIds[1]),
                     IsDeleted = false
@@ -518,10 +519,10 @@ namespace PMS.Data.Seeders
                 new Equipment
                 {
                     EquipmentId = Guid.NewGuid(),
-                    Name = "3D Printer",
-                    Description = "A machine for creating 3D objects by layering material based on a digital model.",
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    Name = "Power Generator",
+                    Description = "A machine driven by diesel motor used to generate electrical power",
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     CreatorId = adminId,
                     MakerId = Guid.Parse(makersIds[2]),
                     IsDeleted = false
@@ -531,8 +532,8 @@ namespace PMS.Data.Seeders
                     EquipmentId = Guid.NewGuid(),
                     Name = "Laser Cutter",
                     Description = "A precision machine used to cut materials using a laser beam.",
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     CreatorId = adminId,
                     MakerId = Guid.Parse(makersIds[3]),
                     IsDeleted = false
@@ -542,8 +543,8 @@ namespace PMS.Data.Seeders
                     EquipmentId = Guid.NewGuid(),
                     Name = "Industrial Robot Arm",
                     Description = "A robotic arm used in industrial automation for assembly, welding, and more.",
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     CreatorId = adminId,
                     MakerId = Guid.Parse(makersIds[4]),
                     IsDeleted = false
@@ -553,8 +554,8 @@ namespace PMS.Data.Seeders
                     EquipmentId = Guid.NewGuid(),
                     Name = "Forklift",
                     Description = "A powered industrial vehicle used to lift and move materials over short distances.",
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     CreatorId = adminId,
                     MakerId = Guid.Parse(makersIds[5]),
                     IsDeleted = false
@@ -564,8 +565,8 @@ namespace PMS.Data.Seeders
                     EquipmentId = Guid.NewGuid(),
                     Name = "Welding Machine",
                     Description = "A machine used to fuse materials together by applying heat and pressure.",
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     CreatorId = adminId,
                     MakerId = Guid.Parse(makersIds[6]),
                     IsDeleted = false
@@ -575,8 +576,8 @@ namespace PMS.Data.Seeders
                     EquipmentId = Guid.NewGuid(),
                     Name = "Air Compressor",
                     Description = "A machine that converts power into potential energy stored in pressurized air.",
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     CreatorId = adminId,
                     MakerId = Guid.Parse(makersIds[7]),
                     IsDeleted = false
@@ -586,8 +587,8 @@ namespace PMS.Data.Seeders
                     EquipmentId = Guid.NewGuid(),
                     Name = "Conveyor Belt",
                     Description = "A machine used for transporting materials from one place to another in a continuous flow.",
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     CreatorId = adminId,
                     MakerId = Guid.Parse(makersIds[8]),
                     IsDeleted = false
@@ -597,8 +598,8 @@ namespace PMS.Data.Seeders
                     EquipmentId = Guid.NewGuid(),
                     Name = "Drill Press",
                     Description = "A machine used to drill holes in materials with precise control and power.",
-                    CreatedOn = DateTime.Now,
-                    EditedOn = DateTime.Now,
+                    CreatedOn = DateTime.UtcNow,
+                    EditedOn = DateTime.UtcNow,
                     CreatorId = adminId,
                     MakerId = Guid.Parse(makersIds[9]),
                     IsDeleted = false
@@ -621,8 +622,8 @@ namespace PMS.Data.Seeders
                         Price = 450.00m,
                         Units = "pieces",
                         EquipmentId = Guid.Parse(equipmentIds[0]),
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         CreatorId = adminId,
                         IsDeleted = false
                     },
@@ -635,22 +636,22 @@ namespace PMS.Data.Seeders
                         Price = 320.00m,
                         Units = "pieces",
                         EquipmentId = Guid.Parse(equipmentIds[1]),
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         CreatorId = adminId,
                         IsDeleted = false
                     },
                     new Sparepart
                     {
                         SparepartId = Guid.NewGuid(),
-                        SparepartName = "3D Printer Nozzle",
-                        Description = "Replacement nozzle for precision 3D printing.",
+                        SparepartName = "FuelInjector",
+                        Description = "Replacement Injector for Power Generator.",
                         ROB = 100,
                         Price = 15.00m,
                         Units = "pieces",
                         EquipmentId = Guid.Parse(equipmentIds[2]),
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         CreatorId = adminId,
                         IsDeleted = false
                     },
@@ -663,8 +664,8 @@ namespace PMS.Data.Seeders
                         Price = 120.00m,
                         Units = "pieces",
                         EquipmentId = Guid.Parse(equipmentIds[3]),
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         CreatorId = adminId,
                         IsDeleted = false
                     },
@@ -677,8 +678,8 @@ namespace PMS.Data.Seeders
                         Price = 900.00m,
                         Units = "pieces",
                         EquipmentId = Guid.Parse(equipmentIds[4]),
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         CreatorId = adminId,
                         IsDeleted = false
                     },
@@ -691,8 +692,8 @@ namespace PMS.Data.Seeders
                         Price = 200.00m,
                         Units = "pieces",
                         EquipmentId = Guid.Parse(equipmentIds[5]),
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         CreatorId = adminId,
                         IsDeleted = false
                     },
@@ -705,8 +706,8 @@ namespace PMS.Data.Seeders
                         Price = 5.00m,
                         Units = "pieces",
                         EquipmentId = Guid.Parse(equipmentIds[6]),
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         CreatorId = adminId,
                         IsDeleted = false
                     },
@@ -719,8 +720,8 @@ namespace PMS.Data.Seeders
                         Price = 25.00m,
                         Units = "pieces",
                         EquipmentId = Guid.Parse(equipmentIds[7]),
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         CreatorId = adminId,
                         IsDeleted = false
                     },
@@ -733,8 +734,8 @@ namespace PMS.Data.Seeders
                         Price = 600.00m,
                         Units = "pieces",
                         EquipmentId = Guid.Parse(equipmentIds[8]),
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         CreatorId = adminId,
                         IsDeleted = false
                     },
@@ -747,8 +748,8 @@ namespace PMS.Data.Seeders
                         Price = 50.00m,
                         Units = "pieces",
                         EquipmentId = Guid.Parse(equipmentIds[9]),
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         CreatorId = adminId,
                         IsDeleted = false
                     }
@@ -765,120 +766,120 @@ namespace PMS.Data.Seeders
                     {
                         Name = "Oil Change",
                         Description = "Changing the oil in machinery for optimal performance.",
-                        LastCompletedDate = DateTime.Now.AddDays(-90),
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-90),
                         Interval = 90,
-                        ResponsiblePosition = "Maintenance Supervisor",
+                        ResponsiblePosition = "Technician",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new RoutineMaintenance
                     {
                         Name = "Filter Replacement",
                         Description = "Replace air filters to prevent dust accumulation.",
-                        LastCompletedDate = DateTime.Now.AddDays(-60),
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-60),
                         Interval = 60,
-                        ResponsiblePosition = "Facilities Engineer",
+                        ResponsiblePosition = "Technician",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new RoutineMaintenance
                     {
                         Name = "Inspection of Safety Equipment",
                         Description = "Inspect all safety equipment for compliance.",
-                        LastCompletedDate = DateTime.Now.AddDays(-30),
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-30),
                         Interval = 180,
-                        ResponsiblePosition = "Safety Officer",
+                        ResponsiblePosition = "Engineer",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new RoutineMaintenance
                     {
                         Name = "Lubrication of Machinery",
                         Description = "Lubricate machinery parts to prevent wear and tear.",
-                        LastCompletedDate = DateTime.Now.AddDays(-45),
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-45),
                         Interval = 45,
                         ResponsiblePosition = "Technician",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new RoutineMaintenance
                     {
                         Name = "Battery Check",
                         Description = "Check and recharge batteries for uninterrupted power supply.",
-                        LastCompletedDate = DateTime.Now.AddDays(-10),
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-10),
                         Interval = 30,
-                        ResponsiblePosition = "Electrical Technician",
+                        ResponsiblePosition = "Technician",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new RoutineMaintenance
                     {
                         Name = "Calibration of Sensors",
                         Description = "Calibrate sensors to maintain accurate measurements.",
-                        LastCompletedDate = DateTime.Now.AddDays(-180),
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-180),
                         Interval = 365,
-                        ResponsiblePosition = "Instrumentation Engineer",
+                        ResponsiblePosition = "Engineer",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new RoutineMaintenance
                     {
                         Name = "HVAC System Cleaning",
                         Description = "Clean and maintain HVAC systems for optimal performance.",
-                        LastCompletedDate = DateTime.Now.AddDays(-120),
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-120),
                         Interval = 120,
-                        ResponsiblePosition = "HVAC Specialist",
+                        ResponsiblePosition = "Technician",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new RoutineMaintenance
                     {
                         Name = "Fire Extinguisher Inspection",
                         Description = "Inspect fire extinguishers for readiness and recharge if needed.",
-                        LastCompletedDate = DateTime.Now.AddDays(-365),
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-365),
                         Interval = 365,
-                        ResponsiblePosition = "Fire Safety Officer",
+                        ResponsiblePosition = "Manager",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new RoutineMaintenance
                     {
                         Name = "Pump Maintenance",
                         Description = "Inspect and repair pumps to avoid breakdowns.",
-                        LastCompletedDate = DateTime.Now.AddDays(-180),
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-180),
                         Interval = 180,
-                        ResponsiblePosition = "Mechanical Engineer",
+                        ResponsiblePosition = "Engineer",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new RoutineMaintenance
                     {
                         Name = "Lighting System Check",
                         Description = "Check and replace faulty lighting to ensure workplace safety.",
-                        LastCompletedDate = DateTime.Now.AddDays(-15),
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-15),
                         Interval = 30,
-                        ResponsiblePosition = "Electrician",
+                        ResponsiblePosition = "Technician",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     }
             };
@@ -894,128 +895,128 @@ namespace PMS.Data.Seeders
                     {
                         Name = "Hydraulic Pump Check",
                         Description = "Routine check of hydraulic pump functionality.",
-                        LastCompletedDate = DateTime.Now.AddDays(-90),
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-90),
                         Interval = 90,
                         EquipmentId = Guid.Parse(eqIds[0]),
-                        ResponsiblePosition = "Maintenance Supervisor",
+                        ResponsiblePosition = "Engineer",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new SpecificMaintenance
                     {
                         Name = "Cooling System Flush",
                         Description = "Flush and clean the cooling system to prevent overheating.",
-                        LastCompletedDate = DateTime.Now.AddDays(-60),
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-60),
                         Interval = 180,
                         EquipmentId = Guid.Parse(eqIds[1]),
-                        ResponsiblePosition = "HVAC Technician",
+                        ResponsiblePosition = "Technician",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new SpecificMaintenance
                     {
                         Name = "Electrical Panel Inspection",
                         Description = "Inspect electrical panels and ensure connections are secure.",
-                        LastCompletedDate = DateTime.Now.AddDays(-30),
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-30),
                         Interval = 365,
                         EquipmentId = Guid.Parse(eqIds[2]),
-                        ResponsiblePosition = "Electrical Engineer",
+                        ResponsiblePosition = "Engineer",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new SpecificMaintenance
                     {
                         Name = "Air Filter Replacement",
                         Description = "Replace air filters to improve air quality.",
-                        LastCompletedDate = DateTime.Now.AddDays(-45),
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-45),
                         Interval = 30,
                         EquipmentId = Guid.Parse(eqIds[3]),
-                        ResponsiblePosition = "Facilities Manager",
+                        ResponsiblePosition = "Technician",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new SpecificMaintenance
                     {
                         Name = "Emergency Power Test",
                         Description = "Test emergency power systems to ensure backup readiness.",
-                        LastCompletedDate = DateTime.Now.AddDays(-180),
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-180),
                         Interval = 180,
                         EquipmentId = Guid.Parse(eqIds[4]),
-                        ResponsiblePosition = "Power Systems Engineer",
+                        ResponsiblePosition = "Manager",
                         CReatorId = adminId,
                         IsDeleted = false
                     },
                     new SpecificMaintenance
                     {
-                        Name = "Fire Alarm System Test",
-                        Description = "Run a test of the fire alarm system for compliance.",
-                        LastCompletedDate = DateTime.Now.AddDays(-365),
+                        Name = "Proximity Alarm System Test",
+                        Description = "Run a test of the proximity alarm for proper functioning.",
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-365),
                         Interval = 365,
                         EquipmentId = Guid.Parse(eqIds[5]),
-                        ResponsiblePosition = "Safety Officer",
+                        ResponsiblePosition = "Manager",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new SpecificMaintenance
                     {
-                        Name = "Exhaust Fan Maintenance",
-                        Description = "Check and clean exhaust fans to ensure ventilation.",
-                        LastCompletedDate = DateTime.Now.AddDays(-15),
+                        Name = "Cooling Fan Maintenance",
+                        Description = "Check and clean cooling fans to ensure ventilation.",
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-15),
                         Interval = 60,
                         EquipmentId = Guid.Parse(eqIds[6]),
-                        ResponsiblePosition = "Ventilation Specialist",
+                        ResponsiblePosition = "Technician",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new SpecificMaintenance
                     {
-                        Name = "Fuel System Cleanout",
-                        Description = "Remove any residues and clean the fuel system.",
-                        LastCompletedDate = DateTime.Now.AddDays(-120),
+                        Name = "Lubricating System Cleanout",
+                        Description = "Remove any residues and clean the luricating system.",
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-120),
                         Interval = 180,
                         EquipmentId = Guid.Parse(eqIds[7]),
-                        ResponsiblePosition = "Mechanical Technician",
+                        ResponsiblePosition = "Technician",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new SpecificMaintenance
                     {
-                        Name = "Generator Maintenance",
-                        Description = "Regular maintenance of the standby generator.",
-                        LastCompletedDate = DateTime.Now.AddDays(-270),
+                        Name = "El.Motor Maintenance",
+                        Description = "Regular maintenance of the Electric Motor.",
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-270),
                         Interval = 270,
                         EquipmentId = Guid.Parse(eqIds[8]),
-                        ResponsiblePosition = "Generator Technician",
+                        ResponsiblePosition = "Engineer",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     },
                     new SpecificMaintenance
                     {
-                        Name = "Lift Inspection",
-                        Description = "Routine inspection of building lifts for safety.",
-                        LastCompletedDate = DateTime.Now.AddDays(-75),
+                        Name = "Machanical Interlock Inspection",
+                        Description = "Inspection and maintenance of mechanical interlocks for safety.",
+                        LastCompletedDate = DateTime.UtcNow.AddDays(-75),
                         Interval = 90,
                         EquipmentId = Guid.Parse(eqIds[9]),
-                        ResponsiblePosition = "Lift Inspector",
+                        ResponsiblePosition = "Engineer",
                         CReatorId = adminId,
-                        CreatedOn = DateTime.Now,
-                        EditedOn = DateTime.Now,
+                        CreatedOn = DateTime.UtcNow,
+                        EditedOn = DateTime.UtcNow,
                         IsDeleted = false
                     }
                 };
@@ -1023,5 +1024,122 @@ namespace PMS.Data.Seeders
             return specificMaintenances;
         }
 
+        public List<Manual> GetManuals(string adminId, List<string> eqIds, List<string> makerIds)
+        {
+            var manualsList = new List<Manual>
+                {
+                    new Manual
+                    {
+                        ManualName = "User Guide and Spres List",
+                        MakerId = Guid.Parse(makerIds[0]),
+                        EquipmentId = Guid.Parse(eqIds[0]),
+                        CreatorId = adminId,
+                        CreatedOn = DateTime.Now.AddMonths(-6),
+                        EditedOn = DateTime.Now.AddDays(-10),
+                        ContentURL = "MANUAL1.pdf",
+                        IsDeleted = false
+                    },
+                    new Manual
+                    {
+                        ManualName = "Maintenance Guide Y-1000",
+                        MakerId = Guid.Parse(makerIds[1]),
+                        EquipmentId = Guid.Parse(eqIds[1]),
+                        CreatorId = adminId,
+                        CreatedOn = DateTime.Now.AddMonths(-12),
+                        EditedOn = DateTime.Now.AddDays(-3),
+                        ContentURL = "MANUAL2.pdf",
+                        IsDeleted = false
+                    },
+                    new Manual
+                    {
+                        ManualName = "Installation Manual Z200",
+                        MakerId =  Guid.Parse(makerIds[2]),
+                        EquipmentId = Guid.Parse(eqIds[2]),
+                        CreatorId = adminId,
+                        CreatedOn = DateTime.Now.AddYears(-1),
+                        EditedOn = DateTime.Now,
+                        ContentURL = "MANUAL3.pdf",
+                        IsDeleted = false
+                    },
+                    new Manual
+                    {
+                        ManualName = "Operation And Service Manual X",
+                        MakerId = Guid.Parse(makerIds[3]),
+                        EquipmentId = Guid.Parse(eqIds[3]),
+                        CreatorId = adminId,
+                        CreatedOn = DateTime.Now.AddMonths(-2),
+                        EditedOn = DateTime.Now.AddDays(-15),
+                        ContentURL = "MANUAL4.pdf",
+                        IsDeleted = false
+                    },
+                    new Manual
+                    {
+                        ManualName = "Service Manual 2023 Edition",
+                        MakerId = Guid.Parse(makerIds[4]),
+                        EquipmentId = Guid.Parse(eqIds[4]),
+                        CreatorId = adminId,
+                        CreatedOn = DateTime.Now.AddYears(-2),
+                        EditedOn = DateTime.Now.AddMonths(-1),
+                        ContentURL = "MANUAL5.pdf",
+                        IsDeleted = false
+                    },
+                    new Manual
+                    {
+                        ManualName = "Quick Start Guide Q-Lite",
+                        MakerId = Guid.Parse(makerIds[5]),
+                        EquipmentId = Guid.Parse(eqIds[5]),
+                        CreatorId = adminId,
+                        CreatedOn = DateTime.Now.AddMonths(-5),
+                        EditedOn = DateTime.Now.AddDays(-30),
+                        ContentURL = "MANUAL6.pdf",
+                        IsDeleted = false
+                    },
+                    new Manual
+                    {
+                        ManualName = "Troubleshooting Handbook Alpha",
+                        MakerId = Guid.Parse(makerIds[6]),
+                        EquipmentId = Guid.Parse(eqIds[6]),
+                        CreatorId = adminId,
+                        CreatedOn = DateTime.Now.AddMonths(-9),
+                        EditedOn = DateTime.Now.AddDays(-7),
+                        ContentURL = "MANUAL7.pdf",
+                        IsDeleted = false
+                    },
+                    new Manual
+                    {
+                        ManualName = "Safety Instructions for Beta Series",
+                        MakerId = Guid.Parse(makerIds[7]),
+                        EquipmentId = Guid.Parse(eqIds[7]),
+                        CreatorId = adminId,
+                        CreatedOn = DateTime.Now.AddYears(-3),
+                        EditedOn = DateTime.Now.AddMonths(-4),
+                        ContentURL = "MANUAL8.pdf",
+                        IsDeleted = false
+                    },
+                    new Manual
+                    {
+                        ManualName = "Guide to Operate All Systems",
+                        MakerId = Guid.Parse(makerIds[8]),
+                        EquipmentId = Guid.Parse(eqIds[8]),
+                        CreatorId = adminId,
+                        CreatedOn = DateTime.Now.AddYears(-1).AddMonths(-2),
+                        EditedOn = DateTime.Now.AddDays(-25),
+                        ContentURL = "MANUAL9.pdf",
+                        IsDeleted = false
+                    },
+                    new Manual
+                    {
+                        ManualName = "Electric Motor Setup Guide",
+                        MakerId = Guid.Parse(makerIds[9]),
+                        EquipmentId = Guid.Parse(eqIds[9]),
+                        CreatorId = adminId,
+                        CreatedOn = DateTime.Now.AddMonths(-8),
+                        EditedOn = DateTime.Now.AddDays(-5),
+                        ContentURL = "MANUAL10.pdf",
+                        IsDeleted = false
+                    }
+            };
+            return manualsList; 
+        }
     }
 }

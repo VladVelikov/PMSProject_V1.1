@@ -146,6 +146,25 @@ namespace PMSWeb.Controllers
                         await context.Budget.AddAsync(budget);
                 }    // Seeds Budget 500 000
                 await context.SaveChangesAsync();
+
+                if (!await context.Manuals.AnyAsync())
+                {
+                    var equipmentIds = await context
+                        .Equipments
+                        .AsNoTracking()
+                        .Select(x => x.EquipmentId.ToString())
+                        .ToListAsync();
+                    var makerIds = await context
+                        .Makers
+                        .AsNoTracking()
+                        .Select(x => x.MakerId.ToString())
+                        .ToListAsync();
+                    foreach (var manual in seeder.GetManuals(userId, equipmentIds, makerIds))
+                    {
+                        await context.Manuals.AddAsync(manual);
+                    }
+                }    // Seeds Manuals
+                await context.SaveChangesAsync();
             }
             return View();
         }
