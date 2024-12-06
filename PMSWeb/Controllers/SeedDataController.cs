@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace PMSWeb.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Manager")]
     public class SeedDataController(PMSDbContext context) : Controller
     {
         public IActionResult Index()

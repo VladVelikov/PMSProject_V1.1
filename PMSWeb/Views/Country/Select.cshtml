@@ -16,7 +16,10 @@
         <tr>
             <th>Name</th>
             <th>Created On</th>
-            <th>Actions</th>
+            @if (User.IsInRole("Manager"))
+            {
+                <th>Actions</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -25,9 +28,12 @@
             <tr>
                 <td>@city.Name</td>
                 <td>@city.CreatedOn</td>
-                <td>
-                    <a asp-action="Delete" asp-route-id="@city.CountryId" class="btn btn-danger">Delete</a>
-                </td>
+                @if (User.IsInRole("Manager"))
+                {
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@city.CountryId" class="btn btn-danger">Delete</a>
+                    </td>
+                }
             </tr>
         }
     </tbody>

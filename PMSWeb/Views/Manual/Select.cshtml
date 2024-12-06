@@ -26,7 +26,10 @@
 
                 <td>
                     <a asp-action="Details" asp-route-id="@manual.ManualId" class="btn btn-info btn-sm">ShowContent</a>
-                    <a asp-action="Delete" asp-route-id="@manual.ManualId" class="btn btn-danger btn-sm">Delete Manual</a>
+                    @if (User.IsInRole("Manager"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@manual.ManualId" class="btn btn-danger btn-sm">Delete Manual</a>
+                    }
                 </td>
             </tr>
         }

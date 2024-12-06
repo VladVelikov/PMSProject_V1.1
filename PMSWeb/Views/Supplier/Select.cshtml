@@ -34,7 +34,10 @@
                     <td style="display:flex; flex-direction:column; gap:0.2em;">
                         <a asp-action="Edit" asp-route-id="@supplier.SupplierId" class="btn btn-sm btn-warning">Edit</a>
                         <a asp-action="Details" asp-route-id="@supplier.SupplierId" class="btn btn-sm btn-info">Details</a>
-                        <a asp-action="Delete" asp-route-id="@supplier.SupplierId" class="btn btn-sm btn-danger">Delete</a>
+                        @if (User.IsInRole("Manager"))
+                        {
+                            <a asp-action="Delete" asp-route-id="@supplier.SupplierId" class="btn btn-sm btn-danger">Delete</a>
+                        }
                     </td>
                 </tr>
             }

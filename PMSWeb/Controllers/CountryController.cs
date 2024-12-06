@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.CountryVM;
 
 namespace PMSWeb.Controllers
 {
+    [Authorize]
     public class CountryController(ICountryService countryService) : BasicController
     {
         [HttpGet]
@@ -37,7 +39,7 @@ namespace PMSWeb.Controllers
             bool isCreated = await countryService.CreateCountryAsync(model);
             return RedirectToAction(nameof(Select));
         }
-
+        [Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {

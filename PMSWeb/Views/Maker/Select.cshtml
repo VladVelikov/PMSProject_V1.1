@@ -28,7 +28,10 @@
                 <td style ="display:flex; flex-direction:column; gap:0.2em;">
                     <a href="@Url.Action("Edit", "Maker", new { id = maker.MakerId })" class="btn btn-warning">Edit</a>
                     <a href="@Url.Action("Details", "Maker", new { id = maker.MakerId })" class="btn btn-info">Details</a>
-                    <a href="@Url.Action("Delete", "Maker", new { id = maker.MakerId })" class="btn btn-danger">Delete</a>
+                    @if (User.IsInRole("Manager"))
+                    {
+                        <a href="@Url.Action("Delete", "Maker", new { id = maker.MakerId })" class="btn btn-danger">Delete</a>
+                    }
                 </td>
             </tr>
         }

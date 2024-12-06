@@ -104,6 +104,7 @@ namespace PMSWeb.Controllers
             return RedirectToAction(nameof(Select));
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {

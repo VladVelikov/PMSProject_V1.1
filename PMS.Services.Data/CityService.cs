@@ -36,7 +36,7 @@ namespace PMS.Services.Data
             {
                 return false;
             }
-            var modelDel = cities.GetAllAsQueryable()
+            var modelDel = await cities.GetAllAsQueryable()
                .Where(x => x.CityId.ToString().ToLower() == deleteModel.CityId.ToLower())
                .FirstOrDefaultAsync();
 

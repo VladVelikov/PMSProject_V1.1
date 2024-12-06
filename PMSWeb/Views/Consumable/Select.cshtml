@@ -27,14 +27,17 @@
                     <td>@consumable.Name</td>
                     <td>@consumable.Units</td>
                     <td style="word-wrap:anywhere;">
-                          @consumable.Description
+                        @consumable.Description
                     </td>
                     <td>@consumable.Price.ToString("C")</td>
                     <td>@consumable.ROB</td>
                     <td style="display:flex; flex-direction:column; gap:0.2em;">
                         <a asp-action="Edit" asp-route-id="@consumable.ConsumableId" class="btn btn-sm btn-warning">Edit</a>
                         <a asp-action="Details" asp-route-id="@consumable.ConsumableId" class="btn btn-sm btn-info">Details</a>
-                        <a asp-action="Delete" asp-route-id="@consumable.ConsumableId" class="btn btn-sm btn-danger">Delete</a>
+                        @if (User.IsInRole("Manager"))
+                        {
+                            <a asp-action="Delete" asp-route-id="@consumable.ConsumableId" class="btn btn-sm btn-danger">Delete</a>
+                        }
                     </td>
                 </tr>
             }

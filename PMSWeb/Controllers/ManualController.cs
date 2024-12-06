@@ -190,7 +190,7 @@ namespace PMSWeb.Controllers
             };
         }
 
-
+        [Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {

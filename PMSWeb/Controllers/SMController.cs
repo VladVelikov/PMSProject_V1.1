@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.SM;
@@ -108,6 +109,7 @@ namespace PMSWeb.Controllers
             return RedirectToAction(nameof(Select));
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {

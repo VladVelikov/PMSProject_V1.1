@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PMS.Services.Data.Interfaces;
 using PMSWeb.ViewModels.CityVM;
 
 namespace PMSWeb.Controllers
 {
-
+    [Authorize]
     public class CityController(ICityService cityService) : BasicController
     {
         [HttpGet]
@@ -36,6 +37,7 @@ namespace PMSWeb.Controllers
             return RedirectToAction(nameof(Select));
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {

@@ -179,6 +179,7 @@ namespace PMSWeb.Controllers
             return RedirectToAction(nameof(AddMaintenanceSM));
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
