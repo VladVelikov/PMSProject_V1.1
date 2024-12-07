@@ -6,89 +6,59 @@
 @{
     ViewBag.Title = "Dashboard";
 }
-
-
-<aside class="container-fluid" style="border-radius:0.5em;">
-    <div>
-        <div class="dropdown">
-            <button>Creators Page</button>
-            <div class="content">
-                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Creator's Page</a>
-                <a class="butn btn-info" asp-controller="Home" asp-action="CreatorHelpNotes">Help Notes</a>
+<h1 style="display:block; max-width:450px; color:darkslateblue; font-weight: bold; margin: 1em auto;">Welcome to Dashboard</h1>
+<div style="margin-bottom: 15em;">
+    <aside class="container-fluid" style="border-radius:0.5em;">
+        <div>
+            <div class="dropdown">
+                <button>Creators Page</button>
+                <div class="content">
+                    <a class="butn btn-info" asp-controller="Home" asp-action="CreatorPage">Creator's Page</a>
+                    <a class="butn btn-info" asp-controller="Home" asp-action="CreatorHelpNotes">Help Notes</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div>
-        <div class="dropdown">
-            <button>Jobs Handling</button>
-            <div class="content">
-                <a class="butn btn-info" asp-controller="JobOrder" asp-action="SelectDueJobs">Jobs For Today</a>
-                <a class="butn btn-info" asp-controller="JobOrder" asp-action="SelectHistory">JobsHistory</a>
-                <a class="btn btn-info" asp-controller="JobOrder" asp-action="Select">All Scheduled</a>
-                <a class="butn btn-warning" asp-controller="JobOrder" asp-action="AddEquipment">Create Job Order</a>
+        <div>
+            <div class="dropdown">
+                <button>Jobs Handling</button>
+                <div class="content">
+                    <a class="butn btn-info" asp-controller="JobOrder" asp-action="SelectDueJobs">Jobs For Today</a>
+                    <a class="butn btn-info" asp-controller="JobOrder" asp-action="SelectHistory">JobsHistory</a>
+                    <a class="btn btn-info" asp-controller="JobOrder" asp-action="Select">All Scheduled</a>
+                    <a class="butn btn-warning" asp-controller="JobOrder" asp-action="AddEquipment">Create Job Order</a>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div>
-        <div class="dropdown">
-            <button>Inventory</button>
-            <div class="content">
-                <a class="butn btn-info" asp-controller="Inventory" asp-action="SparesInventory">Spares Inventory</a>
-                <a class="butn btn-info" asp-controller="Inventory" asp-action="ConsumablesInventory">Consumables Inventory</a>
+        <div>
+            <div class="dropdown">
+                <button>Inventory</button>
+                <div class="content">
+                    <a class="butn btn-info" asp-controller="Inventory" asp-action="SparesInventory">Spares Inventory</a>
+                    <a class="butn btn-info" asp-controller="Inventory" asp-action="ConsumablesInventory">Consumables Inventory</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div>
-        <div class="dropdown">
-            <button>Purchasing</button>
-            <div class="content">
-                <a class="butn btn-info" asp-controller="Requisition" asp-action="CreateSpareparts">Create <span style="font-weight:bold; color: darkmagenta;">SpareParts</span> Requisition</a>
-                <a class="butn btn-info" asp-controller="Requisition" asp-action="CreateConsumables">Create <span style="font-weight:bold; color: blue;">Consumables</span> Requisition</a>
-                <a class="butn btn-info" asp-controller="Requisition" asp-action="Select">All Requisitions List</a>
-                <a class="butn btn-success" asp-controller="Requisition" asp-action="SelectReadyForApproval">Ready For Approval</a>
-                <a class="butn btn-info" asp-controller="Requisition" asp-action="SelectAlreadyApproved">Completed Requisitions</a>
+        <div>
+            <div class="dropdown">
+                <button>Purchasing</button>
+                <div class="content">
+                    <a class="butn btn-info" asp-controller="Requisition" asp-action="CreateSpareparts">Create <span style="font-weight:bold; color: darkmagenta;">SpareParts</span> Requisition</a>
+                    <a class="butn btn-info" asp-controller="Requisition" asp-action="CreateConsumables">Create <span style="font-weight:bold; color: blue;">Consumables</span> Requisition</a>
+                    <a class="butn btn-info" asp-controller="Requisition" asp-action="Select">All Requisitions List</a>
+                    <a class="butn btn-success" asp-controller="Requisition" asp-action="SelectReadyForApproval">Ready For Approval</a>
+                    <a class="butn btn-info" asp-controller="Requisition" asp-action="SelectAlreadyApproved">Completed Requisitions</a>
+                </div>
             </div>
         </div>
-    </div>
-</aside>
-
-<div class="container mt-4" style="max-width: 10em; display:inline-block; margin-inline: 1em;">
-    <table class="table" style="border: 2px solid #4CAF50; background-color: #f9f9f9; border-radius: 8px; overflow: hidden;">
-        <thead style="background-color: #4CAF50; color: white;">
-            <tr>
-                <th style="text-align: center; padding: 15px; font-size: 1.5em;">Completed Requisitions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="text-align: center; padding: 20px; font-size: 2em; color: #333; box-shadow:  0em 0 0.2em 0.1em purple inset;">
-                    @ViewBag.CompletedRequisitions
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    </aside>
 </div>
 
-@if (User.IsInRole("Manager"))
-{
-    <div class="container mt-4" style="max-width: 10em; display:inline-block;">
-        <table class="table" style="border: 2px solid #4CAF50; background-color: #f9f9f9; border-radius: 8px; overflow: hidden;">
-            <thead style="background-color: #4CAF50; color: white;">
-                <tr>
-                    <th style="text-align: center; padding: 15px; font-size: 1.5em;"> Remaining Budget</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="text-align: center; padding: 20px; font-size: 2em; color: #333; box-shadow:  0em 0 0.2em 0.1em purple inset;">
-                        @ViewBag.Budget
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-}
+
+<div class="statistics-container">
+    <a class="btn btn-primary statistics-button" asp-controller="Home" asp-action="Statistics">Show Statistics</a>
+</div>
+
 
 
 <style>
@@ -154,45 +124,31 @@
         gap: 2em;
     }
 
+    .statistics-container {
+        margin: 2em auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: lightslategray;
+        border-radius: 3em;
+        padding: 2em;
+        max-width: 600px;
+    }
+
+    .statistics-button {
+        font-size: 1.5em;
+        padding: 0.5em 2em;
+        background-color: #007bff;
+        color: white;
+        border-radius: 0.5em;
+        text-align: center;
+        text-decoration: none;
+    }
+
+        .statistics-button:hover {
+            background-color: #0056b3;
+        }
+
 </style>
 
-<div class="container mt-4">
-    <canvas id="barChart" width="400" height="200"></canvas>
-</div>
 
-<script>
-    // Data for the bar chart
-    const data = {
-        labels: ['Completed Requisitions', 'Remaining Budget'],
-        datasets: [{
-            label: 'Dashboard Metrics',
-            data: [@ViewBag.CompletedRequisitions, @ViewBag.Budget], // Assuming these values are set in your controller
-            backgroundColor: [
-                'rgba(75, 192, 192, 0.2)', // Bar 1 color
-                'rgba(153, 102, 255, 0.2)' // Bar 2 color
-            ],
-            borderColor: [
-                'rgba(75, 192, 192, 1)', // Bar 1 border color
-                'rgba(153, 102, 255, 1)' // Bar 2 border color
-            ],
-            borderWidth: 1
-        }]
-    };
-
-    // Configuration options for the bar chart
-    const config = {
-        type: 'bar',
-        data: data,
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    };
-
-    // Render the chart
-    const ctx = document.getElementById('barChart').getContext('2d');
-    new Chart(ctx, config);
-</script>

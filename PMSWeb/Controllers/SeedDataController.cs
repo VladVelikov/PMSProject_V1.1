@@ -5,6 +5,7 @@ using PMS.Data;
 using PMS.Data.Models;
 using PMS.Data.Seeders;
 using System.Security.Claims;
+using static PMS.Common.EntityValidationConstants;
 
 namespace PMSWeb.Controllers
 {
@@ -141,10 +142,10 @@ namespace PMSWeb.Controllers
                     {
                         Id = 0,
                         LastChangeDate = DateTime.UtcNow,
-                        Ballance = 500000
+                        Ballance = MaxBudget
                     };
                         await context.Budget.AddAsync(budget);
-                }    // Seeds Budget 500 000
+                }    // Seeds Budget = MaxBudget constant
                 await context.SaveChangesAsync();
 
                 if (!await context.Manuals.AnyAsync())

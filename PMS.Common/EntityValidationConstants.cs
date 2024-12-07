@@ -1,6 +1,4 @@
-﻿using Microsoft.CodeAnalysis.Elfie.Diagnostics;
-
-namespace PMS.Common
+﻿namespace PMS.Common
 {
     public static class EntityValidationConstants
     {
@@ -11,6 +9,7 @@ namespace PMS.Common
         public const int PositionMaxLength = 50;
         public const int PositionMinLength = 2;
         public static readonly string[] PMSPositions = { "Manager", "Engineer", "Technician" };
+        public const decimal MaxBudget = 500000m;
 
         public static class EquipmentConstants
         {

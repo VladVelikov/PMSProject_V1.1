@@ -1,0 +1,155 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using PMS.Data.Models.Identity
+@using PMSWeb.ViewModels.CommonVM
+@inject SignInManager<PMSUser> SignInManager
+@inject UserManager<PMSUser> UserManager
+@model StatisticsViewModel
+
+@{
+    ViewBag.Title = "Statistics";
+}
+
+<style>
+    html, body {
+        background-color: darkgrey;
+    }
+
+    .dropdown {
+        display: inline-block;
+        margin: 0 auto;
+    }
+
+        .dropdown button {
+            background-color: grey;
+            padding: 0.5em;
+            cursor: pointer;
+            width: 15em;
+            border-radius: 0.5em;
+            font-weight: 600;
+            opacity: 100%;
+        }
+
+        .dropdown a {
+            display: block;
+            color: black;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 0.5em 1em;
+            margin-top: 0.5em;
+            border: 2px solid white;
+            border-radius: 0.5em;
+        }
+
+        .dropdown .content {
+            display: none;
+            position: absolute;
+        }
+
+        .dropdown:hover .content {
+            display: flex;
+            flex-direction: column;
+            z-index: 1;
+            background-color: transparent;
+            width: 15em;
+            text-align: center;
+        }
+
+        .dropdown:hover button {
+            background-color: lightgray;
+            transition: 0.5s ease-in;
+        }
+
+        .dropdown a:hover {
+            border: 1px solid black;
+        }
+
+    aside {
+        padding: 2em;
+        background-color: lightgray;
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        gap: 2em;
+    }
+
+</style>
+
+
+<div class="container mt-4" style="max-width: 10em; display:inline-block; margin-inline: 1em;">
+    <table class="table" style="border: 2px solid #4CAF50; background-color: #f9f9f9; border-radius: 8px; overflow: hidden;">
+        <thead style="background-color: #4CAF50; color: white;">
+            <tr>
+                <th style="text-align: center; padding: 15px; font-size: 1.5em;">Completed Requisitions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align: center; padding: 20px; font-size: 2em; color: #333; box-shadow:  0em 0 0.2em 0.1em purple inset;">
+                    @Model.CompletedRequisitions
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@if (User.IsInRole("Manager"))
+{
+    <div class="container mt-4" style="max-width: 10em; display:inline-block;">
+        <table class="table" style="border: 2px solid #4CAF50; background-color: #f9f9f9; border-radius: 8px; overflow: hidden;">
+            <thead style="background-color: #4CAF50; color: white;">
+                <tr>
+                    <th style="text-align: center; padding: 15px; font-size: 1.5em;"> Remaining Budget</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: center; padding: 20px; font-size: 2em; color: #333; box-shadow:  0em 0 0.2em 0.1em purple inset;">
+                        @Model.RemainingBudget
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
+
+
+<div class="container mt-4">
+    <canvas id="barChart" width="400" height="200"></canvas>
+</div>
+
+<script>
+    // Data for the bar chart
+    const data = {
+        labels: ['Completed Requisitions', 'Remaining Budget'],
+        datasets: [{
+            label: 'Dashboard Metrics',
+            data: [@Model.CompletedRequisitions, @Model.RemainingBudget], // Assuming these values are set in your controller
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.2)', // Bar 1 color
+                'rgba(153, 102, 255, 0.2)' // Bar 2 color
+            ],
+            borderColor: [
+                'rgba(75, 192, 192, 1)', // Bar 1 border color
+                'rgba(153, 102, 255, 1)' // Bar 2 border color
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    // Configuration options for the bar chart
+    const config = {
+        type: 'bar',
+        data: data,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    };
+
+    // Render the chart
+    const ctx = document.getElementById('barChart').getContext('2d');
+    new Chart(ctx, config);
+</script>

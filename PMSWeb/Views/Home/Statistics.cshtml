@@ -1,0 +1,185 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using PMS.Data.Models.Identity
+@using PMSWeb.ViewModels.CommonVM
+@inject SignInManager<PMSUser> SignInManager
+@inject UserManager<PMSUser> UserManager
+@model StatisticsViewModel
+
+@{
+    ViewBag.Title = "Statistics";
+}
+
+<style>
+    html, body {
+    background-color: darkgrey;
+    }
+
+    .container {
+    margin-top: 2em;
+    }
+
+    table {
+    margin: 1em auto;
+    border: 2px solid #4CAF50;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    overflow: hidden;
+    }
+
+    table th {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 1.2em;
+    }
+
+    table td {
+    text-align: center;
+    padding: 15px;
+    font-size: 1.2em;
+    color: #333;
+    }
+
+    canvas {
+    display: block;
+    margin: 1em auto;
+    max-width: 90%;
+    }
+</style>
+
+<h1 style="display:block; max-width:300px; color:blue; font-weight: bold; margin: 1em auto;">Statistics Page</h1>
+
+<div class="container-fluid" style="display: flex;">
+    <!-- Requisitions Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Requisitions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Completed: @Model.CompletedRequisitions</td>
+            </tr>
+            <tr>
+                <td>Total: @Model.TotalRequisitions</td>
+            </tr>
+            <tr>
+                <td>Ready to Approve: @Model.RequisitionsReadyToApprove</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Jobs Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Jobs</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Completed: @Model.CompletedJobOrders</td>
+            </tr>
+            <tr>
+                <td>Due: @Model.DueJobs</td>
+            </tr>
+            <tr>
+                <td>All Jobs: @Model.AllJobs</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Budget Table -->
+    @if (User.IsInRole("Manager"))
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Budget</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Remaining Budget: @Model.RemainingBudget</td>
+                </tr>
+                <tr>
+                    <td>Total Budget: @Model.TotalBudget</td>
+                </tr>
+            </tbody>
+        </table>
+    }
+</div>
+
+<!-- Charts -->
+<div style="display: flex;"> 
+    <div class="container">
+        <canvas id="requisitionsChart" width="300" height="200"></canvas>
+    </div>
+    <div class="container">
+        <canvas id="jobsChart" width="300" height="200"></canvas>
+    </div>
+    @if (User.IsInRole("Manager"))
+    {
+        <div class="container">
+            <canvas id="budgetChart" width="300" height="200"></canvas>
+        </div>
+    }
+</div>
+
+<script>
+    // Requisitions Chart
+    const requisitionsData = {
+        labels: ['Completed', 'Total', 'Ready to Approve'],
+        datasets: [{
+            label: 'Requisitions',
+            data: [@Model.CompletedRequisitions, @Model.TotalRequisitions, @Model.RequisitionsReadyToApprove],
+            backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 205, 86, 0.2)'],
+            borderColor: ['rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 205, 86, 1)'],
+            borderWidth: 1
+        }]
+    };
+
+    // Jobs Chart
+    const jobsData = {
+        labels: ['Completed', 'Due', 'All Jobs'],
+        datasets: [{
+            label: 'Jobs',
+            data: [@Model.CompletedJobOrders, @Model.DueJobs, @Model.AllJobs],
+            backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)', 'rgba(201, 203, 207, 0.2)'],
+            borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)', 'rgba(201, 203, 207, 1)'],
+            borderWidth: 1
+        }]
+    };
+
+    // Budget Chart
+    const budgetData = {
+        labels: ['Remaining Budget', 'Total Budget'],
+        datasets: [{
+            label: 'Budget',
+            data: [@Model.RemainingBudget, @Model.TotalBudget],
+            backgroundColor: ['rgba(255, 159, 64, 0.2)', 'rgba(75, 192, 192, 0.2)'],
+            borderColor: ['rgba(255, 159, 64, 1)', 'rgba(75, 192, 192, 1)'],
+            borderWidth: 1
+        }]
+    };
+
+    // Configuration
+    const config = {
+        type: 'bar',
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    };
+
+    // Render Charts
+    new Chart(document.getElementById('requisitionsChart').getContext('2d'), { ...config, data: requisitionsData });
+    new Chart(document.getElementById('jobsChart').getContext('2d'), { ...config, data: jobsData });
+    new Chart(document.getElementById('budgetChart').getContext('2d'), { ...config, data: budgetData });
+</script>

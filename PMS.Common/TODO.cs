@@ -11,7 +11,6 @@ namespace PMS.Common
         ///
         /// READ ME FILE FILL UP
         /// SEARCH
-        /// ANTI FORGERY TOKEN
         /// SEEDER - Requisition and Job order TODO if time .....
         /// DASHBOARD RESHAPETO NORMAL UI VIEW
         /// SIGNAL R - refresh statistics / page model rework first VIEW separate
