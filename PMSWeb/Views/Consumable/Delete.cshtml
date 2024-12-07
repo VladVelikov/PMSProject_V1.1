@@ -32,7 +32,7 @@
     </dl>
 </div>
 
-<form asp-action="DeleteConfirmed" method="post">
+<form asp-action="DeleteConfirmed" method="post" asp-antiforgery="true">
     <input type="hidden" asp-for="ConsumableId"/>
 
     <div class="form-group">

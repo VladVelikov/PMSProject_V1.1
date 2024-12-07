@@ -21,6 +21,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CityCreateViewModel model)
         {
             if (!ModelState.IsValid)
@@ -54,6 +55,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(CityDeleteViewModel model)
         {
             if (!ModelState.IsValid || model == null || model.CityId == null)

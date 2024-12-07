@@ -26,6 +26,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ConsumableCreateViewModel model)
         {
             if (!ModelState.IsValid)
@@ -65,6 +66,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ConsumableEditViewModel model)
         {
             if (!ModelState.IsValid)
@@ -123,11 +125,12 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(ConsumableDeleteViewModel model)
         {
-            if (!ModelState.IsValid)
-            { 
-                return View(model);
+            if (model.ConsumableId == null)
+            {
+                return RedirectToAction("NotFound", "Crushes");
             }
             if (!IsValidGuid(model.ConsumableId))
             {

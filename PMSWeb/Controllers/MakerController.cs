@@ -21,6 +21,7 @@ namespace PMSWeb.Controllers
         }
        
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MakerCreateViewModel model)
         {
             if (!ModelState.IsValid || string.IsNullOrWhiteSpace(model.MakerName))
@@ -55,6 +56,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(MakerEditViewModel model)
         {
             if (!ModelState.IsValid || string.IsNullOrWhiteSpace(model.MakerName))
@@ -96,6 +98,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(MakerDeleteViewModel model)
         {
             if (!ModelState.IsValid)

@@ -31,6 +31,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SMCreateViewModel model)
         {
             if (GetUserId() == null || !IsValidGuid(GetUserId()!))
@@ -80,6 +81,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(SMEditViewModel model)
         {
             if (GetUserId() == null || !IsValidGuid(GetUserId()!))
@@ -126,6 +128,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(SMDeleteViewModel model)
         {
             if (model == null || !ModelState.IsValid || model.SmId == null)

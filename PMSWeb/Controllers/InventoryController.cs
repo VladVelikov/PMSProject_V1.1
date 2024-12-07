@@ -20,6 +20,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateSparesInventory(SparesInventoryViewModel model)
         {
             if (!ModelState.IsValid)
@@ -57,6 +58,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateConsumablesInventory(ConsumablesInventoryViewModel model)
         {
             if (!ModelState.IsValid)

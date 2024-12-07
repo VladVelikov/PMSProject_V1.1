@@ -156,6 +156,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult AddEquipment(JobOrderAddEquipmentViewModel model)
         {
             if (!ModelState.IsValid)
@@ -183,7 +184,7 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
-            if (IsValidGuid(id.ToString()))
+            if (!IsValidGuid(id.ToString()))
             {
                 return RedirectToAction("WrongData", "Crushes");
             }
@@ -211,6 +212,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CloseJob(CompleteTheJobViewModel model)
         {
             if (string.IsNullOrWhiteSpace(model.Details))
@@ -323,6 +325,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpGet]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> OpenManual(string jobid, string manualid)   // this method to be recreated as MicroService later
         {
             if (!IsValidGuid(jobid) || !IsValidGuid(manualid))

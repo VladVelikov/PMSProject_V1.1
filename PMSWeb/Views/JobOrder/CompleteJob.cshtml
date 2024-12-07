@@ -28,7 +28,7 @@
                 <dt>Equipment:</dt>
                 <dd>@Model.Equipment</dd>
 
-                <form asp-action="CloseJob" method="post">
+                <form asp-action="CloseJob" method="post" asp-antiforgery="true">
                     <div class="form-group">
                         <label asp-for="Details" class="control-label" style="color: darkmagenta; font-weight: bold;">Please enter short description of what you did.</label>
                         <textarea asp-for="Details" class="form-control" placeholder="THIS FIELD IS REQUIRED!!!"></textarea>

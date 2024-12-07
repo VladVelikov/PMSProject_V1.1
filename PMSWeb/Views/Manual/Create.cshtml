@@ -11,7 +11,7 @@
     <h3 style="color: lightcoral; margin-top: 1em;">Please upload the file first and then fill up the other fields!</h3>
 }
 
-<form asp-action="Create" method="post">
+<form asp-action="Create" method="post" asp-antiforgery="true">
     <div style="margin: 2em auto">
         <div class="form-group">
             <label asp-for="ContentURL" class="control-label">Upload File (*.pdf)</label>

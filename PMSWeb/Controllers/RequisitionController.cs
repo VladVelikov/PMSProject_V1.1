@@ -64,6 +64,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(RequisitionCreateViewModel model)
         {
             // Seperate model properties validation to avoid errors due to the presence of list items
@@ -129,6 +130,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmDelete(string id)
         {
             if (!IsValidGuid(id))

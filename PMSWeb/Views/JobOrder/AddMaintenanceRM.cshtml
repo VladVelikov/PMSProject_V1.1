@@ -7,7 +7,7 @@
 
 <h4>Create Job Order</h4>
 
-<form asp-action="Create" method="get" class="form-horizontal">
+<form asp-action="Create" method="get" class="form-horizontal" asp-antiforgery="true">
     @Html.AntiForgeryToken()
     <div class="form-horizontal">
         <hr />

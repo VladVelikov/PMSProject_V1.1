@@ -26,6 +26,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CountryCreateViewModel model)
         {
             if (!ModelState.IsValid)
@@ -57,6 +58,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(CountryDeleteViewModel model)
         {
             if (!ModelState.IsValid || model == null || model.CountryId == null)

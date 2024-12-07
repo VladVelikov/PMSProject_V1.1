@@ -29,7 +29,7 @@
     </table>
 </div>
 
-<form asp-action="Delete" method="post">
+<form asp-action="Delete" method="post" asp-antiforgery="true">
     <input type="hidden" asp-for="ManualId" />
     <button type="submit" class="btn btn-danger">Delete</button>
     <a asp-action="Select" class="btn btn-secondary">Cancel</a>

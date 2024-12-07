@@ -4,7 +4,7 @@
 
 <h2>WELCOME TO UPLOAG PAGE</h2>
 
-<form asp-controller="Manual" asp-action="Upload" method="post" enctype="multipart/form-data">
+<form asp-controller="Manual" asp-action="Upload" method="post" enctype="multipart/form-data" asp-antiforgery="true">
 
     <div style="display:flex; flex-direction:column;">
         <label for="fileUpload" style="font-size:2em; margin-top:1em;">Plese Choose a file to upload (*.pdf):</label>

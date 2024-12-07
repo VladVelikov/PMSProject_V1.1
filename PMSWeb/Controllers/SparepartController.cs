@@ -31,6 +31,7 @@ namespace PMSWeb.Controllers
         }
             
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SparepartCreateViewModel model)
         {
             if (!ModelState.IsValid)
@@ -80,6 +81,7 @@ namespace PMSWeb.Controllers
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(SparepartEditViewModel model)
         {
             if (!ModelState.IsValid)
@@ -144,6 +146,7 @@ namespace PMSWeb.Controllers
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(SparepartDeleteViewModel model)
         {
             if (!ModelState.IsValid)

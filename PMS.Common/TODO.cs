@@ -10,17 +10,12 @@ namespace PMS.Common
     {
         ///
         /// READ ME FILE FILL UP
-        /// ROLES TO BE UPDATED FOR ALL CONTROLLERS
         /// SEARCH
-        /// RESPONSIVE
         /// ANTI FORGERY TOKEN
-        /// SEEDER - REWORK TO PROPER ONE
-        /// DASHBOARD REWORK TO NORMAL UI VIEW
-        /// SIGNAL R
-        /// MANUALS TO GOOGLE STORE
+        /// SEEDER - Requisition and Job order TODO if time .....
+        /// DASHBOARD RESHAPETO NORMAL UI VIEW
+        /// SIGNAL R - refresh statistics / page model rework first VIEW separate
         /// DEPLOY
         /// 
-
-
     }
 }

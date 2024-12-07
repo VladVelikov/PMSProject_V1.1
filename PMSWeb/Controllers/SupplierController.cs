@@ -27,6 +27,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SupplierCreateViewModel model,
             List<Guid> Spareparts, List<Guid> Consumables)
         {
@@ -72,6 +73,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(SupplierEditViewModel model,
             List<Guid> Spareparts, List<Guid> Consumables, List<Guid> AvailableSpareparts, List<Guid> AvailableConsumables)
         {
@@ -118,6 +120,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(SupplierDeleteViewModel model)
         {
             if (!ModelState.IsValid || string.IsNullOrWhiteSpace(model.SupplierId))

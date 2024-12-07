@@ -34,6 +34,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ManualCreateViewModel model)
         {
             if (!ModelState.IsValid)
@@ -64,6 +65,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Upload(IFormFile myFile)
         {
             var manualsAlreadyUploadedFiles = await context
@@ -207,6 +209,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(ManualDeleteViewModel model)
         {
             if (!ModelState.IsValid)

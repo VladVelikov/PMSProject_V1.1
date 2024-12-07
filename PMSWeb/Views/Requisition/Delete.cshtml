@@ -44,7 +44,7 @@
 
     <div class="row mt-4">
         <div class="col-md-12 text-center">
-            <form asp-action="ConfirmDelete" asp-route-id="@Model.RequisitionId" method="post">
+            <form asp-action="ConfirmDelete" asp-route-id="@Model.RequisitionId" method="post" asp-antiforgery="true">
                 <button type="submit" class="btn btn-danger">Delete</button>
                 <a asp-action="Select" class="btn btn-secondary">Cancel</a>
             </form>

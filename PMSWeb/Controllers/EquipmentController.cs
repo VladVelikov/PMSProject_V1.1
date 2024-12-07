@@ -35,6 +35,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EquipmentCreateViewModel model, List<Guid> RoutineMaintenances, List<Guid> Consumables)
         {
             if (!ModelState.IsValid)
@@ -76,6 +77,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EquipmentEditViewModel model,
             List<Guid> RoutineMaintenances,
             List<Guid> Consumables,
@@ -134,6 +136,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(EquipmentDeleteViewModel model)
         {
             if (!ModelState.IsValid)
