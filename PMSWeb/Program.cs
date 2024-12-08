@@ -59,7 +59,7 @@ namespace PMSWeb
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllerRoute(                // with map we can add branches to the pipeline and to send it to "other directions"
+            app.MapControllerRoute(    // with map we can add branches to the pipeline and to send it to "other directions"
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();

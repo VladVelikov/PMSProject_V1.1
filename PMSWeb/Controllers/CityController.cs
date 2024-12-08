@@ -11,7 +11,12 @@ namespace PMSWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Select()
         {
-            return View(await cityService.GetListOfCitiesAsync());
+            var modelList = await cityService.GetListOfCitiesAsync();
+            if (modelList.Count() == 0)
+            {
+                return RedirectToAction("EmptyList", "Crushes");
+            }
+            return View();
         }
 
         [HttpGet]

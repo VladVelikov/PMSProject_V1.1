@@ -27,6 +27,10 @@
         </select>
         <span asp-validation-for="MakerId" class="text-danger"></span>
     </div>
+    @if (Model.Makers.Count == 0)
+    {
+        <h3 style="color:lightcoral;">Makers list is empty. Please create some Makers first!</h3>
+    }
 
    
 

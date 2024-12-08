@@ -325,7 +325,6 @@ namespace PMSWeb.Controllers
         }
 
         [HttpGet]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> OpenManual(string jobid, string manualid)   // this method to be recreated as MicroService later
         {
             if (!IsValidGuid(jobid) || !IsValidGuid(manualid))

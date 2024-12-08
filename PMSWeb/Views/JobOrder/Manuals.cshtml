@@ -16,7 +16,7 @@
         <tbody>
             @foreach (var manual in Model.Manuals)
             {
-                <form asp-action="OpenManual" method="get" asp-antiforgery="true">
+                <form asp-action="OpenManual" method="get">
                     <tr>
                         <td>@manual.ManualName</td>
                         <td>@manual.Maker.MakerName</td>
