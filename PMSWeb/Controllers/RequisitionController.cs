@@ -142,6 +142,7 @@ namespace PMSWeb.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles ="Manager, Engineer")]
         public async Task<IActionResult> Approve(string id)
         {
             if (!IsValidGuid(id))

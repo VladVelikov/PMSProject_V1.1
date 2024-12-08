@@ -9,12 +9,11 @@ namespace PMS.Common
     internal class TODO
     {
         ///
-        /// READ ME FILE FILL UP
-        /// SEARCH
+        /// READ ME FILE FILL UP and Help Notes
+        /// SEARCH - if time .....
         /// SEEDER - Requisition and Job order TODO if time .....
-        /// DASHBOARD RESHAPETO NORMAL UI VIEW
-        /// SIGNAL R - refresh statistics / page model rework first VIEW separate
-        /// DEPLOY
+        /// SIGNAL R - refresh statistics / page model rework first VIEW separate - if time.....
+        /// DEPLOY - if time.....
         /// 
     }
 }

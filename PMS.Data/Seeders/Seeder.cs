@@ -1141,5 +1141,26 @@ namespace PMS.Data.Seeders
             };
             return manualsList; 
         }
+
+        public List<JobOrder> GetJobOrders()
+        {
+            ///
+            /// JobId
+            /// JobName
+            /// JobDescription
+            /// DueDate - utc
+            /// LastDoneDate - utc
+            /// Interval
+            /// Type - Routine / Specific
+            /// ResponsiblePosition - Manager/Engineer/Technician
+            /// CreatorId
+            /// EquipmentId
+            /// MaintenanceId
+            /// IsDeleted
+            /// IsHistory
+            /// CompletedBy - if completed / History
+            ///
+            return new List<JobOrder>();
+        }
     }
 }

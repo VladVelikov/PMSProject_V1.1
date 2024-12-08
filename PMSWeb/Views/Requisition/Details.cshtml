@@ -37,7 +37,7 @@
                                 <th scope="row">Total Cost</th>
                                 <td>@Model.TotalCost</td>
                             </tr>
-                            
+
                         </tbody>
                     </table>
                 </div>
@@ -92,9 +92,11 @@
             <a asp-action="Select" class="btn btn-secondary">Back To List</a>
             @if (Model.IsApproved == false)
             {
-               <a asp-action="Approve" asp-route-id="@Model.RequisitionId" class="btn btn-info">Approve The Order</a>
+                if (User.IsInRole("Manager") || User.IsInRole("Engineer"))
+                {
+                    <a asp-action="Approve" asp-route-id="@Model.RequisitionId" class="btn btn-info">Approve The Order</a>
+                }
             }    
-            
         </div>
     </div>
 </div>
