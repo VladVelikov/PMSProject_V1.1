@@ -38,6 +38,12 @@ namespace PMSWeb.Controllers
         }
 
         [HttpGet]
+        public IActionResult UserGuide()
+        {
+            return View();
+        }
+
+        [HttpGet]
         public IActionResult CreatorPage()
         {
             return View();

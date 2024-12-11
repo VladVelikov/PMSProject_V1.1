@@ -1,0 +1,111 @@
+﻿@{
+    ViewData["Title"] = "Help";
+}
+    <style>
+        .mob {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+    </style>
+
+<div class="mob">
+    <h1>Users Guide - How to Use PMS Software</h1>
+
+    <div class="section">
+        <h2>1. Homepage and Logo</h2>
+        <p>Homepage has a simple layout and will give the user access to Register or Login. The logo is simple and created for the purpose of this project only. From the Navbar a non-registered user can access as well the Dashboard page and sub-items of the 4 main sections. Any further actions will require registration and login first. Logged in users will not have access to the Homepage. They will be redirected to Dashboard instead.</p>
+    </div>
+
+    <div class="section">
+        <h2>2. Registration</h2>
+        <p>New user can be registered to the PMS in two ways:</p>
+        <div>
+            <p>- Create a New Account – where User Name, E-mail, Password and Position will be required</p>
+            <p>- Register with owned Google account, and fill up the additional info only required by the PMS. That includes Position, which is very important for the users permissions while using the software.</p>
+        </div>
+        <p>Once successfully registered the User will be redirected to Dashboard page.</p>
+    </div>
+
+    <div class="section">
+        <h2>3. Login</h2>
+        <p>The registered users can access the PMS with simple login with User Name and password, or using their external provider credentials.</p>
+    </div>
+
+    <div class="section">
+        <h2>4. Logout</h2>
+        <p>Only logged-in users will be allowed to log out. This option will not be visible for the rest.</p>
+    </div>
+
+    <div class="section">
+        <h2>5. Seed Database</h2>
+        <p>If the logged-in User is in Position of Manager, the SeedDatabase option will be visible and available to use from the navigation bar on any page. The Managers are allowed to seed the database.</p>
+        <p>!!!Database will be seeded only if it is empty. The seeder will not be activated if any records already exist in the tables.</p>
+    </div>
+
+    <div class="section">
+        <h2>6. Statistics</h2>
+        <p>Statistics page can be accessed via Show Statistics button on the Dashboard page. It will visualize comparative statistics of the jobs and requisitions existing in the PMS and Budget VS Predetermined Budget (current 500,000). Budget statistics is visible only for the Managers.</p>
+    </div>
+
+    <div class="section">
+        <h2>7. Dashboard</h2>
+        <p>Dashboard page includes the four main menus of PMS:</p>
+        <div>
+            <p>- Creators Page</p>
+            <p>- Jobs Handling</p>
+            <p>- Inventory</p>
+            <p>- Purchasing</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>8. Creators Page</h2>
+        <p>Allows users to create and manipulate the core objects of the application:</p>
+        <div>
+            <p>- Consumables tab – users can create, edit, check and delete Consumables. The consumables are considered not specific items like fuel, oil, common bolts, nuts, rags paint etc. One consumable item can be used for maintenance of various equipment. That’s why they should be created first and added to the list of the equipment if needed.</p>
+            <p>- Spare parts – spare parts are specific, and each one will fit specific equipment. While creating spare part, the equipment field will be required in order to link the spare part to the correct equipment. So equipment should exist, before spare part creating begins.</p>
+            <p>- Equipment tab – each equipment should have a maker – the company that produces the equipment is its maker. Makers should be created before equipment, because the Maker field will be required while creating a new equipment. Available Routine Maintenances and Consumables will be listed below the “Select Maker” drop-down. If you check some of them, before pressing the Create button they will be associated with the equipment created. Same could be added or changed using Edit Equipment later.</p>
+            <p>- Routine maintenances – similar to the consumables, they are non-specific regular jobs related to simple maintenance activities. They can be created first and associated with the equipment later.</p>
+            <p>- Specific Maintenances – they are specific and linked to a specific equipment. Create the equipment first and then create the maintenances which are specific for the equipment you created.</p>
+            <p>- Countries and Cities are used to complete the Addresses of the suppliers. They are more simple to create and delete. Please note, that if one of them is included in any address, it will not be possible to delete it.</p>
+            <p>- Suppliers tab – suppliers are the companies who supply Parts and Consumables. When supplier is created, the user should choose which parts and/or consumables he will accept to be supplied by this supplier. One supplier can supply many parts and/or consumables. Also any consumable or spare part can be supplied by various suppliers.</p>
+            <p>- Manual tab – manuals are normally written by the Maker of the equipment where details for the proper maintenance procedures, operating instructions and drawings are included. Usually manuals are additional files, so in PMS the user can upload the Manual book/file as well. While creating manuals, the Equipment and Maker will be required. Sometimes more than one maker will provide manual for the same equipment, and each equipment should be allowed to have a list of manuals if needed.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>9. Jobs Handling</h2>
+        <p>- Create job order tab – job order is a periodic job that should be performed for selected equipment. The job orders will reoccur in time at certain predetermined intervals. When creating a job order it is usually related to a certain equipment maintenance. For example, if I would like the filters of my compressor to be replaced every 30 days, the job order should be created for Equipment = Compressor, Specific Maintenance = replace filters, with period 30 days. If I point “The Last Done Date” to be today, it means the next due date will be after 30 days. Similar, if you would like the oil of the compressor to be changed every 2 months, new job order, for Equipment = compressor, type of maintenance Routine, Oil Change should be created with period of 60 days. The job will be Due when they passed the due date. Due date for each job is calculated as the last done date + interval. Once the due date for a job is reached, the Job will appear in the due jobs list.</p>
+        <p>- Jobs for today – shows the Due Jobs List</p>
+        <p>- All Scheduled – it will display all jobs regardless due date</p>
+        <p>- Job History – all jobs already done in the past</p>
+    </div>
+
+    <div class="section">
+        <h2>10. Inventory</h2>
+        <p>Due to some reasons, spares and consumables are not always removed from the stock during various maintenances. Usually at certain intervals an inventory of all parts and spares should be performed so the real stock will be checked against the numbers existing in the records.</p>
+        <div>
+            <p>- Spares Inventory – it will present a list of all spare parts, with option to update the current/real stock. Once the real stock is corrected in the Real Stock cell, press Update button to save the Real Stock figures in the inventory. Inventory stock will be equal to the real stock after that. After finish changes – go back to Dashboard.</p>
+            <p>- Consumables Inventory – same as above but is done for all consumables.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>11. Purchasing</h2>
+        <p>Requisitions for spare parts and consumables are handled here:</p>
+        <div>
+            <p>- In order to create requisition Spare Parts or Consumables, just press the corresponding button. The selection of all items will be presented. Check the box for each item the will be included in the request and fill up the necessary amount in the Quantity To Order cells. Add requisition name if you want. Since the items can be supplied by more that one supplier, on the last column a list of available suppliers will be present to select from them. Press “Create Requisition” and the requisition will be created and will wait approval.</p>
+            <p>- Approve requisition – List of requisitions ready for approval will be shown here. From the actions select Details to see the requisition details including total cost. In the details page press “Approve The Order” if you like to approve it. Approved requisition will be completed and the numbers of the ordered items will be added to the stock. Total cost will be deducted from the budget, if the budget is enough. Requisition cannot be approved if the budget is lower than the total cost. Only Managers and Engineers are granted with rights to approve requisitions and only Managers can delete requisitions.</p>
+        </div>
+    </div>
+</div>
+
