@@ -1,8 +1,58 @@
-﻿@{
-    ViewData["Title"] = "Creator Help Notes";
+﻿
+    <style>
+        div {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin-top: 20px;
+            font-size: 1.4em;
+        }
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        ul li {
+            margin-bottom: 10px;
+        }
+    </style>
 
-    <h2>Creator Help notes here...</h2>
-}
+<div>
+    <h1>Creators Page</h1>
+    <p>In the creators page a logged-in user will find all the options to create and manipulate the core objects of the application:</p>
+
+    <h2>Consumables Tab</h2>
+    <p>Users can create, edit, check, and delete Consumables. The consumables are considered non-specific items like fuel, oil, common bolts, nuts, rags, paint, etc. One consumable item can be used for maintenance of various equipment. That’s why they should be created first and added to the list of the equipment if needed.</p>
+
+    <h2>Spare Parts</h2>
+    <p>Spare parts are specific, and each one will fit specific equipment. While creating a spare part, the equipment field will be required in order to link the spare part to the correct equipment. So equipment should exist before spare part creation begins.</p>
+
+    <h2>Equipment Tab</h2>
+    <p>Each equipment should have a maker – the company that produces the equipment is its maker. Makers should be created before equipment, because the Maker field will be required while creating new equipment. Available Routine Maintenances and Consumables will be listed below the “Select Maker” drop-down. If you check some of them before pressing the Create button, they will be associated with the equipment created. The same could be added or changed using Edit Equipment later.</p>
+
+    <h2>Routine Maintenances</h2>
+    <p>Similar to the consumables, they are non-specific regular jobs related to simple maintenance activities. They can be created first and associated with the equipment later.</p>
+
+    <h2>Specific Maintenances</h2>
+    <p>These are specific and linked to specific equipment. Create the equipment first and then create the maintenances which are specific to the equipment you created.</p>
+
+    <h2>Countries and Cities</h2>
+    <p>These are used to complete the Addresses of the suppliers. They are simpler to create and delete. Please note that if one of them is included in any address, it will not be possible to delete it.</p>
+
+    <h2>Suppliers Tab</h2>
+    <p>Suppliers are the companies who supply Parts and Consumables. When a supplier is created, the user should choose which parts and/or consumables they will accept to be supplied by this supplier. One supplier can supply many parts and/or consumables. Also, any consumable or spare part can be supplied by various suppliers.</p>
+
+    <h2>Manual Tab</h2>
+    <p>Manuals are normally written by the Maker of the equipment where details for the proper maintenance procedures, operating instructions, and drawings are included. Usually, manuals are additional files, so in PMS the user can upload the Manual book/file as well. While creating manuals, the Equipment and Maker will be required. Sometimes more than one maker will provide a manual for the same equipment, and each equipment should be allowed to have a list of manuals if needed.</p>
+
+    <a asp-action="Dashboard" class="btn btn-secondary">Close</a>
+</div>
 
 
-<a asp-action="Dashboard" class="btn btn-secondary">Close</a>
+
+
